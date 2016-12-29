@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-29 17:16:43 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.hjcr.wechat.entity.Test" table="TEST">
+        <id name="TestId" type="int">
+            <column name="TESTID" />
+            <generator class="assigned" />
+        </id>
+        <property name="TestName" type="java.lang.String">
+            <column name="TESTNAME" />
+        </property>
+    </class>
+</hibernate-mapping>
