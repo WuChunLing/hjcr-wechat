@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.hjcr.wechat</groupId>
-  <artifactId>hjcr-wechat</artifactId>
-  <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>hjcr-wechat Maven Webapp</name>
-  <url>http://maven.apache.org</url>
- <dependencies>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hjcr.wechat</groupId>
+	<artifactId>hjcr-wechat</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>hjcr-wechat Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
 		<!-- http://mvnrepository.com/artifact/org.glassfish/jsonp-jaxrs -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -211,7 +211,7 @@
 			<artifactId>jstl</artifactId>
 			<version>1.1.2</version>
 		</dependency>
-<dependency>
+		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
 			<version>1.1.2</version>
@@ -232,10 +232,10 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 
 	</dependencies>
-  <build>
-    <finalName>hjcr-wechat</finalName>
-  </build>
+	<build>
+		<finalName>hjcr-wechat</finalName>
+	</build>
 </project>
