@@ -62,6 +62,9 @@
 
 
 
+<bean id="MsgHandler" class="com.hjcr.wechat.handler.MsgHandler">
+
+	</bean>
 
 	
 
