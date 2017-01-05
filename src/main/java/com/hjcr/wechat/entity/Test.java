@@ -3,12 +3,11 @@ package com.hjcr.wechat.entity;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Cacheable
-@Table(name="amter")
-@Entity
+
 public class Test {
 
 	
@@ -16,8 +15,8 @@ public class Test {
 	private String TestName;
 	
 	
-	@GeneratedValue
-	@Id
+	
+	
 	public int getTestId() {
 		return TestId;
 	}

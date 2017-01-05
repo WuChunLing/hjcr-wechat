@@ -1,5 +1,6 @@
 package com.hjcr.wechat.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,9 +8,17 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hjcr.wechat.entity.Template;
+import com.hjcr.wechat.entity.User;
+
+import com.hjcr.wechat.impl.TemplateImpl;
+import com.hjcr.wechat.impl.UserImpl;
+
+import com.hjcr.wechat.tools.photoJoin;
 import com.hjcr.wechat.tools.propFactory;
 
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
@@ -21,119 +30,217 @@ import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
-
-
 @Service
 public class QRcodeService {
 
-	
-	
-	
+	@Autowired
+	private TemplateImpl templateImpl;
+
+	@Autowired
+	private UserImpl userImpl;
+
 	/*
 	 * 创建二维码
+	 * 
 	 * @author 知鹏
 	 */
-	public void  QRcodecreat(String openid) throws WxErrorException, IOException{
-		
-		WxMpInMemoryConfigStorage config =new propFactory().WxMpInMemoryConfigStorageFactory();
+	public void QRcodecreat(String openid) throws WxErrorException, IOException {
+
+		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
-		
-		
-		//获取用户资料
-				String lang = "zh_CN"; //语言
-				WxMpUser user = wxService.userInfo(openid, lang);
-				String HeadImgUrl= user.getHeadImgUrl();
-				String Username=user.getNickname();
-				
-				//获取二维码
-				WxMpQrCodeTicket ticket = wxService.qrCodeCreateTmpTicket(1, 3000000);
-				//生成二维码文件
-				File file = wxService.qrCodePicture(ticket);
-					
-				//上传图片
-				WxMediaUploadResult res=wxService.mediaUpload("image", file);
-				
-				
-				//WxMediaUploadResult res=wxService.mediaUpload(mediaType, file);
-				
-				WxMpCustomMessage message = WxMpCustomMessage.IMAGE() .toUser(openid) .mediaId(res.getMediaId()).build();
-				try {
-					wxService.customMessageSend(message);
-				} catch (WxErrorException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-	}
-	
 
-	public void	QRcodemessage(String toUserName,String fromUserName) throws WxErrorException, IOException{
+		// 获取用户资料
+		String lang = "zh_CN"; // 语言
+		WxMpUser user = wxService.userInfo(openid, lang);
+		String HeadImgUrl = user.getHeadImgUrl();
+		String Username = user.getNickname();
+
+		// 通过用户openid获取用户id
+		User userbyopenid = userImpl.getUserbyOpenid(openid);
+
+		// 获取二维码
+		WxMpQrCodeTicket ticket = wxService.qrCodeCreateTmpTicket(userbyopenid.getUserId(), 3000000);
+		// 生成二维码文件
+		File file = wxService.qrCodePicture(ticket);
+
+		// 获取模板信息
+		Template template = templateImpl.getTemplatebyConfirm("1");
+
+		// 拼接图片
+		InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file);
+		System.out.println(image);
+		// 上传图片
+		WxMediaUploadResult res = wxService.mediaUpload("image", "jpg", image);
+
+		WxMpCustomMessage message = WxMpCustomMessage.IMAGE().toUser(openid).mediaId(res.getMediaId()).build();
+		try {
+			wxService.customMessageSend(message);
+		} catch (WxErrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/*
+	 * 扫描二维码成功后发送的信息
+	 * 
+	 * @author 知鹏
+	 */
+	public void QRcodemessage(String toUserid, String fromUseropenid) throws WxErrorException, IOException {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
-		WxMpUser toUser = UserMessage(toUserName);
-		
-		WxMpUser fromUser = UserMessage(fromUserName);
-		
-		
-		System.out.println(toUser+"fff");
-		 WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserName).content("恭喜你成为了"+fromUser.getNickname()+"的会员").build();
-		 wxService.customMessageSend(toUserNamemessage);
-		
-		 WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUserName).content("恭喜你成为了"+toUser.getNickname()+"的领导").build();
-		 wxService.customMessageSend(fromUserNamemessage);
+		int Userid = Integer.parseInt(toUserid);
+
+		// 获取UserId
+		String toUserOpenid = userImpl.getOpenidbyuser(Userid);
+
+		// 获取发送方的openid
+		WxMpUser toUser = UserMessage(toUserOpenid);
+		// 获取关注方的openid
+		WxMpUser fromUser = UserMessage(fromUseropenid);
+
+		// 获取设置代理关系的结果，从而判断下一步行为
+		String setHierarchyresult = setUserHierarchy(Userid, fromUseropenid);
+
+		// 用戶已經是代理
+		if (setHierarchyresult.equals("HierarchyExist")) {
+
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
+					.content("你已经成为代理，不可重复代理").build();
+			wxService.customMessageSend(toUserNamemessage);
+		} else {
+
+			// 給双方发送通知信息
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
+					.content("恭喜你成为了" + fromUser.getNickname() + "的会员").build();
+			wxService.customMessageSend(toUserNamemessage);
+
+			WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUseropenid)
+					.content("恭喜你成为了" + toUser.getNickname() + "的领导").build();
+			wxService.customMessageSend(fromUserNamemessage);
+		}
 	}
-	
-	
-	
-	//获取用户数据
-	public WxMpUser	UserMessage(String openid){
-		
-		WxMpUser user=null;
+
+	/*
+	 * 获取用户数据
+	 * 
+	 * @author 知鹏
+	 */
+	public WxMpUser UserMessage(String openid) {
+
+		WxMpUser user = null;
 		WxMpInMemoryConfigStorage config;
 		try {
-	  config = new propFactory().WxMpInMemoryConfigStorageFactory();
+			config = new propFactory().WxMpInMemoryConfigStorageFactory();
 
-		WxMpService wxService = new WxMpServiceImpl();
-		wxService.setWxMpConfigStorage(config);
-		
-		String lang = "zh_CN"; //语言
+			WxMpService wxService = new WxMpServiceImpl();
+			wxService.setWxMpConfigStorage(config);
+
+			String lang = "zh_CN"; // 语言
 			user = wxService.userInfo(openid, lang);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return user;
 	}
-	
-	
-	
-	
-	//上传图片
-	public String uploadPhoto(MultipartFile file,HttpServletRequest request){
-		double numble = Math.random() * 100;
-		String fileName = file.getOriginalFilename();
-		String path=request.getSession().getServletContext().getRealPath("/");
-		File imagePath = new File(path + "image/" + numble);
-		File imageFile = new File(imagePath, fileName);
+
+	/*
+	 * 上传图片
+	 * 
+	 * @author 知鹏
+	 */
+	public String uploadPhoto(MultipartFile file, HttpServletRequest request) throws IOException {
+		int numble = (int) (Math.random() * 100);
+		String fileName = numble + file.getOriginalFilename();
+		String path = request.getSession().getServletContext().getRealPath("/");
+		File imagePath = new File(path + "image");
+		if (!imagePath.exists())
+			imagePath.mkdirs();
+		File imageFile = new File(imagePath + "/", fileName);
+
 		InputStream in;
-		try {
-			in = file.getInputStream();
-			FileOutputStream os = new FileOutputStream(imageFile);
-			byte[] buffer = new byte[1024];
-			int len = 0;
-			while ((len = in.read(buffer)) != -1) {
-				os.write(buffer, 0, len);
-			}
-		} catch (IOException e) {
-			
+
+		in = file.getInputStream();
+		FileOutputStream os = new FileOutputStream(imageFile);
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		while ((len = in.read(buffer)) != -1) {
+			os.write(buffer, 0, len);
 		}
-		
-		
-		return imagePath+"image/" + numble;
-		
-	}
-	
+
+		return imagePath + "image/" + numble;
+
 	}
 
+	public Template getTemplate() {
+		return (Template) templateImpl.getTemplatebyConfirm("1");
+	}
+
+	/*
+	 * 保存用户
+	 * 
+	 * @author 知鹏
+	 */
+	public String savaUser(String openid) {
+		WxMpUser wxMpUser = UserMessage(openid);
+		if (userImpl.getUserbyOpenid(openid) == null) {
+			User savauser = new User();
+			/*
+			 * savauser.setHeadImgUrl(wxMpUser.getHeadImgUrl());
+			 * savauser.setUserOpenid(wxMpUser.getOpenId());
+			 * savauser.setUserName(wxMpUser.getNickname());
+			 */
+			savauser.setUserForeignkey(1);
+			System.out.println(savauser);
+			userImpl.save(savauser);
+		}
+		return "success";
+
+	}
+
+	/*
+	 * 通过用户openid获取用户id
+	 * 
+	 * @author 知鹏
+	 */
+	public User getUserbyopenid(String openid) {
+		// 通过用户openid获取用户id
+		return userImpl.getUserbyOpenid(openid);
+	}
+
+	/*
+	 * 设置层级关系
+	 * 
+	 * @author 知鹏
+	 */
+	public String setUserHierarchy(int Userid, String fromUseropenid) {
+		User touser = userImpl.getUserbyuserid(Userid); // 获取发送者的user
+		User fromuser = userImpl.getUserbyOpenid(fromUseropenid);// 获取关注者的user
+
+		// 判断该用户是否有上级了
+		if (fromuser.getUserHierarchy() != null || fromuser.getUserHierarchy().length() > 0) {
+			return "HierarchyExist";
+		} else {
+
+			// 判断是否上级没有层级关系
+			if (touser.getUserHierarchy() == null || fromuser.getUserHierarchy().equals("")) {
+				String hierarchy = "/" + Userid;// int 转化成String
+				fromuser.setUserHierarchy(hierarchy);
+			} else {
+				// 获取所有层级关系
+				String touserhierarchy = touser.getUserHierarchy();
+				String fromuserhierarchy = "/" + Userid + touserhierarchy;
+				fromuser.setUserHierarchy(fromuserhierarchy);
+
+			}
+
+		}
+		return "success";
+
+	}
+
+}

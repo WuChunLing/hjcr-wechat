@@ -3,6 +3,7 @@ package com.hjcr.wechat.entity;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,30 +13,85 @@ import javax.persistence.Table;
 public class User {
 
 	
-	private int TestId;
-	private String TestName;
+	private int userId;
+	private String headImgUrl;
+	private String userName;
+	private String userOpenid;
+	private String userHierarchy;
+	private int userForeignkey;
+	private String userMobiphone;
 	
-	
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-	public int getTestId() {
-		return TestId;
+	public int getUserId() {
+		return userId;
 	}
-	public void setTestId(int testId) {
-		TestId = testId;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-	public String getTestName() {
-		return TestName;
+	public String getHeadImgUrl() {
+		return headImgUrl;
 	}
-	public void setTestName(String testName) {
-		TestName = testName;
+	public void setHeadImgUrl(String headImgUrl) {
+		this.headImgUrl = headImgUrl;
 	}
-	public User(int testId, String testName) {
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getUserOpenid() {
+		return userOpenid;
+	}
+	public void setUserOpenid(String userOpenid) {
+		this.userOpenid = userOpenid;
+	}
+	public String getUserHierarchy() {
+		return userHierarchy;
+	}
+	public void setUserHierarchy(String userHierarchy) {
+		this.userHierarchy = userHierarchy;
+	}
+	public int getUserForeignkey() {
+		return userForeignkey;
+	}
+	public void setUserForeignkey(int userForeignkey) {
+		this.userForeignkey = userForeignkey;
+	}
+	public String getUserMobiphone() {
+		return userMobiphone;
+	}
+	public void setUserMobiphone(String userMobiphone) {
+		this.userMobiphone = userMobiphone;
+	}
+	public User(int userId, String headImgUrl, String userName, String userOpenid, String userHierarchy,
+			int userForeignkey, String userMobiphone) {
 		super();
-		TestId = testId;
-		TestName = testName;
+		this.userId = userId;
+		this.headImgUrl = headImgUrl;
+		this.userName = userName;
+		this.userOpenid = userOpenid;
+		this.userHierarchy = userHierarchy;
+		this.userForeignkey = userForeignkey;
+		this.userMobiphone = userMobiphone;
 	}
 	public User() {
 		super();
 	}
+	
+	public User(String headImgUrl, String userName, String userOpenid) {
+		this.headImgUrl = headImgUrl;
+		this.userName = userName;
+		this.userOpenid = userOpenid;
+		
+	}
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", headImgUrl=" + headImgUrl + ", userName=" + userName + ", userOpenid="
+				+ userOpenid + ", userHierarchy=" + userHierarchy + ", userForeignkey=" + userForeignkey
+				+ ", userMobiphone=" + userMobiphone + "]";
+	}
+	
+	
 }
