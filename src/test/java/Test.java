@@ -6,7 +6,7 @@ public class Test {
 
 	
 	public void FF() throws IOException{
-		new photoJoin().photoJoinImage2();
+		
 	}
 	
 }

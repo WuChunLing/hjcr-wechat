@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hjcr.wechat.entity.Template;
+import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.impl.UserImpl;
 
 import com.hjcr.wechat.service.QRcodeService;
 import com.hjcr.wechat.service.TemplateService;
+import com.hjcr.wechat.service.UserService;
 import com.hjcr.wechat.tools.photoJoin;
 import com.hjcr.wechat.tools.propFactory;
 import com.hjcr.wechat.tools.wxMenu;
@@ -59,6 +61,9 @@ public class Handler extends GenericController {
 	@Autowired
 	private TemplateService templateService;
 
+	@Autowired
+	private UserService wxuserService;
+	
 	// 和微信沟通的主程序
 	@RequestMapping(value = { "/WxMessageRouter" }, produces = { "application/json;charset=UTF-8" })
 	public void WxMessageRouter(HttpServletRequest request, HttpServletResponse response)
@@ -129,22 +134,11 @@ public class Handler extends GenericController {
 
 	}
 
-	// 获取跳转链接
 	/*
-	 * @RequestMapping(value = { "/getcode" }, produces = {
-	 * "application/json;charset=UTF-8" }) public String
-	 * getcode(HttpServletRequest request, HttpServletResponse response) throws
-	 * WxErrorException, IOException { WxMpInMemoryConfigStorage config = new
-	 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService wxService =
-	 * new WxMpServiceImpl(); wxService.setWxMpConfigStorage(config); return
-	 * "redirect:/" + wxService.oauth2buildAuthorizationUrl("getuser",
-	 * WxConsts.OAUTH2_SCOPE_USER_INFO, null); }
-	 */
-	/*
-	 * 获取二维码
+	 * 临时获取二维码
 	 */
 	@RequestMapping(value = { "/getqrcode" })
-	public void getuser(@RequestParam("code") String code) throws WxErrorException, IOException {
+	public void getqrcode(@RequestParam("code") String code) throws WxErrorException, IOException {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
@@ -155,6 +149,16 @@ public class Handler extends GenericController {
 		// 生成二维码且发送给用户
 		QRcodeService.QRcodecreat(openid);
 
+	}
+
+	/*
+	 * 永久二维码
+	 */
+	@RequestMapping(value = { "/getlastqrcode" })
+	public String getlastqrcode(@RequestParam("telephone") String telephone,HttpServletRequest request) throws WxErrorException, IOException {
+
+		//
+       return QRcodeService.creatForeverQrcode(telephone, request);
 	}
 
 	/*
@@ -169,22 +173,38 @@ public class Handler extends GenericController {
 	}
 
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
-	public void Test() throws WxErrorException, IOException {
+	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 
 		String openid = "oUPl-wh3UehzmwaztIQzkvcuS3rE";
 
 		// 生成二维码且发送给用户
-		QRcodeService.savaUser(openid);
+		// QRcodeService.QRcodecreat(openid);
+		QRcodeService.creatForeverQrcode("1111",request);
 
 	}
+	
 
-	@RequestMapping(value = { "/Url" }, produces = { "application/json;charset=UTF-8" })
-	public void Url() throws WxErrorException, IOException {
+	/*
+	 * 查看个人信息
+	 */
+	@RequestMapping(value = { "/getUserInfortation" })
+	public String getUserInfortation(@RequestParam("code") String code) throws WxErrorException, IOException {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
-		System.out.println(wxService.oauth2buildAuthorizationUrl("http://fuzhi.ngrok.cc/hjcr-wechat/getuser",
-				WxConsts.OAUTH2_SCOPE_USER_INFO, null));
+		WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
+		WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
+		String openid = wxMpUser.getOpenId();
 
+		// 生成二维码且发送给用户
+		
+     String result=wxuserService.getUserInfortation(openid);
+     if(result.equals("success")){
+    	 return "";
+     }
+     return "";
 	}
+	
+	
+
 }

@@ -12,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hjcr.wechat.entity.Foreverqrcode;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
-
+import com.hjcr.wechat.impl.ForeverqrcodeImpl;
 import com.hjcr.wechat.impl.TemplateImpl;
 import com.hjcr.wechat.impl.UserImpl;
 
@@ -38,6 +39,9 @@ public class QRcodeService {
 
 	@Autowired
 	private UserImpl userImpl;
+
+	@Autowired
+	private ForeverqrcodeImpl foreverqrcodeImpl;
 
 	/*
 	 * 创建二维码
@@ -105,7 +109,7 @@ public class QRcodeService {
 
 		// 获取设置代理关系的结果，从而判断下一步行为
 		String setHierarchyresult = setUserHierarchy(Userid, fromUseropenid);
-
+		System.out.println(setHierarchyresult);
 		// 用戶已經是代理
 		if (setHierarchyresult.equals("HierarchyExist")) {
 
@@ -116,11 +120,11 @@ public class QRcodeService {
 
 			// 給双方发送通知信息
 			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
-					.content("恭喜你成为了" + fromUser.getNickname() + "的会员").build();
+					.content("恭喜你成为了" + toUser.getNickname() + "的会员").build();
 			wxService.customMessageSend(toUserNamemessage);
 
 			WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUseropenid)
-					.content("恭喜你成为了" + toUser.getNickname() + "的领导").build();
+					.content("恭喜你成为了" + fromUser.getNickname() + "的领导").build();
 			wxService.customMessageSend(fromUserNamemessage);
 		}
 	}
@@ -189,12 +193,11 @@ public class QRcodeService {
 		WxMpUser wxMpUser = UserMessage(openid);
 		if (userImpl.getUserbyOpenid(openid) == null) {
 			User savauser = new User();
-			/*
-			 * savauser.setHeadImgUrl(wxMpUser.getHeadImgUrl());
-			 * savauser.setUserOpenid(wxMpUser.getOpenId());
-			 * savauser.setUserName(wxMpUser.getNickname());
-			 */
-			savauser.setUserForeignkey(1);
+
+			savauser.setHeadImgUrl(wxMpUser.getHeadImgUrl());
+			savauser.setUserOpenid(wxMpUser.getOpenId());
+			savauser.setUserName(wxMpUser.getNickname());
+
 			System.out.println(savauser);
 			userImpl.save(savauser);
 		}
@@ -222,25 +225,89 @@ public class QRcodeService {
 		User fromuser = userImpl.getUserbyOpenid(fromUseropenid);// 获取关注者的user
 
 		// 判断该用户是否有上级了
-		if (fromuser.getUserHierarchy() != null || fromuser.getUserHierarchy().length() > 0) {
+		if (fromuser.getUserHierarchy() != null) {
 			return "HierarchyExist";
 		} else {
 
 			// 判断是否上级没有层级关系
-			if (touser.getUserHierarchy() == null || fromuser.getUserHierarchy().equals("")) {
+			if (touser.getUserHierarchy() == null) {
 				String hierarchy = "/" + Userid;// int 转化成String
 				fromuser.setUserHierarchy(hierarchy);
+				userImpl.saveAndFlush(fromuser);
 			} else {
 				// 获取所有层级关系
 				String touserhierarchy = touser.getUserHierarchy();
 				String fromuserhierarchy = "/" + Userid + touserhierarchy;
 				fromuser.setUserHierarchy(fromuserhierarchy);
-
+				userImpl.saveAndFlush(fromuser);
 			}
 
 		}
 		return "success";
+	}
 
+	/*
+	 * 通过telepphone获取用户永久二维码
+	 */
+	public String creatForeverQrcode(String telephone, HttpServletRequest request) {
+
+		// 通过电话获取永久二维码
+		Foreverqrcode foreverqrcode = foreverqrcodeImpl.getqrcodebyphone(telephone);
+		if (foreverqrcode == null) {
+			User user = userImpl.getUserByphone(telephone);
+			try {
+				// 创建一个永久二维码
+				return LastQrcode(user, request);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "error";
+
+			}
+		} else {
+			return foreverqrcode.getQrcodeUrl();
+		}
+
+	}
+
+	/*
+	 * 生成永久二维码
+	 */
+	public String LastQrcode(User user, HttpServletRequest request) throws IOException, WxErrorException {
+
+		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+		WxMpService wxService = new WxMpServiceImpl();
+		wxService.setWxMpConfigStorage(config);
+		double numble = (Math.random() * 100);
+		// 获取二维码
+		WxMpQrCodeTicket ticket = wxService.qrCodeCreateLastTicket(user.getUserId());
+		// 生成二维码文件
+		File file = wxService.qrCodePicture(ticket);
+
+		// 获取模板信息
+		Template template = templateImpl.getTemplatebyConfirm("1");
+
+		// 拼接图片
+		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file);
+		// 保存文件
+		String path = request.getSession().getServletContext().getRealPath("/");
+		File imagePath = new File(path + "qrcodeimage");
+		if (!imagePath.exists())
+			imagePath.mkdirs();
+		File imageFile = new File(imagePath + "\\", "" + numble + ".jpg");
+
+		FileOutputStream os = new FileOutputStream(imageFile);
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		while ((len = in.read(buffer)) != -1) {
+			os.write(buffer, 0, len);
+		}
+		// 保存到数据库中
+		String qrcodeurl = imagePath + "\\" + numble + ".jpg";
+		Foreverqrcode foreverqrcode = new Foreverqrcode();
+		foreverqrcode.setQrcodeUrl(qrcodeurl);
+		foreverqrcode.setUserTelephone(user.getUserMobiphone());
+		foreverqrcodeImpl.save(foreverqrcode);
+		return qrcodeurl;
 	}
 
 }

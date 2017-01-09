@@ -18,7 +18,7 @@ public class User {
 	private String userName;
 	private String userOpenid;
 	private String userHierarchy;
-	private int userForeignkey;
+	private Integer userForeignkey;
 	private String userMobiphone;
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,10 +53,10 @@ public class User {
 	public void setUserHierarchy(String userHierarchy) {
 		this.userHierarchy = userHierarchy;
 	}
-	public int getUserForeignkey() {
+	public Integer getUserForeignkey() {
 		return userForeignkey;
 	}
-	public void setUserForeignkey(int userForeignkey) {
+	public void setUserForeignkey(Integer userForeignkey) {
 		this.userForeignkey = userForeignkey;
 	}
 	public String getUserMobiphone() {
@@ -66,7 +66,7 @@ public class User {
 		this.userMobiphone = userMobiphone;
 	}
 	public User(int userId, String headImgUrl, String userName, String userOpenid, String userHierarchy,
-			int userForeignkey, String userMobiphone) {
+			Integer userForeignkey, String userMobiphone) {
 		super();
 		this.userId = userId;
 		this.headImgUrl = headImgUrl;
