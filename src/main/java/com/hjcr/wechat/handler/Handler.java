@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.impl.UserImpl;
-
+import com.hjcr.wechat.service.CardService;
 import com.hjcr.wechat.service.QRcodeService;
 import com.hjcr.wechat.service.TemplateService;
 import com.hjcr.wechat.service.UserService;
@@ -46,6 +46,7 @@ import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import net.sf.json.JSONObject;
 
 @Controller
 public class Handler extends GenericController {
@@ -63,7 +64,10 @@ public class Handler extends GenericController {
 
 	@Autowired
 	private UserService wxuserService;
-	
+
+	@Autowired
+	private CardService cardService;
+
 	// 和微信沟通的主程序
 	@RequestMapping(value = { "/WxMessageRouter" }, produces = { "application/json;charset=UTF-8" })
 	public void WxMessageRouter(HttpServletRequest request, HttpServletResponse response)
@@ -105,6 +109,8 @@ public class Handler extends GenericController {
 				// 当用户扫描二维码未关注的动作
 
 				QRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
+				String openid=wxuserService.getOpenidbyuser(inMessage.getEventKey());
+				cardService.sendCard(openid);
 
 			} else if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") == -1) {
 				// 当用户扫描二维码已关注的动作
@@ -155,10 +161,11 @@ public class Handler extends GenericController {
 	 * 永久二维码
 	 */
 	@RequestMapping(value = { "/getlastqrcode" })
-	public String getlastqrcode(@RequestParam("telephone") String telephone,HttpServletRequest request) throws WxErrorException, IOException {
+	public String getlastqrcode(@RequestParam("telephone") String telephone, HttpServletRequest request)
+			throws WxErrorException, IOException {
 
 		//
-       return QRcodeService.creatForeverQrcode(telephone, request);
+		return QRcodeService.creatForeverQrcode(telephone, request);
 	}
 
 	/*
@@ -175,14 +182,32 @@ public class Handler extends GenericController {
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
 	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 
-		String openid = "oUPl-wh3UehzmwaztIQzkvcuS3rE";
-
+		/*
+		 * WxMpInMemoryConfigStorage config = new
+		 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService
+		 * wxService = new WxMpServiceImpl();
+		 * wxService.setWxMpConfigStorage(config); JSONObject jsonORG = new
+		 * JSONObject(); JSONObject jsonOR2 = new JSONObject();
+		 * jsonOR2.element("card_id", "pUPl-wm9wP2yl-2fGhG1EAQW6gL0");
+		 * jsonORG.element("touser", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
+		 * jsonORG.element("msgtype", "wxcard"); jsonORG.element("wxcard",
+		 * jsonOR2);
+		 * 
+		 * String postData=jsonORG.toString(); String
+		 * url="https://api.weixin.qq.com/cgi-bin/message/custom/send?";
+		 * System.out.println(wxService.post(url, postData));
+		 * 
+		 */
+		System.out.println(cardService.creatfiftyCard());
+		//cardService.sendCard("pUPl-wsgjMCDw0zTfNC2PAyC6Dqw", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
 		// 生成二维码且发送给用户
-		// QRcodeService.QRcodecreat(openid);
-		QRcodeService.creatForeverQrcode("1111",request);
-
+		/*
+		 * String openid = "oUPl-whRdCbCywOXjTZPdOOl4p-s";
+		 * QRcodeService.QRcodecreat(openid);
+		 */
+		// QRcodeService.creatForeverQrcode("1111",request);
+		
 	}
-	
 
 	/*
 	 * 查看个人信息
@@ -197,14 +222,40 @@ public class Handler extends GenericController {
 		String openid = wxMpUser.getOpenId();
 
 		// 生成二维码且发送给用户
-		
-     String result=wxuserService.getUserInfortation(openid);
-     if(result.equals("success")){
-    	 return "";
-     }
-     return "";
-	}
-	
-	
 
+		String result = wxuserService.getUserInfortation(openid);
+		if (result.equals("success")) {
+			return "";
+		}
+		return "";
+	}
+
+	// 创建卡卷
+
+	/*
+	 * 发送卡卷给用户
+	 */
+	public String sendCard(String touseropenid) {
+		try {
+			cardService.sendCard(touseropenid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "success";
+	}
+
+	/*
+	 * 删除卡卷
+	 */
+	public String deleteCard(String code) {
+		try {
+			cardService.deleteCard(code);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "success";
+
+	}
 }

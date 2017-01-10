@@ -74,6 +74,12 @@ public class UserService {
 		return userImpl.getUserbyOpenid(openid);
 	}
 
+	public  String getOpenidbyuser(String userId){
+		int Userid = Integer.parseInt(userId);
+		return userImpl.getOpenidbyuser(Userid);
+	}
+
+	
 	
 	public String getUserInfortation(String openid){
 		//通过Openid获取User

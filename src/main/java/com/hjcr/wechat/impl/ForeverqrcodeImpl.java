@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.hjcr.wechat.entity.Foreverqrcode;
 import com.hjcr.wechat.entity.User;
 
-public interface ForeverqrcodeImpl extends JpaRepository<Foreverqrcode, Integer>{
+public interface ForeverqrcodeImpl extends JpaRepository<Foreverqrcode, Integer> {
 
-	
 	/*
 	 * 通过telephone获得二维码信息
 	 */

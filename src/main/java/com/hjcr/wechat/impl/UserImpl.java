@@ -6,17 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.User;
-public interface UserImpl extends JpaRepository<User, Integer>{
 
-	
+public interface UserImpl extends JpaRepository<User, Integer> {
+
 	/*
 	 * 通过openId获得用户信息
 	 */
 	@Query("SELECT user FROM User user WHERE user.userOpenid = ?1 ")
 	User getUserbyOpenid(String Openid);
 
-	
-	
 	/*
 	 * 通过userId获得用户openid
 	 */
@@ -28,8 +26,6 @@ public interface UserImpl extends JpaRepository<User, Integer>{
 	 */
 	@Query("SELECT user FROM User user WHERE user.userMobiphone = ?1 ")
 	User getUserByphone(String userMobiphone);
-	
-	
 
 	/*
 	 * 通过userId获得用户信息
@@ -37,12 +33,11 @@ public interface UserImpl extends JpaRepository<User, Integer>{
 	@Query("SELECT user FROM User user WHERE user.userId = ?1 ")
 	User getUserbyuserid(int userId);
 
-
-	//获取用户的一级代理
+	// 获取用户的一级代理
 	@Query("SELECT user FROM User user WHERE user.userId like  '/?1%'")
-	 List<User> getFirstAgent(int userid);
-	
-	//获取用户的二级代理
-		@Query("SELECT user FROM User user WHERE user.userId like  '/?/?1%'")
-		 List<User> getSecondAgent(int userid);
+	List<User> getFirstAgent(int userid);
+
+	// 获取用户的二级代理
+	@Query("SELECT user FROM User user WHERE user.userId like  '/?/?1%'")
+	List<User> getSecondAgent(int userid);
 }
