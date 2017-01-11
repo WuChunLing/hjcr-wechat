@@ -4,6 +4,7 @@ import java.awt.Menu;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -69,7 +70,7 @@ public class Handler extends GenericController {
 
 	@Autowired
 	private CardService cardService;
-	
+
 	@Autowired
 	private OrderMoneyService orderMoneyService;
 
@@ -108,19 +109,19 @@ public class Handler extends GenericController {
 
 			if (inMessage.getEvent().equals("subscribe")) {
 				// 用户订阅公众号保存信息
+				avoidRepetition(response);
 				QRcodeService.savaUser(inMessage.getFromUserName());
 			}
-			if(inMessage.getEvent().equals("CLICK")&&inMessage.getEventKey().equals("0")){
+			if (inMessage.getEvent().equals("CLICK") && inMessage.getEventKey().equals("0")) {
 				// 生成二维码且发送给用户
+				avoidRepetition(response);
 				QRcodeService.QRcodecreat(inMessage.getFromUserName());
 			}
-			
+
 			if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") != -1) {
 				// 当用户扫描二维码未关注的动作
-
+				avoidRepetition(response);
 				QRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
-				/*String openid = wxuserService.getOpenidbyuser(inMessage.getEventKey().substring(8));
-				cardService.sendCard(openid);*/
 
 			} else if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") == -1) {
 				// 当用户扫描二维码已关注的动作
@@ -238,42 +239,42 @@ public class Handler extends GenericController {
 		return "success";
 
 	}
-	
-	
+
 	/*
 	 * 添加类别分配比例信息
 	 */
 	@RequestMapping("addOrderMoney")
-	public String addOrderMoney(Ordermoney ordermoney){
+	public String addOrderMoney(Ordermoney ordermoney) {
 		orderMoneyService.sava(ordermoney);
 		return "success";
 	}
-	
+
 	/*
 	 * 更新类别分配比例信息
 	 */
 	@RequestMapping("updataOrderMoney")
-	public String updataOrderMoney(Ordermoney ordermoney){
+	public String updataOrderMoney(Ordermoney ordermoney) {
 		orderMoneyService.update(ordermoney);
 		return "success";
 	}
-	
+
 	/*
 	 * 删除类别分配比例信息
 	 */
 	@RequestMapping("deteleOrderMoney")
-	public String deteleOrderMoney(int orderMoneyId){
+	public String deteleOrderMoney(int orderMoneyId) {
 		orderMoneyService.delete(orderMoneyId);
 		return "success";
 	}
-	
+
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
 	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 
-		 WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
-		   WxMpService wxService = new WxMpServiceImpl();
-			wxService.setWxMpConfigStorage(config);
-	System.out.println(wxService.oauth2buildAuthorizationUrl("http://9645db09.ngrok.io/hjcr-wechat/getqrcode", "snsapi_base", ""));
+		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+		WxMpService wxService = new WxMpServiceImpl();
+		wxService.setWxMpConfigStorage(config);
+		System.out.println(wxService.oauth2buildAuthorizationUrl("http://9645db09.ngrok.io/hjcr-wechat/getqrcode",
+				"snsapi_base", ""));
 		/*
 		 * WxMpInMemoryConfigStorage config = new
 		 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService
@@ -290,7 +291,7 @@ public class Handler extends GenericController {
 		 * System.out.println(wxService.post(url, postData));
 		 * 
 		 */
-		//System.out.println(cardService.creatfiftyCard());
+		// System.out.println(cardService.creatfiftyCard());
 		// cardService.sendCard("pUPl-wsgjMCDw0zTfNC2PAyC6Dqw",
 		// "oUPl-whRdCbCywOXjTZPdOOl4p-s");
 		// 生成二维码且发送给用户
@@ -300,6 +301,15 @@ public class Handler extends GenericController {
 		 */
 		// QRcodeService.creatForeverQrcode("1111",request);
 
+	}
+
+	/*
+	 * 防止微信三次发送信息，排重
+	 */
+	public void avoidRepetition(HttpServletResponse response) throws IOException {
+		PrintWriter out = response.getWriter();
+		out.print("");
+		out.close(); // 防止微信三次发送信息，排重
 	}
 
 }
