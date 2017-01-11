@@ -21,9 +21,9 @@ public class wxMenu {
 	        button2.setName("知鹏好帅");
 	
 	        WxMenuButton button21 = new WxMenuButton();
-	        button21.setType(WxConsts.BUTTON_VIEW);
+	        button21.setType(WxConsts.BUTTON_CLICK);
 	        button21.setName("生成二维码");
-	        button21.setUrl("http://www.4399.com");
+	        button21.setKey("0");
 	        
 	        
 	        WxMenuButton button22 = new WxMenuButton();
@@ -34,11 +34,10 @@ public class wxMenu {
 	        button2.getSubButtons().add(button21);
 	        button2.getSubButtons().add(button22);
 	  
-	    
-	       
 	        menu.getButtons().add(button2);
 	        wxService.menuCreate(menu);
-	       
 	    }
+	   
+	   
 }
 

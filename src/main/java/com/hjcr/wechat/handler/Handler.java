@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hjcr.wechat.entity.Ordermoney;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.impl.UserImpl;
 import com.hjcr.wechat.service.CardService;
+import com.hjcr.wechat.service.OrderMoneyService;
 import com.hjcr.wechat.service.QRcodeService;
 import com.hjcr.wechat.service.TemplateService;
 import com.hjcr.wechat.service.UserService;
@@ -67,6 +69,9 @@ public class Handler extends GenericController {
 
 	@Autowired
 	private CardService cardService;
+	
+	@Autowired
+	private OrderMoneyService orderMoneyService;
 
 	// 和微信沟通的主程序
 	@RequestMapping(value = { "/WxMessageRouter" }, produces = { "application/json;charset=UTF-8" })
@@ -105,12 +110,17 @@ public class Handler extends GenericController {
 				// 用户订阅公众号保存信息
 				QRcodeService.savaUser(inMessage.getFromUserName());
 			}
+			if(inMessage.getEvent().equals("CLICK")&&inMessage.getEventKey().equals("0")){
+				// 生成二维码且发送给用户
+				QRcodeService.QRcodecreat(inMessage.getFromUserName());
+			}
+			
 			if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") != -1) {
 				// 当用户扫描二维码未关注的动作
 
 				QRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
-				String openid=wxuserService.getOpenidbyuser(inMessage.getEventKey());
-				cardService.sendCard(openid);
+				/*String openid = wxuserService.getOpenidbyuser(inMessage.getEventKey().substring(8));
+				cardService.sendCard(openid);*/
 
 			} else if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") == -1) {
 				// 当用户扫描二维码已关注的动作
@@ -179,36 +189,6 @@ public class Handler extends GenericController {
 
 	}
 
-	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
-	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
-
-		/*
-		 * WxMpInMemoryConfigStorage config = new
-		 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService
-		 * wxService = new WxMpServiceImpl();
-		 * wxService.setWxMpConfigStorage(config); JSONObject jsonORG = new
-		 * JSONObject(); JSONObject jsonOR2 = new JSONObject();
-		 * jsonOR2.element("card_id", "pUPl-wm9wP2yl-2fGhG1EAQW6gL0");
-		 * jsonORG.element("touser", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
-		 * jsonORG.element("msgtype", "wxcard"); jsonORG.element("wxcard",
-		 * jsonOR2);
-		 * 
-		 * String postData=jsonORG.toString(); String
-		 * url="https://api.weixin.qq.com/cgi-bin/message/custom/send?";
-		 * System.out.println(wxService.post(url, postData));
-		 * 
-		 */
-		System.out.println(cardService.creatfiftyCard());
-		//cardService.sendCard("pUPl-wsgjMCDw0zTfNC2PAyC6Dqw", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
-		// 生成二维码且发送给用户
-		/*
-		 * String openid = "oUPl-whRdCbCywOXjTZPdOOl4p-s";
-		 * QRcodeService.QRcodecreat(openid);
-		 */
-		// QRcodeService.creatForeverQrcode("1111",request);
-		
-	}
-
 	/*
 	 * 查看个人信息
 	 */
@@ -258,4 +238,68 @@ public class Handler extends GenericController {
 		return "success";
 
 	}
+	
+	
+	/*
+	 * 添加类别分配比例信息
+	 */
+	@RequestMapping("addOrderMoney")
+	public String addOrderMoney(Ordermoney ordermoney){
+		orderMoneyService.sava(ordermoney);
+		return "success";
+	}
+	
+	/*
+	 * 更新类别分配比例信息
+	 */
+	@RequestMapping("updataOrderMoney")
+	public String updataOrderMoney(Ordermoney ordermoney){
+		orderMoneyService.update(ordermoney);
+		return "success";
+	}
+	
+	/*
+	 * 删除类别分配比例信息
+	 */
+	@RequestMapping("deteleOrderMoney")
+	public String deteleOrderMoney(int orderMoneyId){
+		orderMoneyService.delete(orderMoneyId);
+		return "success";
+	}
+	
+	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
+	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
+
+		 WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+		   WxMpService wxService = new WxMpServiceImpl();
+			wxService.setWxMpConfigStorage(config);
+	System.out.println(wxService.oauth2buildAuthorizationUrl("http://9645db09.ngrok.io/hjcr-wechat/getqrcode", "snsapi_base", ""));
+		/*
+		 * WxMpInMemoryConfigStorage config = new
+		 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService
+		 * wxService = new WxMpServiceImpl();
+		 * wxService.setWxMpConfigStorage(config); JSONObject jsonORG = new
+		 * JSONObject(); JSONObject jsonOR2 = new JSONObject();
+		 * jsonOR2.element("card_id", "pUPl-wm9wP2yl-2fGhG1EAQW6gL0");
+		 * jsonORG.element("touser", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
+		 * jsonORG.element("msgtype", "wxcard"); jsonORG.element("wxcard",
+		 * jsonOR2);
+		 * 
+		 * String postData=jsonORG.toString(); String
+		 * url="https://api.weixin.qq.com/cgi-bin/message/custom/send?";
+		 * System.out.println(wxService.post(url, postData));
+		 * 
+		 */
+		//System.out.println(cardService.creatfiftyCard());
+		// cardService.sendCard("pUPl-wsgjMCDw0zTfNC2PAyC6Dqw",
+		// "oUPl-whRdCbCywOXjTZPdOOl4p-s");
+		// 生成二维码且发送给用户
+		/*
+		 * String openid = "oUPl-whRdCbCywOXjTZPdOOl4p-s";
+		 * QRcodeService.QRcodecreat(openid);
+		 */
+		// QRcodeService.creatForeverQrcode("1111",request);
+
+	}
+
 }

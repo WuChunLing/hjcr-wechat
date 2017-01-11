@@ -114,6 +114,7 @@ public class CardService {
 	 * 发送卡卷给微信用户
 	 */
 	public String sendCard(String touseropenid) throws IOException, WxErrorException {
+		System.out.println("9999");
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);

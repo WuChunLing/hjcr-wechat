@@ -52,8 +52,8 @@ public class photoJoin {
 
 	final public InputStream photoJoinImage(Template template, String HeadImgUrl, File file) throws IOException {
 
-		// BufferedImage image= ImageIO.read(file);//二维码
-		BufferedImage image = ImageIO.read(new File("D://14.jpg"));// 测试二维码
+		 BufferedImage image= ImageIO.read(file);//二维码
+		//BufferedImage image = ImageIO.read(new File("D://14.jpg"));// 测试二维码
 		BufferedImage bg = ImageIO.read(new File(template.getTemplatePath()));// 获取模板图片
 		BufferedImage HeadImg = getBufferedImage(HeadImgUrl);// 获取头像图片
 		// BufferedImage HeadImg = ImageIO.read(new File("D://2.jpg"));//

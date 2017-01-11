@@ -39,6 +39,9 @@ public class QRcodeService {
 
 	@Autowired
 	private UserImpl userImpl;
+	
+	@Autowired
+	private CardService cardService;
 
 	@Autowired
 	private ForeverqrcodeImpl foreverqrcodeImpl;
@@ -97,7 +100,8 @@ public class QRcodeService {
 
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
-		int Userid = Integer.parseInt(toUserid);
+		
+		int Userid = Integer.parseInt(toUserid.substring(8));
 
 		// 获取UserId
 		String toUserOpenid = userImpl.getOpenidbyuser(Userid);
@@ -113,19 +117,20 @@ public class QRcodeService {
 		// 用戶已經是代理
 		if (setHierarchyresult.equals("HierarchyExist")) {
 
-			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUseropenid)
 					.content("你已经成为代理，不可重复代理").build();
 			wxService.customMessageSend(toUserNamemessage);
 		} else {
 
 			// 給双方发送通知信息
-			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUseropenid)
 					.content("恭喜你成为了" + toUser.getNickname() + "的会员").build();
 			wxService.customMessageSend(toUserNamemessage);
 
-			WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(fromUseropenid)
+			WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
 					.content("恭喜你成为了" + fromUser.getNickname() + "的领导").build();
 			wxService.customMessageSend(fromUserNamemessage);
+			cardService.sendCard(toUserOpenid);
 		}
 	}
 
@@ -197,7 +202,7 @@ public class QRcodeService {
 			savauser.setHeadImgUrl(wxMpUser.getHeadImgUrl());
 			savauser.setUserOpenid(wxMpUser.getOpenId());
 			savauser.setUserName(wxMpUser.getNickname());
-
+             savauser.setUserForeignkey(0);
 			System.out.println(savauser);
 			userImpl.save(savauser);
 		}
