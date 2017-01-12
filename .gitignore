@@ -1,5 +1,6 @@
-.settings
-target
-.project
-.classpath
-src\main\resources\db.properties
+/.settings
+/target
+/.project
+/.classpath
+/src/main/resources/db.properties
+/.tern-project
