@@ -211,8 +211,19 @@ public class Handler extends GenericController {
 		return "";
 	}
 
-	// 创建卡卷
-
+	// 创建50元卡卷
+	@RequestMapping(value = { "/creatfiftyCard" })
+	public String creatCard() {
+		try {
+			System.out.println(cardService.creatthirtyCard());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "success";
+	}
+	
+	
 	/*
 	 * 发送卡卷给用户
 	 */

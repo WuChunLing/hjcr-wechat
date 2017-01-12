@@ -1,5 +1,15 @@
 package com.hjcr.wechat.entity;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Cacheable
+@Table(name="allocation")
+@Entity
 public class Allocation {
 
 //分配的比例
@@ -7,7 +17,9 @@ public class Allocation {
 	private String allocationName;  // 
 	private String orderMoneyFirst;  //一級代理
 	private String orderMoneySecond;//二級代理
-	private int orderConfirm;       //是否先用該模板
+	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
 	public int getAllocationId() {
 		return allocationId;
 	}
@@ -32,12 +44,7 @@ public class Allocation {
 	public void setOrderMoneySecond(String orderMoneySecond) {
 		this.orderMoneySecond = orderMoneySecond;
 	}
-	public int getOrderConfirm() {
-		return orderConfirm;
-	}
-	public void setOrderConfirm(int orderConfirm) {
-		this.orderConfirm = orderConfirm;
-	}
+	
 	
 	
 	

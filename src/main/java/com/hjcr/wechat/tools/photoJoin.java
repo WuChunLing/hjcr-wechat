@@ -73,11 +73,11 @@ public class photoJoin {
 		QR.drawImage(HeadImg, template.getTemplateHeadImgWide(), template.getTemplateHeadImgHigh(), size, size, null);// 绘制微信头像
 
 		File weixinfile = new File("file");
-		ImageIO.write(bg, "png", weixinfile);
+		ImageIO.write(bg, "jpg", weixinfile);
 
 		ByteArrayOutputStream bs = new ByteArrayOutputStream();
 		ImageOutputStream imOut = ImageIO.createImageOutputStream(bs);
-		ImageIO.write(bg, "png", imOut);
+		ImageIO.write(bg, "jpg", imOut);
 		InputStream is = new ByteArrayInputStream(bs.toByteArray());
 
 		return is;

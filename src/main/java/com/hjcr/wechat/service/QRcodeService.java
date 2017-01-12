@@ -30,6 +30,7 @@ import me.chanjar.weixin.mp.api.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpQrCodeTicket;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import net.sf.json.JSONObject;
 
 @Service
 public class QRcodeService {
@@ -39,7 +40,7 @@ public class QRcodeService {
 
 	@Autowired
 	private UserImpl userImpl;
-	
+
 	@Autowired
 	private CardService cardService;
 
@@ -100,11 +101,12 @@ public class QRcodeService {
 
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
-		
+
 		int Userid = Integer.parseInt(toUserid.substring(8));
 
 		// 获取UserId
-		String toUserOpenid = userImpl.getOpenidbyuser(Userid);
+		User User = userImpl.getUserbyuserid(Userid);
+		String toUserOpenid = User.getUserOpenid();
 
 		// 获取发送方的openid
 		WxMpUser toUser = UserMessage(toUserOpenid);
@@ -130,11 +132,22 @@ public class QRcodeService {
 			WxMpCustomMessage fromUserNamemessage = WxMpCustomMessage.TEXT().toUser(toUserOpenid)
 					.content("恭喜你成为了" + fromUser.getNickname() + "的领导").build();
 			wxService.customMessageSend(fromUserNamemessage);
-			cardService.sendCard(toUserOpenid);
+			sendCashMessage(toUserOpenid);
+
+			if (!User.getUserHierarchy().isEmpty()) {
+				String hierarchy = User.getUserHierarchy();
+				hierarchy = hierarchy.substring(hierarchy.lastIndexOf("/") + 1);
+				int agentUserid = Integer.parseInt(hierarchy);
+
+				// 获取代理UserId
+				User agentUser = userImpl.getUserbyuserid(agentUserid);
+				System.out.println(agentUser);
+				sendAgentMessage(agentUser.getUserOpenid(),toUser.getNickname());
+			}
 		}
 	}
 
-	/*
+	/*s
 	 * 获取用户数据
 	 * 
 	 * @author 知鹏
@@ -202,7 +215,7 @@ public class QRcodeService {
 			savauser.setHeadImgUrl(wxMpUser.getHeadImgUrl());
 			savauser.setUserOpenid(wxMpUser.getOpenId());
 			savauser.setUserName(wxMpUser.getNickname());
-             savauser.setUserForeignkey(0);
+			savauser.setUserForeignkey(0);
 			System.out.println(savauser);
 			userImpl.save(savauser);
 		}
@@ -315,4 +328,48 @@ public class QRcodeService {
 		return qrcodeurl;
 	}
 
+	/*
+	 * 给二级代理用户发送模板信息
+	 */
+	public void sendAgentMessage(String openid,String openname) throws IOException, WxErrorException {
+		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+		WxMpService wxService = new WxMpServiceImpl();
+		wxService.setWxMpConfigStorage(config);
+		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?";
+		JSONObject jsonORG = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONObject first=new JSONObject();
+		jsonORG.element("touser", openid);
+		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
+		jsonORG.element("url","https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D5%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		first.element("value", "你的会员"+openname+"发展了一个下线，"
+		+"恭喜你获得一张代金券");
+		first.element("color","#173177");
+		data.element("first",first);
+		jsonORG.element("data", data);
+		wxService.post(url, jsonORG.toString());
+	}
+
+	
+	/*
+	 * 给发展的用户的代理发送模板信息
+	 */
+	public void sendCashMessage(String openid) throws IOException, WxErrorException {
+		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+		WxMpService wxService = new WxMpServiceImpl();
+		wxService.setWxMpConfigStorage(config);
+		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?";
+		JSONObject jsonORG = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONObject first=new JSONObject();
+		jsonORG.element("touser", openid);
+		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
+		jsonORG.element("url","https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D6%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		first.element("value","恭喜你获得一张代金券");
+		first.element("color","#173177");
+		data.element("first",first);
+		jsonORG.element("data", data);
+		wxService.post(url, jsonORG.toString());
+	}
+	
 }

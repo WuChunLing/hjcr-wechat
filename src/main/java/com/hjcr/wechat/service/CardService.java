@@ -34,11 +34,11 @@ public class CardService {
 
 		JSONObject jsonORG = new JSONObject();
 		JSONObject card = new JSONObject();
-		JSONObject groupon = new JSONObject();
+		JSONObject general_coupon = new JSONObject();
 		JSONObject base_info = new JSONObject();
 		JSONObject sku = new JSONObject();
 		JSONObject date_info = new JSONObject();
-		card.element("card_type", "GROUPON");// 设置卡券的类型
+		card.element("card_type", "GENERAL_COUPON");// 设置卡券的类型
 		base_info.element("code_type", "CODE_TYPE_TEXT");
 		base_info.element("logo_url",
 				"http://mmbiz.qpic.cn/mmbiz/iaL1LJM1mF9aRKPZJkmG8xXhiaHqkKSVMMWeN3hLut7X7hicFNjakmxibMLGWpXrEXB33367o7zHN0CwngnQY7zb7g/0");// 卡券的商户logo
@@ -55,9 +55,9 @@ public class CardService {
 		sku.element("quantity", 100000);
 		base_info.element("date_info", date_info);
 		base_info.element("sku", sku);
-		groupon.element("base_info", base_info);
-		groupon.element("deal_detail", "以下锅底2选1（有菌王锅、麻辣锅、大骨锅、番茄锅、清补 凉锅、酸菜鱼锅可选）： 大锅1份 12元 小锅2份 16元");
-		card.element("groupon", groupon);
+		general_coupon.element("base_info", base_info);
+		general_coupon.element("default_detail", "皇嘉財潤50元优惠卷");
+		card.element("general_coupon", general_coupon);
 		jsonORG.element("card", card);
 		String postData = jsonORG.toString();
 		String url = "https://api.weixin.qq.com/card/create?";
@@ -77,11 +77,11 @@ public class CardService {
 
 		JSONObject jsonORG = new JSONObject();
 		JSONObject card = new JSONObject();
-		JSONObject groupon = new JSONObject();
+		JSONObject general_coupon = new JSONObject();
 		JSONObject base_info = new JSONObject();
 		JSONObject sku = new JSONObject();
 		JSONObject date_info = new JSONObject();
-		card.element("card_type", "GROUPON");// 设置卡券的类型
+		card.element("card_type", "GENERAL_COUPON");// 设置卡券的类型
 		base_info.element("code_type", "CODE_TYPE_TEXT");
 		base_info.element("logo_url",
 				"http://mmbiz.qpic.cn/mmbiz/iaL1LJM1mF9aRKPZJkmG8xXhiaHqkKSVMMWeN3hLut7X7hicFNjakmxibMLGWpXrEXB33367o7zHN0CwngnQY7zb7g/0");// 卡券的商户logo
@@ -98,9 +98,9 @@ public class CardService {
 		sku.element("quantity", 100000);
 		base_info.element("date_info", date_info);
 		base_info.element("sku", sku);
-		groupon.element("base_info", base_info);
-		groupon.element("deal_detail", "以下锅底2选1（有菌王锅、麻辣锅、大骨锅、番茄锅、清补 凉锅、酸菜鱼锅可选）： 大锅1份 12元 小锅2份 16元");
-		card.element("groupon", groupon);
+		general_coupon.element("base_info", base_info);
+		general_coupon.element("default_detail", "皇嘉財潤30元优惠卷");
+		card.element("general_coupon", general_coupon);
 		jsonORG.element("card", card);
 		String postData = jsonORG.toString();
 		String url = "https://api.weixin.qq.com/card/create?";
