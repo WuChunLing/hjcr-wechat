@@ -234,7 +234,8 @@ public class SystemHandler extends GenericController {
 	@RequestMapping(value = "/getRoleByUser" ,method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getRoleByUser(Integer userId) {
 		ResultMessage result = new ResultMessage();
-		
+		Role role = roleService.getRoleByUser(userId);
+		result.getResultParm().put("role",role);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

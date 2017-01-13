@@ -13,6 +13,9 @@ public class RoleService {
 
 	@Autowired
 	private RoleImpl roleImpl;
+	
+//	@Autowired
+//	private SystemUserImpl systemUserImpl;
 
 	/**
 	 * 添加角色信息
@@ -31,6 +34,16 @@ public class RoleService {
 	 */
 	public List<Role> getAllRole() {
 		return roleImpl.findAll();
+	}
+
+	/**
+	 * 根据用户id获取用户角色
+	 * @author Kellan
+	 * @param userId
+	 * @return
+	 */
+	public Role getRoleByUser(Integer userId) {
+		return roleImpl.getRoleByUser(userId);
 	}
 	
 	
