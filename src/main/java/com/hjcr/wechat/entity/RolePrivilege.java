@@ -15,37 +15,37 @@ import javax.persistence.Table;
 @Entity
 public class RolePrivilege implements Serializable {
 	
-    private int id;
+    private Integer id;
 
-    private int roleId;
+    private Integer roleId;
 
-    private int privilegeId;
+    private Integer privilegeId;
 
     private static final long serialVersionUID = 1L;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-	public int getRoleId() {
+	public Integer getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(int roleId) {
+	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
 
-	public int getPrivilegeId() {
+	public Integer getPrivilegeId() {
 		return privilegeId;
 	}
 
-	public void setPrivilegeId(int privilegeId) {
+	public void setPrivilegeId(Integer privilegeId) {
 		this.privilegeId = privilegeId;
 	}
 
