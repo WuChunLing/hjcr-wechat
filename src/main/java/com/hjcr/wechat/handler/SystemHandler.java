@@ -220,7 +220,8 @@ public class SystemHandler extends GenericController {
 	@RequestMapping(value = "/getAllRole" ,method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getAllRole() {
 		ResultMessage result = new ResultMessage();
-		
+		List<Role> list = roleService.getAllRole();
+		result.getResultParm().put("roleList",list);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

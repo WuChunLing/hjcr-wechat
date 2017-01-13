@@ -1,5 +1,7 @@
 package com.hjcr.wechat.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,15 @@ public class RoleService {
 	 */
 	public Role addRole(Role role) {
 		return roleImpl.save(role);
+	}
+
+	/**
+	 * 获取所有角色
+	 * @author Kellan
+	 * @return
+	 */
+	public List<Role> getAllRole() {
+		return roleImpl.findAll();
 	}
 	
 	
