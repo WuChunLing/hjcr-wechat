@@ -9,6 +9,7 @@
 	<configs>
 	</configs>
 	<autoconfigs>
+		<config>src/main/resources/applicationContext-mvc.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

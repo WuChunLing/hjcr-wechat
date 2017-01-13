@@ -1,5 +1,6 @@
 package com.hjcr.wechat.tools;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -71,13 +72,14 @@ public class photoJoin {
 
 		Graphics2D QR = bg.createGraphics();
 		QR.drawImage(HeadImg, template.getTemplateHeadImgWide(), template.getTemplateHeadImgHigh(), size, size, null);// 绘制微信头像
-
+		 BufferedImage newBufferedImage = new BufferedImage(bg.getWidth(), bg.getHeight(), BufferedImage.TYPE_INT_RGB);  
+	        newBufferedImage.createGraphics().drawImage(bg, 0, 0, Color.WHITE, null);  
 		File weixinfile = new File("file");
-		ImageIO.write(bg, "jpg", weixinfile);
+		ImageIO.write(newBufferedImage, "jpg", weixinfile);
 
 		ByteArrayOutputStream bs = new ByteArrayOutputStream();
 		ImageOutputStream imOut = ImageIO.createImageOutputStream(bs);
-		ImageIO.write(bg, "jpg", imOut);
+		ImageIO.write(newBufferedImage, "jpg", imOut);
 		InputStream is = new ByteArrayInputStream(bs.toByteArray());
 
 		return is;

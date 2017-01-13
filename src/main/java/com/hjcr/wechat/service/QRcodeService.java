@@ -52,41 +52,48 @@ public class QRcodeService {
 	 * 
 	 * @author 知鹏
 	 */
-	public void QRcodecreat(String openid) throws WxErrorException, IOException {
+	public void QRcodecreat(String openid) throws IOException, WxErrorException{
 
-		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
-		WxMpService wxService = new WxMpServiceImpl();
-		wxService.setWxMpConfigStorage(config);
-
-		// 获取用户资料
-		String lang = "zh_CN"; // 语言
-		WxMpUser user = wxService.userInfo(openid, lang);
-		String HeadImgUrl = user.getHeadImgUrl();
-		String Username = user.getNickname();
-
-		// 通过用户openid获取用户id
-		User userbyopenid = userImpl.getUserbyOpenid(openid);
-
-		// 获取二维码
-		WxMpQrCodeTicket ticket = wxService.qrCodeCreateTmpTicket(userbyopenid.getUserId(), 3000000);
-		// 生成二维码文件
-		File file = wxService.qrCodePicture(ticket);
-
-		// 获取模板信息
-		Template template = templateImpl.getTemplatebyConfirm("1");
-
-		// 拼接图片
-		InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file);
-		System.out.println(image);
-		// 上传图片
-		WxMediaUploadResult res = wxService.mediaUpload("image", "jpg", image);
-
-		WxMpCustomMessage message = WxMpCustomMessage.IMAGE().toUser(openid).mediaId(res.getMediaId()).build();
 		try {
+			WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+			WxMpService wxService = new WxMpServiceImpl();
+			wxService.setWxMpConfigStorage(config);
+
+			// 获取用户资料
+			String lang = "zh_CN"; // 语言
+			WxMpUser user = wxService.userInfo(openid, lang);
+			String HeadImgUrl = user.getHeadImgUrl();
+			String Username = user.getNickname();
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(openid).content("正在生成二维码文件请稍等")
+					.build();
+			wxService.customMessageSend(toUserNamemessage);// 生成二维码前先让用户等待
+			// 通过用户openid获取用户id
+			User userbyopenid = userImpl.getUserbyOpenid(openid);
+
+			// 获取二维码
+			WxMpQrCodeTicket ticket = wxService.qrCodeCreateTmpTicket(userbyopenid.getUserId(), 3000000);
+			// 生成二维码文件
+			File file = wxService.qrCodePicture(ticket);
+
+			// 获取模板信息
+			Template template = templateImpl.getTemplatebyConfirm("1");
+
+			// 拼接图片
+			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file);
+			System.out.println(image);
+			// 上传图片
+			WxMediaUploadResult res = wxService.mediaUpload("image", "jpg", image);
+             //发送二维码图片
+			WxMpCustomMessage message = WxMpCustomMessage.IMAGE().toUser(openid).mediaId(res.getMediaId()).build();
+
 			wxService.customMessageSend(message);
-		} catch (WxErrorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
+			WxMpService wxService = new WxMpServiceImpl();
+			wxService.setWxMpConfigStorage(config);
+			WxMpCustomMessage toUserNamemessage = WxMpCustomMessage.TEXT().toUser(openid).content("生成二维码错误，请稍后尝试")
+					.build();
+			wxService.customMessageSend(toUserNamemessage);// 生成二维码前先让用户等待
 		}
 
 	}
@@ -135,6 +142,8 @@ public class QRcodeService {
 			sendCashMessage(toUserOpenid);
 
 			if (!User.getUserHierarchy().isEmpty()) {
+				
+				//给一级代理发送代金券
 				String hierarchy = User.getUserHierarchy();
 				hierarchy = hierarchy.substring(hierarchy.lastIndexOf("/") + 1);
 				int agentUserid = Integer.parseInt(hierarchy);
@@ -142,13 +151,13 @@ public class QRcodeService {
 				// 获取代理UserId
 				User agentUser = userImpl.getUserbyuserid(agentUserid);
 				System.out.println(agentUser);
-				sendAgentMessage(agentUser.getUserOpenid(),toUser.getNickname());
+				sendAgentMessage(agentUser.getUserOpenid(), toUser.getNickname());
 			}
 		}
 	}
 
-	/*s
-	 * 获取用户数据
+	/*
+	 * s 获取用户数据
 	 * 
 	 * @author 知鹏
 	 */
@@ -198,6 +207,8 @@ public class QRcodeService {
 
 	}
 
+	
+	//获取选择的模板
 	public Template getTemplate() {
 		return (Template) templateImpl.getTemplatebyConfirm("1");
 	}
@@ -331,26 +342,25 @@ public class QRcodeService {
 	/*
 	 * 给二级代理用户发送模板信息
 	 */
-	public void sendAgentMessage(String openid,String openname) throws IOException, WxErrorException {
+	public void sendAgentMessage(String openid, String openname) throws IOException, WxErrorException {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?";
 		JSONObject jsonORG = new JSONObject();
 		JSONObject data = new JSONObject();
-		JSONObject first=new JSONObject();
+		JSONObject first = new JSONObject();
 		jsonORG.element("touser", openid);
 		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
-		jsonORG.element("url","https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D5%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
-		first.element("value", "你的会员"+openname+"发展了一个下线，"
-		+"恭喜你获得一张代金券");
-		first.element("color","#173177");
-		data.element("first",first);
+		jsonORG.element("url",
+				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D5%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		first.element("value", "你的会员" + openname + "发展了一个下线，" + "恭喜你获得一张代金券");
+		first.element("color", "#173177");
+		data.element("first", first);
 		jsonORG.element("data", data);
 		wxService.post(url, jsonORG.toString());
 	}
 
-	
 	/*
 	 * 给发展的用户的代理发送模板信息
 	 */
@@ -361,15 +371,16 @@ public class QRcodeService {
 		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?";
 		JSONObject jsonORG = new JSONObject();
 		JSONObject data = new JSONObject();
-		JSONObject first=new JSONObject();
+		JSONObject first = new JSONObject();
 		jsonORG.element("touser", openid);
 		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
-		jsonORG.element("url","https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D6%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
-		first.element("value","恭喜你获得一张代金券");
-		first.element("color","#173177");
-		data.element("first",first);
+		jsonORG.element("url",
+				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D6%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		first.element("value", "恭喜你获得一张代金券");
+		first.element("color", "#173177");
+		data.element("first", first);
 		jsonORG.element("data", data);
 		wxService.post(url, jsonORG.toString());
 	}
-	
+
 }
