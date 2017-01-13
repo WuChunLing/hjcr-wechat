@@ -109,18 +109,18 @@ public class Handler extends GenericController {
 
 			if (inMessage.getEvent().equals("subscribe")) {
 				// 用户订阅公众号保存信息
-				avoidRepetition(response);
+				avoidRepetition(response); //微信三次验证，排重
 				QRcodeService.savaUser(inMessage.getFromUserName());
 			}
 			if (inMessage.getEvent().equals("CLICK") && inMessage.getEventKey().equals("0")) {
 				// 生成二维码且发送给用户
-				avoidRepetition(response);
+				avoidRepetition(response);//微信三次验证，排重
 				QRcodeService.QRcodecreat(inMessage.getFromUserName());
 			}
 
 			if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") != -1) {
 				// 当用户扫描二维码未关注的动作
-				avoidRepetition(response);
+				avoidRepetition(response);//微信三次验证，排重
 				QRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
 
 			} else if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") == -1) {
@@ -135,8 +135,7 @@ public class Handler extends GenericController {
 	@ResponseBody
 	@RequestMapping("/addTemplate")
 	public String addTemplate(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("file") MultipartFile file, Template template) throws ServletException {
-		System.out.println("aa");
+			@RequestParam("file") MultipartFile file, Template template){
 		String path;
 		try {
 			path = QRcodeService.uploadPhoto(file, request);
@@ -154,7 +153,7 @@ public class Handler extends GenericController {
 	/*
 	 * 临时获取二维码
 	 */
-	@RequestMapping(value = { "/getqrcode" })
+	/*@RequestMapping(value = { "/getqrcode" })
 	public void getqrcode(@RequestParam("code") String code) throws WxErrorException, IOException {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
@@ -166,15 +165,14 @@ public class Handler extends GenericController {
 		// 生成二维码且发送给用户
 		QRcodeService.QRcodecreat(openid);
 
-	}
+	}*/
 
 	/*
-	 * 永久二维码
+	 * 获取永久二维码
 	 */
 	@RequestMapping(value = { "/getlastqrcode" })
 	public String getlastqrcode(@RequestParam("telephone") String telephone, HttpServletRequest request)
 			throws WxErrorException, IOException {
-
 		//
 		return QRcodeService.creatForeverQrcode(telephone, request);
 	}
@@ -184,8 +182,6 @@ public class Handler extends GenericController {
 	 */
 	@RequestMapping(value = { "/createMenu" }, produces = { "application/json;charset=UTF-8" })
 	public void createMenu() throws WxErrorException, IOException {
-		System.out.println("ddd");
-
 		new wxMenu().getMenu();
 
 	}
@@ -201,9 +197,6 @@ public class Handler extends GenericController {
 		WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
 		WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
 		String openid = wxMpUser.getOpenId();
-
-		// 生成二维码且发送给用户
-
 		String result = wxuserService.getUserInfortation(openid);
 		if (result.equals("success")) {
 			return "";
@@ -286,31 +279,6 @@ public class Handler extends GenericController {
 		wxService.setWxMpConfigStorage(config);
 		System.out.println(wxService.oauth2buildAuthorizationUrl("http://9645db09.ngrok.io/hjcr-wechat/getqrcode",
 				"snsapi_base", ""));
-		/*
-		 * WxMpInMemoryConfigStorage config = new
-		 * propFactory().WxMpInMemoryConfigStorageFactory(); WxMpService
-		 * wxService = new WxMpServiceImpl();
-		 * wxService.setWxMpConfigStorage(config); JSONObject jsonORG = new
-		 * JSONObject(); JSONObject jsonOR2 = new JSONObject();
-		 * jsonOR2.element("card_id", "pUPl-wm9wP2yl-2fGhG1EAQW6gL0");
-		 * jsonORG.element("touser", "oUPl-whRdCbCywOXjTZPdOOl4p-s");
-		 * jsonORG.element("msgtype", "wxcard"); jsonORG.element("wxcard",
-		 * jsonOR2);
-		 * 
-		 * String postData=jsonORG.toString(); String
-		 * url="https://api.weixin.qq.com/cgi-bin/message/custom/send?";
-		 * System.out.println(wxService.post(url, postData));
-		 * 
-		 */
-		// System.out.println(cardService.creatfiftyCard());
-		// cardService.sendCard("pUPl-wsgjMCDw0zTfNC2PAyC6Dqw",
-		// "oUPl-whRdCbCywOXjTZPdOOl4p-s");
-		// 生成二维码且发送给用户
-		/*
-		 * String openid = "oUPl-whRdCbCywOXjTZPdOOl4p-s";
-		 * QRcodeService.QRcodecreat(openid);
-		 */
-		// QRcodeService.creatForeverQrcode("1111",request);
 
 	}
 
