@@ -10,34 +10,26 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Cacheable
-@Table(name="role")
+@Table(name = "role")
 @Entity
 public class Role implements Serializable {
-	
-	 private int id;
-	
-    private String describe;
 
-    private String rolename;
-    
-    private static final long serialVersionUID = 1L;
+	private Integer id;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	private String note;
+
+	private String rolename;
+
+	private static final long serialVersionUID = 1L;
+
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-    public int getId() {
-        return id;
-    }
-    
-    public void setId(int id) {
-    	this.id = id;
-    }
-
-	public String getDescribe() {
-		return describe;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getRolename() {
@@ -48,9 +40,18 @@ public class Role implements Serializable {
 		this.rolename = rolename;
 	}
 
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 	@Override
 	public String toString() {
-		return "Role [describe=" + describe + ", rolename=" + rolename + "]";
+		return "Role [id=" + id + ", note=" + note + ", rolename=" + rolename
+				+ "]";
 	}
 
 }

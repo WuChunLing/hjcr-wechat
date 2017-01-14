@@ -9,35 +9,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Cacheable
-@Table(name="privilege")
+@Table(name = "privilege")
 @Entity
 public class Privilege implements Serializable {
 	private int id;
-	
-    private String describe;
 
-    private String privilegeName;
-    
-    /**
-     * 权限编号. user:*,user:delete,user:create,user:update
-     */
-    private String privilegeCode;
-    
-    private String matchUrl;
+	private String note;
 
-    private static final long serialVersionUID = 1L;
+	private String privilegeName;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	/**
+	 * 权限编号. user:*,user:delete,user:create,user:update
+	 */
+	private String privilegeCode;
+
+	private String matchUrl;
+
+	private static final long serialVersionUID = 1L;
+
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
-    public int getId() {
-        return id;
-    }
-    
-    public void setId(int id) {
-    	this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getPrivilegeCode() {
 		return privilegeCode;
@@ -45,14 +44,6 @@ public class Privilege implements Serializable {
 
 	public void setPrivilegeCode(String privilegeCode) {
 		this.privilegeCode = privilegeCode;
-	}
-
-	public String getDescribe() {
-		return describe;
-	}
-
-	public void setDescribe(String describe) {
-		this.describe = describe;
 	}
 
 	public String getPrivilegeName() {
@@ -71,10 +62,19 @@ public class Privilege implements Serializable {
 		this.matchUrl = matchUrl;
 	}
 
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 	@Override
 	public String toString() {
-		return "Privilege [describe=" + describe + ", privilegeName="
-				+ privilegeName + ", matchUrl=" + matchUrl + "]";
+		return "Privilege [id=" + id + ", note=" + note + ", privilegeName="
+				+ privilegeName + ", privilegeCode=" + privilegeCode
+				+ ", matchUrl=" + matchUrl + "]";
 	}
 
 }
