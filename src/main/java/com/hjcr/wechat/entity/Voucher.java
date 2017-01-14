@@ -15,9 +15,9 @@ public class Voucher {
 	private int voucherId;
 	private int voucherMoney;
 	private String voucherCord;
-    private int voucherConfirm;
+    private String voucherConfirm;  //卡卷url获取连接
 	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	@Id
 	public int getVoucherId() {
 		return voucherId;
@@ -43,12 +43,18 @@ public class Voucher {
 		this.voucherCord = voucherCord;
 	}
 
-	public int getVoucherConfirm() {
+	public String getVoucherConfirm() {
 		return voucherConfirm;
 	}
 
-	public void setVoucherConfirm(int voucherConfirm) {
+	public void setVoucherConfirm(String voucherConfirm) {
 		this.voucherConfirm = voucherConfirm;
+	}
+
+	@Override
+	public String toString() {
+		return "Voucher [voucherId=" + voucherId + ", voucherMoney=" + voucherMoney + ", voucherCord=" + voucherCord
+				+ ", voucherConfirm=" + voucherConfirm + "]";
 	}
 
 	
