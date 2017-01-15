@@ -1,0 +1,149 @@
+<script src="assets/js/datetime/moment.js"></script>
+<script src="assets/js/datetime/daterangepicker.js"></script>
+<link href="css/billManage.css"/>
+<div ng-controller="billManageCtrl">
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+      <div class="databox radius-bordered databox-shadowed databox-graded">
+          <div class="databox-left bg-orange">
+              <div class="databox-piechart">
+                  <span class="white font-200"><i class="fa fa-jpy"></i></span>
+              </div>
+          </div>
+          <div class="databox-right">
+              <span class="databox-number orange">{{billMoney.billMoney}}</span>
+              <div class="databox-text darkgray">总消费金额</div>
+              <div class="databox-stat orange radius-bordered">
+                  <i class="stat-icon icon-lg fa fa-tasks"></i>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+    <div class="databox radius-bordered databox-shadowed databox-graded">
+        <div class="databox-left bg-azure">
+            <div class="databox-piechart">
+              <span class="white font-200"><i class="fa fa-jpy"></i></span>
+            </div>
+        </div>
+        <div class="databox-right">
+            <span class="databox-number azure">{{billMoney.billProfit}}</span>
+            <div class="databox-text darkgray">总分润金额</div>
+            <div class="databox-state bg-azure">
+                <i class="fa fa-check"></i>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-md-12">
+      <div class="widget">
+          <div class="widget-header  with-footer">
+              <span class="widget-caption">总订单信息表</span>
+              <span ng-click="backToAllBill()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+          </div>
+
+          <div class="widget-body" style="height: auto;">
+
+            <div class="flip-scroll">
+              <div class="form-group" style="width:240px;float:right;">
+                  <span class="input-icon">
+                      <input type="text" ng-model="checkbillId" class="form-control input" placeholder="按订单号查询订单信息">
+                      <i ng-click="checkBillById(checkbillId)" class="glyphicon glyphicon-search blue"></i>
+                  </span>
+              </div>
+              <div class="form-group" style="width:250px;float:left;">
+                  <div class="controls">
+                      <div class="input-group">
+                          <span class="input-group-addon">
+                              <i class="fa fa-calendar" ng-click="checkBillByDate()"></i>
+                          </span>
+                          <input type="text" ng-model="checkbillDate" placeholder="按时间查询某一时间段的订单" class="form-control" id="reservation">
+                      </div>
+
+                  </div>
+              </div>
+                  <table class="table table-bordered table-striped table-condensed flip-content">
+                      <thead class="flip-content bordered-palegreen">
+                          <tr>
+                              <th>
+                                  序号
+                              </th>
+                              <th>
+                                  订单号
+                              </th>
+                              <th>
+                                  消费金额（元）
+                              </th>
+                              <th class="numeric">
+                                  利润提成（元）
+                              </th>
+                              <th class="numeric">
+                                  消费用户
+                              </th>
+                              <th class="numeric">
+                                  上级代理
+                              </th>
+                              <th class="numeric">
+                                  上级分润（元）
+                              </th>
+                              <th class="numeric">
+                                  上上级代理
+                              </th>
+                              <th class="numeric">
+                                  上上级分润（元）
+                              </th>
+                              <th class="numeric">
+                                  时间
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="bill in bills.bill">
+                            <td>
+                                {{(bills.currentPage-1)*15+$index+1}}
+                            </td>
+                            <td>
+                                {{bill.billId}}
+                            </td>
+                            <td>
+                                {{bill.billMoney}}
+                            </td>
+                            <td class="numeric">
+                                {{bill.billProfit}}
+                            </td>
+                            <td class="numeric">
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billUser.userId)">{{bill.billUser.userName}}</a>
+                            </td>
+                            <td class="numeric">
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billFirstUser.userId)">{{bill.billFirstUser.userName}}</a>
+                            </td>
+                            <td class="numeric">
+                              {{bill.userFirstProfit}}
+                            </td>
+                            <td class="numeric">
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billSecondUser.userId)">{{bill.billSecondUser.userName}}</a>
+                            </td>
+                            <td class="numeric">
+                                {{bill.userSecondProfit}}
+                            </td>
+                            <td class="numeric">
+                                {{bill.billDate}}
+                            </td>
+                        </tr>
+                      </tbody>
+                  </table>
+            </div>
+            <ul class="pagination" style="margin-top:20px;">
+                <li ng-click="getPageBill(currentNum-1)" ng-class="currentNum===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPageBill(page)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                  <a>{{page}}</a>
+                </li>
+                <li ng-click="getPageBill(currentNum+1)" ng-class="currentNum===bills.totalPage?'disabled':''"><a>»</a></li>
+            </ul>
+          </div>
+      </div>
+  </div>
+</div>
+<script>
+//--Bootstrap Date Range Picker--
+      $('#reservation').daterangepicker();
+</script>

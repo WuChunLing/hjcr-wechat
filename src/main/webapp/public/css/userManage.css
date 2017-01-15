@@ -1,0 +1,16 @@
+#user-permiss a{
+  float: left;
+  margin-right: 5px;
+}
+#user-div{
+  width: 800px;
+}
+#editabledatatable .user-name,.user-edit{
+  width: 50px;
+}
+#editabledatatable .user-permiss{
+  width: 250px;
+}
+i.fa-times{
+  margin-left:2px;
+}

@@ -43,9 +43,60 @@ public class SystemUserService {
 	 * @author 宋
 	 */
 	public SystemUser addUser(SystemUser user) {
-		String MD5Password = MD5Util.md5(user.getPassword());
+		SystemUser tem_user = systemUserImpl.findOneByName(user.getUsername());
+		if (tem_user != null) {
+			throw new SecurityException("该用户已存在");
+		}
+		String MD5Password = MD5Util.md5(user.getPassword()+user.getUsername() );
 		user.setPassword(MD5Password);
 		return systemUserImpl.saveAndFlush(user);
+	}
+
+	/**
+	 * 删除用户
+	 * @author Kellan
+	 * @param user
+	 */
+	public void delete(SystemUser user) {
+		SystemUser systemUser = systemUserImpl.findOne(user.getId());
+		if (systemUser == null) {
+			throw new SecurityException("该用户不存在");
+		}
+		systemUserImpl.delete(user);
+		systemUser = systemUserImpl.findOne(user.getId());
+		if (systemUser != null) {
+			throw new SecurityException("删除失败");
+		}
+	}
+
+	/**
+	 * 修改用户密码
+	 * @author Kellan
+	 * @param username
+	 * @param oldPassword
+	 * @param newPassword
+	 */
+	public void updatePassword(String username, String oldPassword,
+			String newPassword) {
+		String md5OldPassword = MD5Util.md5(oldPassword+username);
+		SystemUser dbUser = systemUserImpl.findOneByName(username);
+		if (!dbUser.getPassword().equals(md5OldPassword)) {
+			throw new SecurityException("旧密码错误");
+		}
+		String md5NewPassword = MD5Util.md5(newPassword+username);
+		dbUser.setPassword(md5NewPassword);
+		systemUserImpl.saveAndFlush(dbUser);
+	}
+
+	/**
+	 * 修改用户角色
+	 * @author Kellan
+	 * @param user
+	 */
+	public void updateUserRole(SystemUser user) {
+		SystemUser dbUser = systemUserImpl.findOne(user.getId());
+		dbUser.setRoleId(user.getRoleId());
+		systemUserImpl.saveAndFlush(dbUser);
 	}
 
 	

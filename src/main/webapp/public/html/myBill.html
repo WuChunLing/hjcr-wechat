@@ -1,0 +1,113 @@
+<link href="css/billManage.css"/>
+<div ng-controller="myBillCtrl">
+  <div class="myMessage">
+    <div class="databox databox-sm databox-halved databox-shadowed databox-vertical no-margin-bottom" style="width:425px;">
+      <div class="bg-white padding-10" style="height:100%;width:297px;float:left">
+          <div class="col-lg-4 col-sm-4 col-xs-4">
+              <img src="{{user.userPortrait}}" style="width:75px; height:75px;" class="image-circular bordered-3 bordered-palegreen">
+          </div>
+          <div class="col-lg-8 col-sm-8 col-xs-8 text-align-left padding-10">
+            <span class="databox-header carbon no-margin">{{user.userName}}</span>
+            <span class="databox-text lightcarbon no-margin">手机号码：{{user.userMobiphone}}</span>
+          </div>
+      </div>
+      <div class="no-padding text-align-center bordered-left bordered-platinum" style="float:left;height:100%;width:127px;">
+        <div style="vertical-align:middle;margin-top:26px">
+          <span class="databox-number lightcarbon no-margin pink">￥{{user.userMoney}}</span>
+          <span class="databox-text sonic-silver  no-margin">账户余额</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="myBill" >
+    <div class="col-xs-12 col-md-12" style="margin-top:28px;">
+        <div class="widget">
+            <div class="widget-header  with-footer">
+                <span class="widget-caption">用户个人订单信息表</span>
+            </div>
+            <div class="widget-body" style="height: auto;">
+              <div class="flip-scroll">
+                <table class="table table-bordered table-striped table-condensed flip-content">
+                    <thead class="flip-content bordered-palegreen">
+                        <tr>
+                            <th>
+                                序号
+                            </th>
+                            <th>
+                                订单号
+                            </th>
+                            <th>
+                                消费金额（元）
+                            </th>
+                            <th class="numeric">
+                                利润提成（元）
+                            </th>
+                            <th class="numeric">
+                                消费用户
+                            </th>
+                            <th class="numeric">
+                                上级代理
+                            </th>
+                            <th class="numeric">
+                                上级分润（元）
+                            </th>
+                            <th class="numeric">
+                                上上级代理
+                            </th>
+                            <th class="numeric">
+                                上上级分润（元）
+                            </th>
+                            <th class="numeric">
+                                时间
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="bill in bills.bill">
+                          <td>
+                              {{(bills.currentPage-1)*15+$index+1}}
+                          </td>
+                          <td>
+                              {{bill.billId}}
+                          </td>
+                          <td>
+                              {{bill.billMoney}}
+                          </td>
+                          <td class="numeric">
+                              {{bill.billProfit}}
+                          </td>
+                          <td class="numeric">
+                            {{bill.billUser.userName}}
+                          </td>
+                          <td class="numeric">
+                            {{bill.billFirstUser.userName}}
+                          </td>
+                          <td class="numeric">
+                            {{bill.userFirstProfit}}
+                          </td>
+                          <td class="numeric">
+                            {{bill.billSecondUser.userName}}
+                          </td>
+                          <td class="numeric">
+                              {{bill.userSecondProfit}}
+                          </td>
+                          <td class="numeric">
+                              {{bill.billDate}}
+                          </td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+              <ul class="pagination" style="margin-top:20px;">
+                  <li ng-click="getPageMyBill(currentNum-1,user.userId)" ng-class="currentNum===1?'disabled':''"><a>«</a></li>
+                  <li ng-click="getPageMyBill(page,user.userId)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                    <a>{{page}}</a>
+                  </li>
+                  <li ng-click="getPageMyBill(currentNum+1,user.userId)" ng-class="currentNum===bills.totalPage?'disabled':''"><a>»</a></li>
+              </ul>
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>

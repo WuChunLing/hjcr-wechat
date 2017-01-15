@@ -1,0 +1,20 @@
+[
+  {
+    "userId":1,
+    "userName":"桃小仙",
+    "userRole":"超级管理员",
+    "userPassword":"123456"
+  },
+  {
+    "userId":2,
+    "userName":"嗷大喵",
+    "userRole":"中级管理",
+    "userPassword":"789456"
+  },
+  {
+    "userId":3,
+    "userName":"小肥柴",
+    "userRole":"普通管理员",
+    "userPassword":"012586"
+  }
+]

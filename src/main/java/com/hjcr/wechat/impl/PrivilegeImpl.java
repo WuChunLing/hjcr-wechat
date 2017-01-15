@@ -18,6 +18,15 @@ public interface PrivilegeImpl extends JpaRepository<Privilege, Integer>{
 	@Query("SELECT p FROM Privilege p, RolePrivilege rp WHERE rp.roleId = ?1 and p.id = rp.privilegeId")
 	List<Privilege> getPrivilegeByRoleId(Integer roleId);
 
+	/**
+	 * 获取角色拥有的权限名称
+	 * @author Kellan
+	 * @param roleId
+	 * @return
+	 */
+	@Query("SELECT p.privilegeName FROM Privilege p, RolePrivilege rp WHERE rp.roleId = ?1 and p.id = rp.privilegeId")
+	List<String> getPrivilegeNameByRoleId(Integer id);
+
 	
 	
 }

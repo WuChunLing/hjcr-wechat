@@ -6,7 +6,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -78,18 +77,7 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 			ex.printStackTrace();
 			logger.info("获取用户失败\n" + ex.getMessage());
 		}
-		if (user == null) {
-		    throw new UnknownAccountException("-------用户不存在--------- ");
-		}
-		logger.info("用户【" + username + "】登录成功");
 		ShiroPrincipal subject = new ShiroPrincipal(user);
-//		List<String> authorities = systemUserService.findPrivilegeCode(user.getId());
-//		String role = systemUserService.findRoleName(user.getId());
-//		subject.setAuthorities(authorities);
-//		subject.setRole(role);
-//		subject.setAuthorized(true);
-//		logger.info("用户【" + username + "】 角色列表为：" + subject.getRole());
-//		logger.info("用户【" + username + "】 权限列表为：" + subject.getAuthorities());
 		
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(subject, user.getPassword(), getName());
 		return info;

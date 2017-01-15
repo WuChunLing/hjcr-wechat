@@ -1,0 +1,41 @@
+.input-icon{
+  width:300px;
+  float: left;
+}
+button{
+  display: block;
+  height: 34px;
+  line-height: 34px;
+  color: #fff;
+  background:#grey;
+  border-radius:0px;
+  float: left;
+}
+.show-panel{
+  margin-bottom: 28px;
+}
+.show-panel img{
+  width: 420px;
+  margin-top: 18px;
+}
+.clear{
+  clear: both;
+}
+.save-btn{
+   width: 420px;
+   text-align: center;
+}
+.save-btn a{
+  margin:2px auto;
+}
+.save-btn span{
+  display: block;
+  width:420px;
+  text-align: center;
+  margin:12px autos;
+}
+.showTip{
+  color: red;
+  display: block;
+  margin:8px 0px;
+}

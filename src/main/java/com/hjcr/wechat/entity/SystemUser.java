@@ -12,14 +12,13 @@ import javax.persistence.Table;
 @Cacheable
 @Table(name = "system_user")
 @Entity
-public class SystemUser implements Serializable
-{
+public class SystemUser implements Serializable {
 	private Integer id;
 
 	private String username;
 
 	private String password;
-	
+
 	private Integer roleId;
 
 	private static final long serialVersionUID = 1L;
@@ -63,5 +62,5 @@ public class SystemUser implements Serializable
 		return "SystemUser [id=" + id + ", username=" + username + ", password="
 				+ password + ", roleId=" + roleId + "]";
 	}
-	
+
 }

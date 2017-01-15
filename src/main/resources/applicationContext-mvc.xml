@@ -11,7 +11,22 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 
-
+	<mvc:resources mapping="/css/**" location="/public/css/" />
+	<mvc:resources mapping="/js/**" location="/public/js/" />
+	<mvc:resources mapping="/assets/**" location="/public/assets/" />
+	<mvc:resources mapping="/imgs/**" location="/public/imgs/" />
+	<mvc:resources mapping="/font/**" location="/public/font/" />
+	<mvc:resources mapping="/framework/**" location="/public/framework/" />
+	<mvc:resources mapping="/html/**" location="/public/html/" />
+	
+	<!--配置拦截器, 多个拦截器,顺序执行 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/system/**" />
+			<bean class="com.hjcr.wechat.interceptor.IpInterceptor"></bean>
+		</mvc:interceptor>
+		<!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
+	</mvc:interceptors>
 
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
@@ -42,6 +57,8 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 
+
+	<!-- shiro 配置 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8"></property>
@@ -61,6 +78,8 @@
 	</bean>
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 
+	<!-- 错误信息拦截，实现HandlerExceptionResolver -->
+ 	<bean class="com.hjcr.wechat.interceptor.SystemExceptionHandler"></bean>
 
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven></mvc:annotation-driven>

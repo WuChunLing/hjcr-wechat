@@ -51,6 +51,8 @@ public class RolePrivilege implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RolePrivilege [roleId=" + roleId + ", privilegeId=" + privilegeId + "]";
+		return "RolePrivilege [id=" + id + ", roleId=" + roleId
+				+ ", privilegeId=" + privilegeId + "]";
 	}
+
 }

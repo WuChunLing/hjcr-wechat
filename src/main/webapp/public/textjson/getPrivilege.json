@@ -1,0 +1,26 @@
+[
+  {
+    "privilegeId":1,
+    "privilegeName":"上传模板"
+  },
+  {
+    "privilegeId":2,
+    "privilegeName":"修改模板"
+  },
+  {
+    "privilegeId":3,
+    "privilegeName":"分润管理"
+  },
+  {
+    "privilegeId":4,
+    "privilegeName":"数据统计"
+  },
+  {
+    "privilegeId":5,
+    "privilegeName":"删除模板"
+  },
+  {
+    "privilegeId":6,
+    "privilegeName":"权限管理"
+  }
+]

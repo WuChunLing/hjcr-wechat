@@ -25,7 +25,7 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
-                <prop key="org.apache.shiro.authz.UnauthorizedException">/NewFile</prop>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">/noPrivilege</prop>
             </props>
         </property>
     </bean>

@@ -1,0 +1,25 @@
+<link href="css/createQrcode.css" rel="stylesheet" />
+
+<div class="createQ-container" ng-controller="createQCtrl">
+  <div>
+      <span class="input-icon icon-right">
+          <input placeholder="请输入手机号码" type="text" class="phone form-control" ng-model="phone">
+          <i class="glyphicon glyphicon-earphone darkpink circular"></i>
+      </span>
+
+      <button class="btn" ng-click="sureCreate()">确认生成</button>
+
+      <div class="clear"></div>
+  </div>
+  <span class="showTip" ng-show="showTip">请输入正确的手机号码</span>
+  <div class="show-qrcode" ng-show="createQ" >
+    <div class="show-panel">
+      <img src={{createQImg}}>
+    </div>
+    <div class="save-btn">
+     <a  download="myQrcode" href={{createQImg}} class="btn btn-default  btn-circle btn-lg"><i class="glyphicon glyphicon-save"></i></a>
+     <span>保存图片</span>
+    </div>
+  </div>
+<div class="clear"></div>
+</div>

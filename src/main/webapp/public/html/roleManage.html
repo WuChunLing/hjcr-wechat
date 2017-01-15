@@ -1,0 +1,83 @@
+<link href="css/roleManage.css" rel="stylesheet" />
+<div id="role-div">
+  <div ng-controller="roleCtrl" >
+    <div class="well with-header with-footer">
+      <div class="header bordered-sky">
+          角色树
+      </div>
+      <div id="roleTree" class="tree tree-plus-minus" ng-repeat="role in roles">
+        <div class="tree-folder" key={{role.roleId}}>
+            <div class="tree-folder-header">
+                <div class="tree-folder-name">{{role.rolename}}</div>
+                <i ng-if="!role.editActive" class="fa fa-folder" ng-click="showPrivilegeFuc($index)">查看其拥有的权限</i>
+                <i ng-if="role.editActive" class="fa fa-folder-open" ng-click="showPrivilegeFuc($index)"></i>
+                <div class="tree-actions">
+                  <i class="fa fa-plus green" ng-click="addRole()"></i>
+                  <i class="fa fa-trash-o danger" ng-click="deleteRole(role.roleId)"></i>
+                </div>
+            </div>
+            <div class="tree-folder-content" ng-if="role.editActive" >
+              <div class="tree-item" ng-repeat="privilege in privileges">
+                  <input type="checkbox" ng-click="updateRole(role.id,privilege.id)" ng-checked='{{role.privileges}}.includes("{{privilege.privilegeName}}")'/>
+                  <div class="tree-item-name">{{privilege.privilegeName}}</div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="footer">
+          你可以对角色的权限进行操作
+      </div>
+  </div>
+
+    <!-- 删除确认弹框 -->
+    <div class="modal-preview"  ng-class="showModal?'show':'noshow'">
+      <div class="modal modal-primary">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" ng-click="closeModel()" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title">删除角色</h4>
+            </div>
+            <div class="modal-body">
+              <p>确认删除此角色？</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="closeModel()">取消</button>
+              <button type="button" class="btn btn-primary" ng-click="sureDeleteRole()">确认</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mask" ng-class="showModal?'show':'noshow'"></div>
+    <!-- 添加新角色弹框 -->
+    <div class="widget add-role-model" ng-show="showRoleModel">
+        <div class="widget-header bordered-bottom bordered-blue">
+            <span class="widget-caption">添加新角色</span>
+            <button type="button" class="close" ng-click="addRole()" aria-hidden="true">×</button>
+        </div>
+        <div class="widget-body">
+            <div>
+                <form id="roleForm" role="form" ng-submit="submitRole()" method="post">
+                    <div class="form-group">
+                        <label for="input-role-name">角色名称</label>
+                        <input name="roleName" type="text" maxlength="20" required class="form-control" id="input-role-name" placeholder="填写角色名称">
+                    </div>
+                    <div class="form-group">
+                        选择权限
+                        <div class="checkbox new-role-privilege" >
+                          <label ng-repeat="privilege in privileges">
+                              <input name="{{privilege.privilegeName}}" type="checkbox" />
+                              <span class="text">{{privilege.privilegeName}}</span>
+                          </label>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <button type="submit" class="btn btn-blue add-role">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="mask" ng-show="showRoleModel"></div>
+  </div>
+</div>

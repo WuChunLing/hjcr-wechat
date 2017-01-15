@@ -1,0 +1,17 @@
+[
+  {
+    "roleId":1,
+    "roleName":"普通管理员",
+    "rolePrivilege":["上传模板","修改模板","分润管理"]
+  },
+  {
+    "roleId":2,
+    "roleName":"中级管理员",
+    "rolePrivilege":["上传模板","修改模板","分润管理","数据统计"]
+  },
+  {
+    "roleId":3,
+    "roleName":"超级管理员",
+    "rolePrivilege":["上传模板","修改模板","分润管理","数据统计","删除模板"]
+  }
+]
