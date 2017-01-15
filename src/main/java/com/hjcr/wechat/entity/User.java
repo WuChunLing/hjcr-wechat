@@ -20,6 +20,8 @@ public class User {
 	private String userHierarchy;
 	private Integer userForeignkey;
 	private String userMobiphone;
+	private String UnionID;
+	
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -64,6 +66,12 @@ public class User {
 	}
 	public void setUserMobiphone(String userMobiphone) {
 		this.userMobiphone = userMobiphone;
+	}
+	public String getUnionID() {
+		return UnionID;
+	}
+	public void setUnionID(String unionID) {
+		UnionID = unionID;
 	}
 	public User(int userId, String headImgUrl, String userName, String userOpenid, String userHierarchy,
 			Integer userForeignkey, String userMobiphone) {

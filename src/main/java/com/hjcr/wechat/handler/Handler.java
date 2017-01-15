@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -13,21 +16,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hjcr.wechat.entity.Allocation;
 import com.hjcr.wechat.entity.Ordermoney;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
+import com.hjcr.wechat.entity.Voucher;
 import com.hjcr.wechat.impl.UserImpl;
+import com.hjcr.wechat.service.AllocationService;
 import com.hjcr.wechat.service.CardService;
 import com.hjcr.wechat.service.OrderMoneyService;
 import com.hjcr.wechat.service.QRcodeService;
 import com.hjcr.wechat.service.TemplateService;
 import com.hjcr.wechat.service.UserService;
+import com.hjcr.wechat.tools.ResultMessage;
 import com.hjcr.wechat.tools.photoJoin;
 import com.hjcr.wechat.tools.propFactory;
 import com.hjcr.wechat.tools.wxMenu;
@@ -60,7 +71,7 @@ public class Handler extends GenericController {
 	protected WxMpMessageRouter wxMpMessageRouter;
 
 	@Autowired
-	private QRcodeService QRcodeService;
+	private QRcodeService qRcodeService;
 
 	@Autowired
 	private TemplateService templateService;
@@ -73,6 +84,9 @@ public class Handler extends GenericController {
 
 	@Autowired
 	private OrderMoneyService orderMoneyService;
+
+	@Autowired
+	private AllocationService allocationService;
 
 	// 和微信沟通的主程序
 	@RequestMapping(value = { "/WxMessageRouter" }, produces = { "application/json;charset=UTF-8" })
@@ -109,19 +123,19 @@ public class Handler extends GenericController {
 
 			if (inMessage.getEvent().equals("subscribe")) {
 				// 用户订阅公众号保存信息
-				avoidRepetition(response); //微信三次验证，排重
-				QRcodeService.savaUser(inMessage.getFromUserName());
+				avoidRepetition(response); // 微信三次验证，排重
+				qRcodeService.savaUser(inMessage.getFromUserName());
 			}
 			if (inMessage.getEvent().equals("CLICK") && inMessage.getEventKey().equals("0")) {
 				// 生成二维码且发送给用户
-				avoidRepetition(response);//微信三次验证，排重
-				QRcodeService.QRcodecreat(inMessage.getFromUserName());
+				avoidRepetition(response);// 微信三次验证，排重
+				qRcodeService.QRcodecreat(inMessage.getFromUserName());
 			}
 
 			if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") != -1) {
 				// 当用户扫描二维码未关注的动作
-				avoidRepetition(response);//微信三次验证，排重
-				QRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
+				avoidRepetition(response);// 微信三次验证，排重
+				qRcodeService.QRcodemessage(inMessage.getEventKey(), inMessage.getFromUserName());
 
 			} else if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") == -1) {
 				// 当用户扫描二维码已关注的动作
@@ -131,51 +145,8 @@ public class Handler extends GenericController {
 
 	}
 
-	// 添加模板
-	@ResponseBody
-	@RequestMapping("/addTemplate")
-	public String addTemplate(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("file") MultipartFile file, Template template){
-		String path;
-		try {
-			path = QRcodeService.uploadPhoto(file, request);
-			template.setTemplatePath(path);
-			templateService.addTemplate(template);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-
-		return "success";
-
-	}
-
-	/*
-	 * 临时获取二维码
-	 */
-	/*@RequestMapping(value = { "/getqrcode" })
-	public void getqrcode(@RequestParam("code") String code) throws WxErrorException, IOException {
-		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
-		WxMpService wxService = new WxMpServiceImpl();
-		wxService.setWxMpConfigStorage(config);
-		WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
-		WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
-		String openid = wxMpUser.getOpenId();
-
-		// 生成二维码且发送给用户
-		QRcodeService.QRcodecreat(openid);
-
-	}*/
-
-	/*
-	 * 获取永久二维码
-	 */
-	@RequestMapping(value = { "/getlastqrcode" })
-	public String getlastqrcode(@RequestParam("telephone") String telephone, HttpServletRequest request)
-			throws WxErrorException, IOException {
-		//
-		return QRcodeService.creatForeverQrcode(telephone, request);
-	}
+	
+	
 
 	/*
 	 * 创建菜单
@@ -204,82 +175,12 @@ public class Handler extends GenericController {
 		return "";
 	}
 
-	// 创建50元卡卷
-	@RequestMapping(value = { "/creatfiftyCard" })
-	public String creatCard() {
-		try {
-			System.out.println(cardService.creatthirtyCard());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-		return "success";
-	}
 	
 	
-	/*
-	 * 发送卡卷给用户
-	 */
-	public String sendCard(String touseropenid) {
-		try {
-			cardService.sendCard(touseropenid);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-		return "success";
-	}
-
-	/*
-	 * 删除卡卷
-	 */
-	public String deleteCard(String code) {
-		try {
-			cardService.deleteCard(code);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "error";
-		}
-		return "success";
-
-	}
-
-	/*
-	 * 添加类别分配比例信息
-	 */
-	@RequestMapping("addOrderMoney")
-	public String addOrderMoney(Ordermoney ordermoney) {
-		orderMoneyService.sava(ordermoney);
-		return "success";
-	}
-
-	/*
-	 * 更新类别分配比例信息
-	 */
-	@RequestMapping("updataOrderMoney")
-	public String updataOrderMoney(Ordermoney ordermoney) {
-		orderMoneyService.update(ordermoney);
-		return "success";
-	}
-
-	/*
-	 * 删除类别分配比例信息
-	 */
-	@RequestMapping("deteleOrderMoney")
-	public String deteleOrderMoney(int orderMoneyId) {
-		orderMoneyService.delete(orderMoneyId);
-		return "success";
-	}
-
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
 	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 
-		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
-		WxMpService wxService = new WxMpServiceImpl();
-		wxService.setWxMpConfigStorage(config);
-		System.out.println(wxService.oauth2buildAuthorizationUrl("http://9645db09.ngrok.io/hjcr-wechat/getqrcode",
-				"snsapi_base", ""));
-
+		cardService.updateFirstVoucher("666");
 	}
 
 	/*

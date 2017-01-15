@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hjcr.wechat.entity.Foreverqrcode;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
+import com.hjcr.wechat.entity.Voucher;
+import com.hjcr.wechat.impl.CardImpl;
 import com.hjcr.wechat.impl.ForeverqrcodeImpl;
 import com.hjcr.wechat.impl.TemplateImpl;
 import com.hjcr.wechat.impl.UserImpl;
@@ -47,6 +49,10 @@ public class QRcodeService {
 	@Autowired
 	private ForeverqrcodeImpl foreverqrcodeImpl;
 
+	@Autowired
+	private CardImpl cardImpl;
+	
+	
 	/*
 	 * 创建二维码
 	 * 
@@ -145,13 +151,23 @@ public class QRcodeService {
 				
 				//给一级代理发送代金券
 				String hierarchy = User.getUserHierarchy();
+				String [] st=hierarchy.split("/");    //获取层级关系
+				if(st.length>2){                //层级不至于一级
+					String hierarchyfirst=st[1];
+					int agentUserid = Integer.parseInt(hierarchyfirst);
+					// 获取代理UserId
+					User agentUser = userImpl.getUserbyuserid(agentUserid);
+					System.out.println(agentUser);
+					sendAgentMessage(agentUser.getUserOpenid(), toUser.getNickname());}
+
+				else {                        //层级只有一级
 				hierarchy = hierarchy.substring(hierarchy.lastIndexOf("/") + 1);
 				int agentUserid = Integer.parseInt(hierarchy);
-
+System.out.println("9999");
 				// 获取代理UserId
 				User agentUser = userImpl.getUserbyuserid(agentUserid);
 				System.out.println(agentUser);
-				sendAgentMessage(agentUser.getUserOpenid(), toUser.getNickname());
+				sendAgentMessage(agentUser.getUserOpenid(), toUser.getNickname());}
 			}
 		}
 	}
@@ -180,7 +196,7 @@ public class QRcodeService {
 	}
 
 	/*
-	 * 上传图片
+	 * 上传模板图片
 	 * 
 	 * @author 知鹏
 	 */
@@ -203,7 +219,7 @@ public class QRcodeService {
 			os.write(buffer, 0, len);
 		}
 
-		return imagePath + "image/" + numble;
+		return imagePath+"\\" + fileName;
 
 	}
 
@@ -227,6 +243,7 @@ public class QRcodeService {
 			savauser.setUserOpenid(wxMpUser.getOpenId());
 			savauser.setUserName(wxMpUser.getNickname());
 			savauser.setUserForeignkey(0);
+			//savauser.setUnionID(wxMpUser.getUnionId());
 			System.out.println(savauser);
 			userImpl.save(savauser);
 		}
@@ -346,25 +363,29 @@ public class QRcodeService {
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
+		Voucher voucher=cardImpl.findOne(2);
+		
 		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?";
 		JSONObject jsonORG = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONObject first = new JSONObject();
 		jsonORG.element("touser", openid);
 		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
-		jsonORG.element("url",
-				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D5%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		jsonORG.element("url",voucher.getVoucherConfirm());
 		first.element("value", "你的会员" + openname + "发展了一个下线，" + "恭喜你获得一张代金券");
 		first.element("color", "#173177");
 		data.element("first", first);
 		jsonORG.element("data", data);
 		wxService.post(url, jsonORG.toString());
+		
 	}
 
 	/*
 	 * 给发展的用户的代理发送模板信息
 	 */
 	public void sendCashMessage(String openid) throws IOException, WxErrorException {
+		Voucher voucher=cardImpl.findOne(1);
+		
 		WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
@@ -374,8 +395,7 @@ public class QRcodeService {
 		JSONObject first = new JSONObject();
 		jsonORG.element("touser", openid);
 		jsonORG.element("template_id", "kgl2C5_-NeGqpSOaCu7ZyiElipaEQEQhP4pwF1wwInc");
-		jsonORG.element("url",
-				"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D6%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect");
+		jsonORG.element("url",voucher.getVoucherConfirm());
 		first.element("value", "恭喜你获得一张代金券");
 		first.element("color", "#173177");
 		data.element("first", first);

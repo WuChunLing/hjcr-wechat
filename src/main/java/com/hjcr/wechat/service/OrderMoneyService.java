@@ -1,7 +1,11 @@
 package com.hjcr.wechat.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hjcr.wechat.entity.Ordermoney;
 import com.hjcr.wechat.impl.OrdermoneyImpl;
@@ -12,6 +16,7 @@ public class OrderMoneyService {
 	@Autowired
 	private OrdermoneyImpl ordermoneyImpl;
 
+	
 	// 添加商品分配信息
 	public String sava(Ordermoney ordermoney) {
 		System.out.println(ordermoney);
@@ -32,5 +37,16 @@ public class OrderMoneyService {
 	public String delete(int ordermoneyid) {
 		ordermoneyImpl.delete(ordermoneyid);
 		return "success";
+	}
+	
+
+	/*
+	 * 获取类别分配比例信息
+	 */
+	@ResponseBody
+	@RequestMapping("getOrderMoney")
+	public List<Ordermoney> getOrderMoney() {
+		return ordermoneyImpl.findAll();
+		
 	}
 }
