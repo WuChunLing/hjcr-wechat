@@ -16,37 +16,27 @@ public class OrderMoneyService {
 	@Autowired
 	private OrdermoneyImpl ordermoneyImpl;
 
-	
 	// 添加商品分配信息
-	public String sava(Ordermoney ordermoney) {
-		System.out.println(ordermoney);
+	public void sava(Ordermoney ordermoney) {
 		ordermoneyImpl.save(ordermoney);
-		return "success";
 	}
 
 	// 更新商品分配信息
-	public String update(Ordermoney ordermoney) {
-
+	public void update(Ordermoney ordermoney) {
 		ordermoneyImpl.save(ordermoney);
-		return "success";
 	}
 
 	/*
 	 * 删除商品分配信息
 	 */
-	public String delete(int ordermoneyid) {
+	public void delete(int ordermoneyid) {
 		ordermoneyImpl.delete(ordermoneyid);
-		return "success";
 	}
-	
 
 	/*
 	 * 获取类别分配比例信息
 	 */
-	@ResponseBody
-	@RequestMapping("getOrderMoney")
 	public List<Ordermoney> getOrderMoney() {
 		return ordermoneyImpl.findAll();
-		
 	}
 }

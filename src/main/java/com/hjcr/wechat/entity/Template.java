@@ -33,7 +33,7 @@ public class Template {
 	
 /*	private String templateHeadImgUrl; //微信用户头像路径
 	*/
-	private boolean templateConfirm; //是否确定的模板
+	private int templateConfirm; //是否确定的模板
 
 	
 
@@ -133,20 +133,20 @@ public class Template {
 
 
 
-	public boolean isTemplateConfirm() {
+	public int isTemplateConfirm() {
 		return templateConfirm;
 	}
 
 
 
-	public void setTemplateConfirm(boolean templateConfirm) {
+	public void setTemplateConfirm(int templateConfirm) {
 		this.templateConfirm = templateConfirm;
 	}
 
 
 
 	public Template(int templateId, String templateName, String templatePath, float templateQrcodeHigh,
-			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, Boolean templateConfirm) {
+			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, int templateConfirm) {
 		super();
 		this.templateId = templateId;
 		this.templateName = templateName;
