@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hjcr.wechat.entity.Role;
 import com.hjcr.wechat.entity.SystemUser;
+import com.hjcr.wechat.impl.RoleImpl;
 import com.hjcr.wechat.impl.SystemUserImpl;
 import com.hjcr.wechat.tools.MD5Util;
 
@@ -14,6 +16,9 @@ public class SystemUserService {
 
 	@Autowired
 	private SystemUserImpl systemUserImpl;
+	
+	@Autowired
+	private RoleImpl roleImpl;
 
 	/**
 	 * 根据系统用户名获取用户信息
@@ -97,6 +102,24 @@ public class SystemUserService {
 		SystemUser dbUser = systemUserImpl.findOne(user.getId());
 		dbUser.setRoleId(user.getRoleId());
 		systemUserImpl.saveAndFlush(dbUser);
+	}
+
+	/**
+	 * 获取所有系统用户
+	 * @author Kellan
+	 * @return
+	 */
+	public List<SystemUser> getAllSystemUser() {
+		List<Role> roleList = roleImpl.findAll();
+		List<SystemUser> userList = systemUserImpl.findAll();
+		for(SystemUser user : userList){
+			for(Role role : roleList){
+				if (user.getRoleId().equals(role.getId())) {
+					user.setRolename(role.getRolename());
+				}
+			}
+		}
+		return userList;
 	}
 
 	

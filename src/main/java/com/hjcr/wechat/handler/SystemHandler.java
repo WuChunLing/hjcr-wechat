@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hjcr.wechat.entity.Privilege;
 import com.hjcr.wechat.entity.Role;
@@ -77,6 +78,21 @@ public class SystemHandler extends GenericController {
 		result.setResultInfo("登录成功");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
+	
+	/**
+	 * 获取系统所有用户.
+	 * 
+	 * @author 宋
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllSystemUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getAllSystemUser() {
+		ResultMessage result = new ResultMessage();
+		List<SystemUser> list = systemUserService.getAllSystemUser();
+		result.getResultParm().put("userList", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
 
 	/**
 	 * 添加系统用户
@@ -99,6 +115,7 @@ public class SystemHandler extends GenericController {
 		if (user.getId() == null) {
 			throw new SecurityException("添加失败");
 		}
+		result.setResultInfo("添加成功");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 
@@ -173,12 +190,17 @@ public class SystemHandler extends GenericController {
 	 * @return
 	 */
 	@RequestMapping(value = "/addRole", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> addRole(@RequestBody Role role) {
+	public ResponseEntity<ResultMessage> addRole(
+			@RequestParam(value = "rolename", required=false) String rolename, 
+			@RequestParam(value = "privilegeIdList", required=false) Integer[] list) {
 		ResultMessage result = new ResultMessage();
-		if (StringUtils.isBlank(role.getRolename())) {
+		
+		if (StringUtils.isBlank(rolename)) {
 			throw new SecurityException("角色名称不能为空");
 		}
-		role = roleService.addRole(role);
+		Role role = new Role();
+		role.setRolename(rolename);
+		role = roleService.addRole(role,list);
 		if (role.getId() == null) {
 			throw new SecurityException("添加失败");
 		}
@@ -208,6 +230,25 @@ public class SystemHandler extends GenericController {
 		}
 		result.getResultParm().put("role", role);
 		result.setResultInfo("更新成功");
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 删除系统角色
+	 * 
+	 * @author 宋
+	 * @param id 
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteRole", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> deleteSystemUser(
+			@RequestBody Role role) {
+		ResultMessage result = new ResultMessage();
+		if (role.getId() == null) {
+			throw new SecurityException("数据有误");
+		}
+		roleService.delete(role);
+		result.setResultInfo("删除成功");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 

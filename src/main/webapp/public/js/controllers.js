@@ -17,13 +17,13 @@ var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
-var addRoleURL = preURL_project + 'addRole';    			// 新增 角色
+var addRoleURL = preURL_project + 'system/addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
-var deleteRoleURL = preURL_project + 'deleteRole';    // 删除 角色
-var getUserURL = preURL_project + 'getUser.json';    			// 获取 用户表
-var addUserURL = preURL_project + 'addSystemUser';    			// 新增  用户
-var updateUserURL = preURL_project + 'updateUser';    // 修改 用户
-var deleteUserURL = preURL_project + 'deleteUser';    // 删除 用户
+var deleteRoleURL = preURL_project + 'system/deleteRole';    // 删除 角色
+var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用户表
+var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用户
+var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
+var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
 // 账单管理的接口
 var getBillURL = preURL_post + 'getBill';   //获取 第n页的订单记录
 var getMyBillURL = preURL_post + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
@@ -540,12 +540,12 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	// 确认删除角色
 	$scope.sureDeleteRole = function(){
 		$http.post(deleteRoleURL,{
-				roleId:$scope.deleteRoleId
+				id:$scope.deleteRoleId
 			})
 			.success(function(response){
 				console.log(response);
 				$scope.showModal = !$scope.showModal;
-				alert("删除成功！");
+				alert(response.resultInfo);
 				console.log($scope.deleteRoleId);
 			}).error(function(){
 				$scope.showModal = !$scope.showModal;
@@ -596,13 +596,13 @@ hjcr.controller('userCtrl',function($scope,$http){
 	// 获取角色表和权限表
 	$http.get(getUserURL)
 		.success(function(response){
-			$scope.users=response;
+			$scope.users=response.resultParm.userList;
 		}).error(function(){
 			alert("错误！请刷新重试。");
 	});
 	$http.get(getRoleURL)
 		.success(function(response){
-			$scope.roles=response;
+			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alert("错误！请刷新重试。");
 	});
