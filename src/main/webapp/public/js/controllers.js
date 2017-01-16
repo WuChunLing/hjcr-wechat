@@ -214,28 +214,20 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 		$scope.template.templateConfirm = $scope.templateConfirm;
-		console.log($scope.template);
 		var templateFormDate = new FormData(document.getElementById("myForm"));
-		templateFormDate.append("templateQrcodeHigh",$scope.template.templateQrcodeHigh);
-		templateFormDate.append("templateQrcodeWide",$scope.template.templateQrcodeWide);
-		templateFormDate.append("templateHeadImgHigh",$scope.template.templateHeadImgHigh);
-		templateFormDate.append("templateHeadImgWide",$scope.template.templateHeadImgWide);
-		templateFormDate.append("templateQrcodeSize",$scope.template.templateQrcodeSize);
-		templateFormDate.append("templateConfirm",$scope.template.templateConfirm);
-		var xhr = new XMLHttpRequest();
-    xhr.onload=function(event)
-    {
-      if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
-      {
-        alert("上传成功！");
-      }
-      else
-      {
-        alert("上传失败！");
-      }
-    };
-		xhr.open("POST", newQrcodeURL,true);
-		xhr.send(templateFormDate);
+		for (var i in $scope.template) {
+			if ($scope.template.hasOwnProperty(i) === true){
+				templateFormDate.append(i,$scope.template[i]]);
+			}
+		}
+		$http.post(newQrcodeURL,templateFormDate)
+		.success(function(response){
+			alert("上传成功！");
+			console.log($scope.template);
+			console.log(templateFormDate);
+		}).error(function(){
+			alert("上传失败,请稍后重试...");
+		});
 	}
 });
 
@@ -552,9 +544,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		});
 	}
 	// 添加角色
-	$scope.showRoleMod
-
-	el = false;
+	$scope.showRoleModel = false;
 	$scope.addRole = function(){
 		$scope.showRoleModel = !$scope.showRoleModel;
 	}
@@ -590,15 +580,10 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		})
 		.success(function(response){
 			alert("删除成功！");
-			$http.get(getRoleURL)
-				.success(function(response){
-					$scope.roles=response;
-					for (var i = 0; i < $scope.roles.length; i++) {
-						$scope.roles[i].editActive = edit[i];
-					}
-				}).error(function(){
-					alert("错误！请刷新重试。");
-			});
+			console.log(response);
+			console.log($scope.updateRoleId);
+			console.log($scope.roleName);
+			console.log($scope.roleDescribe);
 		}).error(function(){
 			alert("系统内部错误");
 		});

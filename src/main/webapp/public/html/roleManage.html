@@ -12,8 +12,8 @@
                 <i ng-if="!role.editActive" class="fa fa-folder" ng-click="showPrivilegeFuc($index)">查看其拥有的权限</i>
                 <i ng-if="role.editActive" class="fa fa-folder-open" ng-click="showPrivilegeFuc($index)"></i>
                 <div class="tree-actions">
-                  <i class="fa fa-edit warning" ng-click="updateRoleName(role.roleId)"></i>
-                  <i class="fa fa-trash-o danger" ng-click="deleteRole(role.roleId)"></i>
+                  <i class="fa fa-edit warning" ng-click="updateRoleName(role.id)"></i>
+                  <i class="fa fa-trash-o danger" ng-click="deleteRole(role.id)"></i>
                 </div>
             </div>
             <div class="tree-folder-content" ng-if="role.editActive" >

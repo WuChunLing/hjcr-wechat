@@ -15,7 +15,7 @@
         <h6 ng-class="qrcode.templateConfirm==='true'?'selected':'none'">{{qrcode.templateName}}</h6>
       </div>
 
-      <img src={{qrcode.templatePath}}>
+      <img style="width:180px;height:328px;"src={{qrcode.templatePath}}>
 
       <div class="edit">
         <a ui-sref="updateQrcode" class="btn btn-labeled btn-palegreen updateQrcode" key={{qrcode.templateId}} ng-click="updateQrcode(qrcode.templateId)" ><i class="btn-label glyphicon glyphicon-plus"></i>修改</a>

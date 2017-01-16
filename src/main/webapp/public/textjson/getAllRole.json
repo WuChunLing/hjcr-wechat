@@ -1,0 +1,48 @@
+{
+  "serviceResult": true,
+  "resultParm": {
+    "roleList": [
+      {
+        "id": 1,
+        "note": "普通管理员",
+        "rolename": "admin",
+        "privileges": [
+          "根据用户名获取用户信息"
+        ]
+      },
+      {
+        "id": 2,
+        "note": "超级管理员",
+        "rolename": "administrator",
+        "privileges": [
+          "根据用户名获取用户信息",
+          "根据用户Id获取用户所有权限",
+          "根据Id获取用户角色"
+        ]
+      },
+      {
+        "id": 36,
+        "note": "测试角色",
+        "rolename": "test",
+        "privileges": [
+          "根据用户名获取用户信息"
+        ]
+      },
+      {
+        "id": 47,
+        "note": null,
+        "rolename": "testrole",
+        "privileges": []
+      },
+      {
+        "id": 48,
+        "note": null,
+        "rolename": "testtt",
+        "privileges": [
+          "根据用户名获取用户信息",
+          "根据用户Id获取用户所有权限"
+        ]
+      }
+    ]
+  }
+}
