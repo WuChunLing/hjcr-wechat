@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Cacheable
 @Table(name = "system_user")
@@ -20,6 +21,8 @@ public class SystemUser implements Serializable {
 	private String password;
 
 	private Integer roleId;
+	
+	private String rolename;
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,6 +64,15 @@ public class SystemUser implements Serializable {
 	public String toString() {
 		return "SystemUser [id=" + id + ", username=" + username + ", password="
 				+ password + ", roleId=" + roleId + "]";
+	}
+
+	@Transient 
+	public String getRolename() {
+		return rolename;
+	}
+
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
 	}
 
 }

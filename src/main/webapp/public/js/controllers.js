@@ -1,20 +1,12 @@
 const preURL_project = "/hjcr-wechat/";
 
 // 模板管理  接口
-<<<<<<< HEAD
 var deleteQrcodeURL = preURL_project + 'deteleTemplate';   										//  删除   模板
 var getQrcodeURL = preURL_project+'getAllTemplate';   												//  获取   所有的模板信息
 var sureupdateQrcodeURL =  preURL_project + 'getTemplate';  										//  修改   模板
 var updateQrcodeURL=preURL_project+'updateTemplate';                                                  //获取模板
 var createQrcodeURL = preURL_project + 'getlastqrcode';  										//  生成永久二维码
 var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   模板
-=======
-var deleteQrcodeURL = preURL_project + 'deleteQrcode';   										//  删除   模板
-var getQrcodeURL = preURL_project+'checkqrcode.json';   												//  获取   所有的模板信息
-var updateQrcodeURL =  preURL_project + 'updateQrcode';  										//  修改   模板
-var createQrcodeURL = preURL_project + 'createQrcode';  										//  生成永久二维码
-var newQrcodeURL = preURL_project + 'newQrcode';   													//  新建   模板
->>>>>>> 9044849f40e596aac9d3a6df3f540c8a157c5347
 // 分润管理  接口
 var getProfitURL = preURL_project + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
 var updateProfitURL = preURL_project + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
@@ -24,14 +16,13 @@ var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
-var addRoleURL = preURL_project + 'addRole';    			// 新增 角色
+var addRoleURL = preURL_project + 'system/addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
-var updateRoleNameURL = preURL_project + 'system/updateRoleName';    // 修改 角色名字
-var deleteRoleURL = preURL_project + 'deleteRole';    // 删除 角色
-var getUserURL = preURL_project + 'getUser.json';    			// 获取 用户表
-var addUserURL = preURL_project + 'addSystemUser';    			// 新增  用户
-var updateUserURL = preURL_project + 'updateUser';    // 修改 用户
-var deleteUserURL = preURL_project + 'deleteUser';    // 删除 用户
+var deleteRoleURL = preURL_project + 'system/deleteRole';    // 删除 角色
+var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用户表
+var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用户
+var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
+var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
 var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
@@ -551,12 +542,12 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	// 确认删除角色
 	$scope.sureDeleteRole = function(){
 		$http.post(deleteRoleURL,{
-				roleId:$scope.deleteRoleId
+				id:$scope.deleteRoleId
 			})
 			.success(function(response){
 				console.log(response);
 				$scope.showModal = !$scope.showModal;
-				alert("删除成功！");
+				alert(response.resultInfo);
 				console.log($scope.deleteRoleId);
 			}).error(function(){
 				$scope.showModal = !$scope.showModal;
@@ -648,13 +639,13 @@ hjcr.controller('userCtrl',function($scope,$http){
 	// 获取角色表和权限表
 	$http.get(getUserURL)
 		.success(function(response){
-			$scope.users=response;
+			$scope.users=response.resultParm.userList;
 		}).error(function(){
 			alert("错误！请刷新重试。");
 	});
 	$http.get(getRoleURL)
 		.success(function(response){
-			$scope.roles=response;
+			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alert("错误！请刷新重试。");
 	});

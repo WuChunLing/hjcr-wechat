@@ -16,24 +16,24 @@
             </tr>
         </thead>
         <tbody id="user-distribution" >
-            <tr ng-repeat="user in users" key={{user.userId}}>
+            <tr ng-repeat="user in users" key={{user.id}}>
                 <td class="name">
-                  <span ng-if="!user.editActive">{{user.userName}}</span>
-                  <input ng-model="user.newuserName" ng-if="user.editActive" type="text" minlength="1" maxlength="8" ng-init="user.newuserName=user.userName">
+                  <span ng-if="!user.editActive">{{user.username}}</span>
+                  <input ng-model="user.newuserName" ng-if="user.editActive" type="text" minlength="1" maxlength="8" ng-init="user.newuserName=user.username">
                 </td>
                 <td class="privilege">
-                  <div ng-if="!user.editActive" id="user-privilege">{{user.userRole}}</div>
-                  <select ng-if="user.editActive" ng-model="user.newuserRole" ng-options="x.roleName for x in roles" ng-init="user.newuserRole=user.userRole">
+                  <div ng-if="!user.editActive" id="user-privilege">{{user.rolename}}</div>
+                  <select ng-if="user.editActive" ng-model="user.newuserRole" ng-options="x.rolename for x in roles" ng-init="user.newuserRole=user.rolename">
                   </select>
                 </td>
                 <td class="password">
-                  <div ng-if="!user.editActive" id="user-privilege">{{user.userPassword}}</div>
+                  <div ng-if="!user.editActive" id="user-privilege">{{user.password}}</div>
                   <input ng-model="user.newuserPassword" ng-if="user.editActive" type="text" minlength="1" maxlength="8" ng-init="user.newuserPassword=user.userPassword">
                 </td>
                 <td class="edit">
-                    <a ng-if="!user.editActive" class="btn btn-info btn-xs updateuser edit " key={{user.orderMoneyId}} ng-click="updateUser($index,user.orderMoneyId)"><i class="fa fa-edit"></i> 修改</a>
-                    <a ng-if="!user.editActive" class="btn btn-danger btn-xs delete" ng-click="deleteUser(user.userId)"><i class="fa fa-trash-o"></i> 删除</a>
-                    <a ng-if="user.editActive"  ng-click="sureUpdateUser($index,user.userId)" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
+                    <a ng-if="!user.editActive" class="btn btn-info btn-xs updateuser edit " key={{user.id}} ng-click="updateUser($index,user.id)"><i class="fa fa-edit"></i> 修改</a>
+                    <a ng-if="!user.editActive" class="btn btn-danger btn-xs delete" ng-click="deleteUser(user.id)"><i class="fa fa-trash-o"></i> 删除</a>
+                    <a ng-if="user.editActive"  ng-click="sureUpdateUser($index,user.id)" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
                     <a ng-if="user.editActive"  ng-click="updateUser($index,user.userId)" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> 取消</a>
                 </td>
             </tr>
