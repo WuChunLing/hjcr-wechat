@@ -1,18 +1,17 @@
-const preURL_get = "http://localhost:4000/textjson/";
-const preURL_post = "/test/qrcode/";
 const preURL_project = "/hjcr-wechat/";
 
 // 模板管理  接口
-var deleteQrcodeURL = preURL_post + 'deleteQrcode';   										//  删除   模板
-var getQrcodeURL = preURL_get+'checkqrcode.json';   												//  获取   所有的模板信息
-var updateQrcodeURL =  preURL_post + 'updateQrcode';  										//  修改   模板
-var createQrcodeURL = preURL_post + 'createQrcode';  										//  生成永久二维码
-var newQrcodeURL = preURL_post + 'newQrcode';   													//  新建   模板
+var deleteQrcodeURL = preURL_project + 'deteleTemplate';   										//  删除   模板
+var getQrcodeURL = preURL_project+'getAllTemplate';   												//  获取   所有的模板信息
+var sureupdateQrcodeURL =  preURL_project + 'getTemplate';  										//  修改   模板
+var updateQrcodeURL=preURL_project+'updateTemplate';                                                  //获取模板
+var createQrcodeURL = preURL_project + 'getlastqrcode';  										//  生成永久二维码
+var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   模板
 // 分润管理  接口
-var getProfitURL = preURL_get + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
-var updateProfitURL = preURL_post + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
-var getGoodsURL = preURL_get + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
-var deleteGoodsURL = preURL_post + 'deleteQrcode';												 //删除   商品分类
+var getProfitURL = preURL_project + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
+var updateProfitURL = preURL_project + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
+var getGoodsURL = preURL_project + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
+var deleteGoodsURL = preURL_project + 'deleteQrcode';												 //删除   商品分类
 var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
@@ -25,14 +24,14 @@ var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用�
 var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
 var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
 // 账单管理的接口
-var getBillURL = preURL_post + 'getBill';   //获取 第n页的订单记录
-var getMyBillURL = preURL_post + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
-var getBillMoneyURL = preURL_get + 'getBillMoney.json'; //获取总订单 的金额信息
-var getBillUserURL = preURL_post + 'getBillUser';  //  获取用户为xx的用户信息
-var getBillByIdURL = preURL_post + 'getBillById';   //通过订单号查询 订单
-var getBillByDateURL = preURL_post + 'getBillByDate';   //通过时间段查询 订单
-var getBillMoneyByDateURL = preURL_post + 'getBillMoneyByDate';
-var getBillMoneyByIdURL = preURL_post + 'getBillMoneyById';
+var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
+var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
+var getBillMoneyURL = preURL_project + 'getBillMoney.json'; //获取总订单 的金额信息
+var getBillUserURL = preURL_project + 'getBillUser';  //  获取用户为xx的用户信息
+var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 订单
+var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
+var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
+var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
 
 // 主页面 的controller
@@ -78,7 +77,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 	// 显示所有的模板
 	$http.get(getQrcodeURL)
 		.success(function(response){
-			$scope.qrcodes=response;
+			$scope.qrcodes=response.resultParm.allTemplate;
 		}).error(function(response){
 			alert("请求得不到响应，请稍后刷新重试！");
 	});
@@ -98,7 +97,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 	$scope.deleteTemplate =function(){
 		$http.post(deleteQrcodeURL,{templateId:$scope.templateId})
 		.success(function(response){
-			alert(response.data);
+			alert(response.resultInfo);
 			console.log(response+' '+"删除了id为"+$scope.templateId+"的模板");
 			// 这里可以对response做判断，判断是否有权限，有则只需下一步操作
 			$scope.qrcodes.splice($scope.templateIndex,1);
@@ -115,16 +114,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	$scope.showQrcode = false;
 	$scope.showToux = false;
 	$scope.templateConfirm = false;
-	//模板信息
-	$scope.template = {
-		"templateName":null,
-		"templateQrcodeHigh":520/820,
-		"templateQrcodeWide":150/450,
-		"templateHeadImgHigh":250/820,
-		"templateHeadImgWide":180/450,
-		"templateQrcodeSize":150/450,
-		"templateConfirm":false
-	};
+	
   //显示选择的模板图片
 	$scope.uploadImage = function(value){
 		 document.querySelector('#template-name').focus();
@@ -212,6 +202,16 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	}
 	//确认上传模板
 	$scope.submitTemplate = function(){
+		//模板信息
+		$scope.template = {
+			"templateName":null,
+			"templateQrcodeHigh":520/820,
+			"templateQrcodeWide":150/450,
+			"templateHeadImgHigh":250/820,
+			"templateHeadImgWide":180/450,
+			"templateQrcodeSize":150/450,
+			"templateConfirm":false
+		};
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 		$scope.template.templateConfirm = $scope.templateConfirm;
@@ -244,9 +244,11 @@ hjcr.controller('newQCtrl',function($scope,$http){
 hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.template = null;
 	//显示要修改的模板的原始信息
-	$http.post(updateQrcodeURL,{templateId:sessionStorage.templateId})
+	console.log("1");
+	$http.post(sureupdateQrcodeURL,{templateId:sessionStorage.templateId})
 		.success(function(response){
-			$scope.template = response;
+			console.log("2");
+			$scope.template = response.resultParm.allTemplate;
 			console.log($scope.template);
 			var prevDiv = document.getElementsByClassName('templateImg')[0];
 			prevDiv.innerHTML = '<img class="templateImg" src="' + $scope.template.templatePath + '" />';
@@ -340,7 +342,7 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 		console.log($scope.template);
-		$http.post(updateQrcodeURL,{template:$scope.template})
+		$http.post(updateQrcodeURL,$scope.template)
 		.success(function(response){
 			alert("上传成功！");
 		}).error(function(){
@@ -577,6 +579,34 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		xhr.send(new FormData(formElement));
 		$scope.showRoleModel = !$scope.showRoleModel;
 	}
+	// 修改角色名字和描述
+	$scope.updateRoleModel = false;
+	$scope.updateRoleName = function(id){
+		$scope.updateRoleModel = !$scope.updateRoleModel;
+		$scope.updateRoleId = id;
+	}
+	$scope.sureUpdate = function(){
+		$http.post(updateRoleNameURL,{
+			roleId:$scope.updateRoleId,
+			roleName:$scope.roleName,
+			roleDescribe:$scope.roleDescribe
+		})
+		.success(function(response){
+			alert("删除成功！");
+			$http.get(getRoleURL)
+				.success(function(response){
+					$scope.roles=response;
+					for (var i = 0; i < $scope.roles.length; i++) {
+						$scope.roles[i].editActive = edit[i];
+					}
+				}).error(function(){
+					alert("错误！请刷新重试。");
+			});
+		}).error(function(){
+			alert("系统内部错误");
+		});
+		$scope.updateRoleModel = !$scope.updateRoleModel;
+	}
 	// 修改 角色权限
 	$scope.updateRole = function(id,privilege){
 		$http.post(updateRoleURL,{
@@ -585,7 +615,20 @@ hjcr.controller('roleCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				console.log(response);
-				console.log('rolrId:' + id + ' privilegeId:' + privilege);
+				console.log(id + ' ' + privilege);
+				var edit = new Array();
+				for (var i = 0; i < $scope.roles.length; i++) {
+					edit[i] = $scope.roles[i].editActive;
+				}
+				$http.get(getRoleURL)
+					.success(function(response){
+						$scope.roles=response;
+						for (var i = 0; i < $scope.roles.length; i++) {
+							$scope.roles[i].editActive = edit[i];
+						}
+					}).error(function(){
+						alert("错误！请刷新重试。");
+				});
 			}).error(function(){
 				alert("系统内部错误");
 		});

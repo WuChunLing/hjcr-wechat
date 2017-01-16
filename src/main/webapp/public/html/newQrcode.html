@@ -10,9 +10,9 @@
          <input
            required
            type="file"
-           name="templatePath"
+           name="file"
            ng-model="newQrcodeImg"
-           accept="image/*" id="select-file"
+           accept="image/jpg,image/jpeg,image/png" id="select-file"
            onchange="angular.element(this).scope().uploadImage(this.files)"/>
        </div>
      </div>

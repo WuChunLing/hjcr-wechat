@@ -82,7 +82,7 @@ public class QRcodeService {
 			File file = wxService.qrCodePicture(ticket);
 
 			// 获取模板信息
-			Template template = templateImpl.getTemplatebyConfirm("1");
+			Template template = templateImpl.getTemplatebyConfirm(true);
 
 			// 拼接图片
 			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file);
@@ -219,14 +219,14 @@ System.out.println("9999");
 			os.write(buffer, 0, len);
 		}
 
-		return imagePath+"\\" + fileName;
+		return ".\\"+"image"+"\\" + fileName;
 
 	}
 
 	
 	//获取选择的模板
 	public Template getTemplate() {
-		return (Template) templateImpl.getTemplatebyConfirm("1");
+		return (Template) templateImpl.getTemplatebyConfirm(true);
 	}
 
 	/*
@@ -330,7 +330,7 @@ System.out.println("9999");
 		File file = wxService.qrCodePicture(ticket);
 
 		// 获取模板信息
-		Template template = templateImpl.getTemplatebyConfirm("1");
+		Template template = templateImpl.getTemplatebyConfirm(true);
 
 		// 拼接图片
 		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file);
