@@ -1,5 +1,7 @@
 package com.hjcr.wechat.handler;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,12 +26,12 @@ public class ForeverqrcodeHandler {
 	 * 获取永久二维码
 	 */
 	@RequestMapping(value = { "/getlastqrcode" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getlastqrcode(@RequestParam("telephone") String telephone,
+	public ResponseEntity<ResultMessage> getlastqrcode(@RequestBody Map<String,Object> map,
 			HttpServletRequest request) {
 		ResultMessage result = new ResultMessage();
 
 		try {
-
+      String telephone=(String) map.get("telephone");
 			result.setResultInfo(qRcodeService.creatForeverQrcode(telephone, request));
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK); // 返回一个永久的二维码
 

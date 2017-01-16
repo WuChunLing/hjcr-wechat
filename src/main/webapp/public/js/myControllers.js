@@ -514,24 +514,29 @@ hjcr.controller('profitCtrl',function($scope,$http){
 // 角色管理 controller
 hjcr.controller('roleCtrl',function($scope,$http){
 	$scope.showModal = false;
-	// 获取角色表和权限表
+	// 获取角色表
 	$http.get(getRoleURL)
 		.success(function(response){
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alert("请求得不到响应，请稍后重试...");
 	});
+	// 获取权限表
 	$http.get(getPrivilegeURL)
 		.success(function(response){
 			$scope.privileges=response.resultParm.privilegeList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alert("请求得不到响应，请稍后重试...");
 	});
-	// 显示权限
+
+
+	// 是否显示权限
 	$scope.showPrivilegeFuc = function(index){
 		$scope.roles[index].editActive = !$scope.roles[index].editActive;
 	}
-	//显示删除确认框
+
+
+	//显示删除角色确认框
 	$scope.deleteRole = function(id){
 		$scope.showModal = !$scope.showModal;
 		$scope.deleteRoleId = id;
@@ -558,11 +563,14 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				alert("请求未得到响应！请稍后刷新重试。");
 		});
 	}
-	// 添加角色
+
+
+	// 显示 添加角色  对话框
 	$scope.showRoleModel = false;
 	$scope.addRole = function(){
 		$scope.showRoleModel = !$scope.showRoleModel;
 	}
+	// 确认添加角色
 	$scope.submitRole = function(){
 		var formElement = document.getElementById("roleForm");
 		var xhr = new XMLHttpRequest();
@@ -570,46 +578,53 @@ hjcr.controller('roleCtrl',function($scope,$http){
     {
       if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
       {
-        console.log("添加成功！");
+        alert("添加成功！");
+				$http.get(getRoleURL)
+					.success(function(response){
+						$scope.roles=response.resultParm.roleList;
+					}).error(function(){
+						alert("错误！请刷新重试。");
+				});
       }
       else
       {
-        console.log("添加失败！");
+        alert("添加失败！");
       }
     };
 		xhr.open("POST", addRoleURL,true);
 		xhr.send(new FormData(formElement));
-		console.log(formElement);
 		$scope.showRoleModel = !$scope.showRoleModel;
 	}
-	// 修改角色
+
+
+	// 显示 修改角色 名称和 角色   的 对话框
 	$scope.updateRoleModel = false;
 	$scope.updateRoleName = function(id){
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 		$scope.updateRoleId = id;
 	}
+	// 确认修改 角色的名称和说明
 	$scope.sureUpdate = function(){
 		$http.post(updateRoleURL,{
-			roleId:$scope.updateRoleId,
-			roleName:$scope.roleName,
-			roleDescribe:$scope.roleDescribe
+			id:$scope.updateRoleId,
+			rolename:$scope.roleName,
+			describe:$scope.roleDescribe
 		})
 		.success(function(response){
-			alert("删除成功！");
+			alert(response);
 			$http.get(getRoleURL)
 				.success(function(response){
-					$scope.roles=response;
-					for (var i = 0; i < $scope.roles.length; i++) {
-						$scope.roles[i].editActive = edit[i];
-					}
+					$scope.roles=response.resultParm.roleList;
 				}).error(function(){
-					alert("错误！请刷新重试。");
+					alert("请求得不到响应，请稍后重试...");
 			});
 		}).error(function(){
-			alert("系统内部错误");
+			alert("请求得不到响应，请稍后重试...");
 		});
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 	}
+
+
 	// 对角色的权限进行增删
 	$scope.updateRole = function(id,privilege){
 		$http.post(updateRoleURL,{
@@ -617,41 +632,48 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				privilegeId:privilege
 			})
 			.success(function(response){
-				console.log(response);
-				console.log(id + ' ' + privilege);
+				alert(response);
 				var edit = new Array();
 				for (var i = 0; i < $scope.roles.length; i++) {
 					edit[i] = $scope.roles[i].editActive;
 				}
 				$http.get(getRoleURL)
 					.success(function(response){
-						$scope.roles=response;
+						$scope.roles=response.resultParm.roleList;
 						for (var i = 0; i < $scope.roles.length; i++) {
 							$scope.roles[i].editActive = edit[i];
 						}
 					}).error(function(){
-						alert("错误！请刷新重试。");
+						alert("请求得不到响应，请稍后重试...");
 				});
 			}).error(function(){
-				alert("系统内部错误");
+				alert("请求得不到响应，请稍后重试...");
 		});
 	}
+
+
 });
+
+
 // 用户管理 controller
 hjcr.controller('userCtrl',function($scope,$http){
-	// 获取角色表和权限表
+
+	// 获取用户表
 	$http.get(getUserURL)
 		.success(function(response){
-			$scope.users=response;
+			$scope.users=response.resultParm.userList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alert("请求未得到响应！请稍后刷新重试。");
 	});
+	// 获取角色表
 	$http.get(getRoleURL)
 		.success(function(response){
-			$scope.roles=response;
+			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alert("请求未得到响应！请稍后刷新重试。");
 	});
+
+
 	// 删除用户确认弹框
 	$scope.showModal = false;
 	$scope.deleteUser = function(id){
@@ -659,13 +681,17 @@ hjcr.controller('userCtrl',function($scope,$http){
 		$scope.deleteUserId = id;
 	};
 	$scope.sureDeleteUser =function(){
-		$http.post(deleteUserURL,{templateId:$scope.deleteUserId})
+		$http.post(deleteUserURL,{id:$scope.deleteUserId})
 		.success(function(response){
-			alert("删除成功！");
-			console.log(response);
-			console.log($scope.deleteUserId);
+			alert(response);
+			$http.get(getUserURL)
+				.success(function(response){
+					$scope.users=response.resultParm.userList;
+				}).error(function(){
+					alert("请求未得到响应！请稍后刷新重试。");
+			});
 		}).error(function(){
-			alert("系统内部错误");
+			alert("请求未得到响应，请稍后重试。。。");
 		});
 		$scope.showModal = !$scope.showModal;
 	}
@@ -673,17 +699,19 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$scope.addUser = function(){
 		$scope.showAddUser = !$scope.showAddUser;
 	}
-	$scope.newUser = {};
 	$scope.sureAddUser = function(){
-		$http.post(addUserURL,{
-				user:$scope.newUser
-			})
+		$http.post(addUserURL,$scope.newUser)
 			.success(function(response){
-				console.log(response);
-				console.log($scope.newUser);
+				alert(response);
+				$http.get(getUserURL)
+					.success(function(response){
+						$scope.users=response.resultParm.userList;
+					}).error(function(){
+						alert("请求未得到响应！请稍后刷新重试。");
+				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
-				alert("系统内部错误");
+				alert("请求未得到响应！请稍后刷新重试。");
 		});
 	}
 	// 修改用户

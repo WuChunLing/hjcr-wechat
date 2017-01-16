@@ -58,8 +58,8 @@ public class TemplateService {
 	 */
 	
 	public void reviseTemplate(){
-		Template template=templateImpl.getTemplatebyConfirm("1");
-		template.setTemplateConfirm("0");
+		Template template=templateImpl.getTemplatebyConfirm(true);
+		template.setTemplateConfirm(false);
 	}
 	
 	
