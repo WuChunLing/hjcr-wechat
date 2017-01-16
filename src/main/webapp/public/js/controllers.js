@@ -1,38 +1,37 @@
-const preURL_get = "http://localhost:4000/textjson/";
-const preURL_post = "/test/qrcode/";
 const preURL_project = "/hjcr-wechat/";
 
 // 模板管理  接口
-var deleteQrcodeURL = preURL_post + 'deleteQrcode';   										//  删除   模板
-var getQrcodeURL = preURL_get+'checkqrcode.json';   												//  获取   所有的模板信息
-var updateQrcodeURL =  preURL_post + 'updateQrcode';  										//  修改   模板
-var createQrcodeURL = preURL_post + 'createQrcode';  										//  生成永久二维码
-var newQrcodeURL = preURL_post + 'newQrcode';   													//  新建   模板
+var deleteQrcodeURL = preURL_project + 'deleteQrcode';   										//  删除   模板
+var getQrcodeURL = preURL_project+'checkqrcode.json';   												//  获取   所有的模板信息
+var updateQrcodeURL =  preURL_project + 'updateQrcode';  										//  修改   模板
+var createQrcodeURL = preURL_project + 'createQrcode';  										//  生成永久二维码
+var newQrcodeURL = preURL_project + 'newQrcode';   													//  新建   模板
 // 分润管理  接口
-var getProfitURL = preURL_get + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
-var updateProfitURL = preURL_post + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
-var getGoodsURL = preURL_get + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
-var deleteGoodsURL = preURL_post + 'deleteQrcode';												 //删除   商品分类
+var getProfitURL = preURL_project + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
+var updateProfitURL = preURL_project + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
+var getGoodsURL = preURL_project + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
+var deleteGoodsURL = preURL_project + 'deleteQrcode';												 //删除   商品分类
 var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
 var addRoleURL = preURL_project + 'addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
+var updateRoleNameURL = preURL_project + 'system/updateRoleName';    // 修改 角色名字
 var deleteRoleURL = preURL_project + 'deleteRole';    // 删除 角色
 var getUserURL = preURL_project + 'getUser.json';    			// 获取 用户表
 var addUserURL = preURL_project + 'addSystemUser';    			// 新增  用户
 var updateUserURL = preURL_project + 'updateUser';    // 修改 用户
 var deleteUserURL = preURL_project + 'deleteUser';    // 删除 用户
 // 账单管理的接口
-var getBillURL = preURL_post + 'getBill';   //获取 第n页的订单记录
-var getMyBillURL = preURL_post + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
-var getBillMoneyURL = preURL_get + 'getBillMoney.json'; //获取总订单 的金额信息
-var getBillUserURL = preURL_post + 'getBillUser';  //  获取用户为xx的用户信息
-var getBillByIdURL = preURL_post + 'getBillById';   //通过订单号查询 订单
-var getBillByDateURL = preURL_post + 'getBillByDate';   //通过时间段查询 订单
-var getBillMoneyByDateURL = preURL_post + 'getBillMoneyByDate';
-var getBillMoneyByIdURL = preURL_post + 'getBillMoneyById';
+var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
+var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
+var getBillMoneyURL = preURL_project + 'getBillMoney.json'; //获取总订单 的金额信息
+var getBillUserURL = preURL_project + 'getBillUser';  //  获取用户为xx的用户信息
+var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 订单
+var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
+var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
+var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
 
 // 主页面 的controller
@@ -576,6 +575,29 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		xhr.open("POST", addRoleURL,true);
 		xhr.send(new FormData(formElement));
 		$scope.showRoleModel = !$scope.showRoleModel;
+	}
+	// 修改角色名字和描述
+	$scope.updateRoleModel = false;
+	$scope.updateRoleName = function(id){
+		$scope.updateRoleModel = !$scope.updateRoleModel;
+		$scope.updateRoleId = id;
+	}
+	$scope.sureUpdate = function(){
+		$http.post(updateRoleNameURL,{
+			roleId:$scope.updateRoleId,
+			roleName:$scope.roleName,
+			roleDescribe:$scope.roleDescribe
+		})
+		.success(function(response){
+			alert("删除成功！");
+			console.log(response);
+			console.log($scope.updateRoleId);
+			console.log($scope.roleName);
+			console.log($scope.roleDescribe);
+		}).error(function(){
+			alert("系统内部错误");
+		});
+		$scope.updateRoleModel = !$scope.updateRoleModel;
 	}
 	// 修改 角色权限
 	$scope.updateRole = function(id,privilege){
