@@ -21,19 +21,19 @@ public class Template {
 	
 	private String templatePath;//模板路径
 	
-	private int templateQrcodeHigh;//二维码纵坐标
+	private float templateQrcodeHigh;//二维码纵坐标
 	
-	private int templateQrcodeWide;//二维码横坐标
+	private float templateQrcodeWide;//二维码横坐标
 	
-	private int templateQrcodeSize;//二维码大小
+	private float templateQrcodeSize;//二维码大小
 	
-	private int templateHeadImgWide;//微信用户头像纵坐标
+	private float templateHeadImgWide;//微信用户头像纵坐标
 	
-	private int templateHeadImgHigh;//微信用户头像横坐标
+	private float templateHeadImgHigh;//微信用户头像横坐标
 	
-	private int templateHeadImgUrl; //微信用户头像路径
-	
-	private String templateConfirm; //是否确定的模板
+/*	private String templateHeadImgUrl; //微信用户头像路径
+	*/
+	private boolean templateConfirm; //是否确定的模板
 
 	
 
@@ -73,94 +73,80 @@ public class Template {
 
 
 
-	public int getTemplateQrcodeHigh() {
+	public float getTemplateQrcodeHigh() {
 		return templateQrcodeHigh;
 	}
 
 
 
-	public void setTemplateQrcodeHigh(int templateQrcodeHigh) {
+	public void setTemplateQrcodeHigh(float templateQrcodeHigh) {
 		this.templateQrcodeHigh = templateQrcodeHigh;
 	}
 
 
 
-	public int getTemplateQrcodeWide() {
+	public float getTemplateQrcodeWide() {
 		return templateQrcodeWide;
 	}
 
 
 
-	public void setTemplateQrcodeWide(int templateQrcodeWide) {
+	public void setTemplateQrcodeWide(float templateQrcodeWide) {
 		this.templateQrcodeWide = templateQrcodeWide;
 	}
 
 
 
-	public int getTemplateQrcodeSize() {
+	public float getTemplateQrcodeSize() {
 		return templateQrcodeSize;
 	}
 
 
 
-	public void setTemplateQrcodeSize(int templateQrcodeSize) {
+	public void setTemplateQrcodeSize(float templateQrcodeSize) {
 		this.templateQrcodeSize = templateQrcodeSize;
 	}
 
 
 
-	public int getTemplateHeadImgWide() {
+	public float getTemplateHeadImgWide() {
 		return templateHeadImgWide;
 	}
 
 
 
-	public void setTemplateHeadImgWide(int templateHeadImgWide) {
+	public void setTemplateHeadImgWide(float templateHeadImgWide) {
 		this.templateHeadImgWide = templateHeadImgWide;
 	}
 
 
 
-	public int getTemplateHeadImgHigh() {
+	public float getTemplateHeadImgHigh() {
 		return templateHeadImgHigh;
 	}
 
 
 
-	public void setTemplateHeadImgHigh(int templateHeadImgHigh) {
+	public void setTemplateHeadImgHigh(float templateHeadImgHigh) {
 		this.templateHeadImgHigh = templateHeadImgHigh;
 	}
 
 
 
-	public int getTemplateHeadImgUrl() {
-		return templateHeadImgUrl;
-	}
-
-
-
-	public void setTemplateHeadImgUrl(int templateHeadImgUrl) {
-		this.templateHeadImgUrl = templateHeadImgUrl;
-	}
-
-
-
-	public String getTemplateConfirm() {
+	public boolean isTemplateConfirm() {
 		return templateConfirm;
 	}
 
 
 
-	public void setTemplateConfirm(String templateConfirm) {
+	public void setTemplateConfirm(boolean templateConfirm) {
 		this.templateConfirm = templateConfirm;
 	}
 
 
-	
 
-	public Template(int templateId, String templateName, String templatePath, int templateQrcodeHigh,
-			int templateQrcodeWide, int templateQrcodeSize, int templateHeadImgWide, int templateHeadImgHigh,
-			int templateHeadImgUrl, String templateConfirm) {
+	public Template(int templateId, String templateName, String templatePath, float templateQrcodeHigh,
+			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, Boolean templateConfirm) {
 		super();
 		this.templateId = templateId;
 		this.templateName = templateName;
@@ -170,14 +156,24 @@ public class Template {
 		this.templateQrcodeSize = templateQrcodeSize;
 		this.templateHeadImgWide = templateHeadImgWide;
 		this.templateHeadImgHigh = templateHeadImgHigh;
-		this.templateHeadImgUrl = templateHeadImgUrl;
-		this.templateConfirm = templateConfirm;
+			this.templateConfirm = templateConfirm;
 	}
 
 
 
 	public Template() {
 		super();
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Template [templateId=" + templateId + ", templateName=" + templateName + ", templatePath="
+				+ templatePath + ", templateQrcodeHigh=" + templateQrcodeHigh + ", templateQrcodeWide="
+				+ templateQrcodeWide + ", templateQrcodeSize=" + templateQrcodeSize + ", templateHeadImgWide="
+				+ templateHeadImgWide + ", templateHeadImgHigh=" + templateHeadImgHigh + ", templateConfirm="
+				+ templateConfirm + "]";
 	}
 	
 

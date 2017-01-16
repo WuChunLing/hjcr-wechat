@@ -65,13 +65,20 @@ public class photoJoin {
 		int height = image.getHeight(null) > bg.getHeight() * 50 / 10 ? (bg.getHeight() * 5 / 10)
 				: image.getWidth(null);
 
-		int size = template.getTemplateQrcodeSize();
-		g.drawImage(image, template.getTemplateQrcodeWide(), template.getTemplateQrcodeHigh(), size, size, null);// 绘制二维码
+		int size = (int)template.getTemplateQrcodeSize();
+		
+		int width1=(int) (bg.getWidth()*template.getTemplateQrcodeWide());
+		int high1=(int) (bg.getHeight()*template.getTemplateQrcodeHigh());
+		
+		g.drawImage(image, width1,high1, size, size, null);// 绘制二维码
 		g.dispose();
 		bg.flush();
 
+		int width2=(int) (bg.getWidth()*template.getTemplateHeadImgWide());
+		int high2=(int) (bg.getHeight()*template.getTemplateHeadImgHigh());
+		
 		Graphics2D QR = bg.createGraphics();
-		QR.drawImage(HeadImg, template.getTemplateHeadImgWide(), template.getTemplateHeadImgHigh(), size, size, null);// 绘制微信头像
+		QR.drawImage(HeadImg,width2,high2, size, size, null);// 绘制微信头像
 		 BufferedImage newBufferedImage = new BufferedImage(bg.getWidth(), bg.getHeight(), BufferedImage.TYPE_INT_RGB);  
 	        newBufferedImage.createGraphics().drawImage(bg, 0, 0, Color.WHITE, null);  
 		File weixinfile = new File("file");

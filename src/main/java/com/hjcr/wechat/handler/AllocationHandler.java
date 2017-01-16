@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -56,7 +57,7 @@ public class AllocationHandler {
 	 * 更新分润分配比例信息
 	 */
 	@RequestMapping(value = "updataAllocation", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> updataAllocation(Allocation allocation) {
+	public ResponseEntity<ResultMessage> updataAllocation(@RequestBody Allocation allocation) {
 		ResultMessage result = new ResultMessage();
 		try {
 			allocationService.updataAllocation(allocation);

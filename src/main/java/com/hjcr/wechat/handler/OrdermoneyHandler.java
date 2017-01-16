@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,7 +33,7 @@ public class OrdermoneyHandler {
 	 * 添加类别分配比例信息
 	 */
 	@RequestMapping(value = "addOrderMoney", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> addOrderMoney(Ordermoney ordermoney) {
+	public ResponseEntity<ResultMessage> addOrderMoney(@RequestBody Ordermoney ordermoney) {
 		ResultMessage result = new ResultMessage();
 		try {
 			orderMoneyService.sava(ordermoney);
@@ -71,7 +72,7 @@ public class OrdermoneyHandler {
 	/*
 	 * 更新类别分配比例信息
 	 */
-	@RequestMapping(value = "updataOrderMoney", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "updataOrderMoney", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> updataOrderMoney(@RequestBody Ordermoney ordermoney) {
 		ResultMessage result = new ResultMessage();
 		try {
@@ -91,9 +92,11 @@ public class OrdermoneyHandler {
 	 * 删除类别分配比例信息
 	 */
 	@RequestMapping(value = "deteleOrderMoney", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> deteleOrderMoney(int orderMoneyId) {
+	public ResponseEntity<ResultMessage> deteleOrderMoney(@RequestBody Map<String,Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
+			 
+			int orderMoneyId= (int) map.get("orderMoneyId");
 			orderMoneyService.delete(orderMoneyId);
 			result.setResultInfo("success");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
