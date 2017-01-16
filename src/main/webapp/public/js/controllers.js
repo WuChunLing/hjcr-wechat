@@ -607,7 +607,20 @@ hjcr.controller('roleCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				console.log(response);
-				console.log('rolrId:' + id + ' privilegeId:' + privilege);
+				console.log(id + ' ' + privilege);
+				var edit = new Array();
+				for (var i = 0; i < $scope.roles.length; i++) {
+					edit[i] = $scope.roles[i].editActive;
+				}
+				$http.get(getRoleURL)
+					.success(function(response){
+						$scope.roles=response;
+						for (var i = 0; i < $scope.roles.length; i++) {
+							$scope.roles[i].editActive = edit[i];
+						}
+					}).error(function(){
+						alert("错误！请刷新重试。");
+				});
 			}).error(function(){
 				alert("系统内部错误");
 		});
