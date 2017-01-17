@@ -10,9 +10,9 @@ var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   �
 // 分润管理  接口
 var getProfitURL = preURL_project + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
 var updateProfitURL = preURL_project + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
-var getGoodsURL = preURL_project + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
-var deleteGoodsURL = preURL_project + 'deleteQrcode';												 //删除   商品分类
-var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
+var getGoodsURL = preURL_project + 'getOrderMoney';     //获取   商品分类  的销售提成比例
+var deleteGoodsURL = preURL_project + 'deteleOrderMoney';												 //删除   商品分类
+var updateGoodsURL = preURL_project +'updataOrderMoney';																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
@@ -218,7 +218,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		var templateFormDate = new FormData(document.getElementById("myForm"));
 		for (var i in $scope.template) {
 			if ($scope.template.hasOwnProperty(i) === true){
-				templateFormDate.append(i,$scope.template[i]]);
+				templateFormDate.append(i,$scope.template[i]);
 			}
 		}
 		$http.post(newQrcodeURL,templateFormDate)

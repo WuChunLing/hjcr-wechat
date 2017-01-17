@@ -35,7 +35,7 @@ public class TemplateHandler {
 	/*
 	 * 添加模板
 	 */
-	@RequestMapping(value = "/addTemplate")
+	@RequestMapping(value = "/addTemplate",method=RequestMethod.POST)
 	public ResponseEntity<ResultMessage> addTemplate(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("file") MultipartFile file, Template template) {
 		System.out.println(file);
