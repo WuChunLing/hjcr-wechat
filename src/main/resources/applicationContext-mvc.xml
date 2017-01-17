@@ -77,9 +77,11 @@
 		<property name="proxyTargetClass" value="true" />
 	</bean>
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	
+	
 
 	<!-- 错误信息拦截，实现HandlerExceptionResolver -->
- 	<bean class="com.hjcr.wechat.interceptor.SystemExceptionHandler"></bean>
+ 	<bean class="com.hjcr.wechat.interceptor.SystemExceptionHandler" ></bean>
 
 	<mvc:default-servlet-handler />
 	<mvc:annotation-driven></mvc:annotation-driven>

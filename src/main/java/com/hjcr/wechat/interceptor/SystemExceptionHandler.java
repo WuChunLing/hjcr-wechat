@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,6 +46,10 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 			resultMessage.setServiceResult(false);
 			resultMessage.setResultInfo("密码认证失败");
 			logger.info("resultMessage =>" + resultMessage.toJson());
+		} else if (ex instanceof UnauthorizedException) {
+			resultMessage.setServiceResult(false);
+			resultMessage.setMessageCode(401l);
+			resultMessage.setResultInfo("没有权限");
 		} else {
 			resultMessage.setServiceResult(false);
 			resultMessage.setResultInfo("系统出错");
