@@ -81,10 +81,6 @@ public class QRcodeService {
 			File file = wxService.qrCodePicture(ticket);
 
 			// 获取模板信息
-<<<<<<< HEAD
-
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			Template template = templateImpl.getTemplatebyConfirm(1);
 
 			// 拼接图片
@@ -211,27 +207,15 @@ public class QRcodeService {
 			os.write(buffer, 0, len);
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		return ".\\"+"image"+"\\" + fileName;
-=======
 		return ".\\" + "image" + "\\" + fileName; // 返回相对路径
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
-		return ".\\" + "image" + "\\" + fileName; // 返回相对路径
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 
 	}
 
 	// 获取选择的模板
 	public Template getTemplate() {
-<<<<<<< HEAD
 
 		return (Template) templateImpl.getTemplatebyConfirm(1);
 
-=======
-		return (Template) templateImpl.getTemplatebyConfirm(1);
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	}
 
 	/*
@@ -335,16 +319,8 @@ public class QRcodeService {
 		File file = wxService.qrCodePicture(ticket);
 
 		// 获取模板信息
-<<<<<<< HEAD
-<<<<<<< HEAD
-		Template template = templateImpl.getTemplatebyConfirm(true);
-=======
-		Template template = templateImpl.getTemplatebyConfirm(1);
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
 		Template template = templateImpl.getTemplatebyConfirm(1);
 
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 
 		// 拼接图片
 		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file);

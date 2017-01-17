@@ -51,11 +51,16 @@ public class AllocationHandler {
 	 * 更新一级代理分润分配比例信息
 	 */
 	@RequestMapping(value = "updatafirstAllocation", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> updataAllocation(@RequestBody Map<String, Object> map) {
+	public ResponseEntity<ResultMessage> updatafirstAllocation(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
-			
+			float orderMoneyFirst = (float) map.get("orderMoneyFirst");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
+			float orderMoneySecond=1-orderMoneyFirst;
+			Allocation allocation=allocationService.getAllocation();
+			allocation.setOrderMoneyFirst(orderMoneyFirst);
+			allocation.setOrderMoneySecond(orderMoneySecond);
+			allocationService.updataAllocation(allocation); // 更新分润信息
 			result.setResultInfo("更新成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
@@ -68,7 +73,13 @@ public class AllocationHandler {
 	public ResponseEntity<ResultMessage> updatasecondAllocation(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
+			float orderMoneySecond = (float) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
+			float orderMoneyFirst=1-orderMoneySecond;
+			Allocation allocation=allocationService.getAllocation();
+			allocation.setOrderMoneyFirst(orderMoneyFirst);
+			allocation.setOrderMoneySecond(orderMoneySecond);
+			allocationService.updataAllocation(allocation); // 更新分润信息
 			result.setResultInfo("更新成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {

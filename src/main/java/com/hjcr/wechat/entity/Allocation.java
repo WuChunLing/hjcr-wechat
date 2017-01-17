@@ -14,8 +14,8 @@ public class Allocation {
 
 	// 分配的比例
 	private int allocationId;
-	private String orderMoneyFirst; // 一級代理
-	private String orderMoneySecond;// 二級代理
+	private float orderMoneyFirst; // 一級代理
+	private float orderMoneySecond;// 二級代理
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -27,19 +27,19 @@ public class Allocation {
 		this.allocationId = allocationId;
 	}
 
-	public String getOrderMoneyFirst() {
+	public float getOrderMoneyFirst() {
 		return orderMoneyFirst;
 	}
 
-	public void setOrderMoneyFirst(String orderMoneyFirst) {
+	public void setOrderMoneyFirst(float orderMoneyFirst) {
 		this.orderMoneyFirst = orderMoneyFirst;
 	}
 
-	public String getOrderMoneySecond() {
+	public float getOrderMoneySecond() {
 		return orderMoneySecond;
 	}
 
-	public void setOrderMoneySecond(String orderMoneySecond) {
+	public void setOrderMoneySecond(float orderMoneySecond) {
 		this.orderMoneySecond = orderMoneySecond;
 	}
 

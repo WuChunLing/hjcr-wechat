@@ -56,10 +56,6 @@ public class TemplateHandler {
 	}
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	/*@ModelAttribute
 	public void getTemplatebyupdata(@RequestBody Map<String,Object> templemap,
 			Map<String, Object> map) {
@@ -79,32 +75,13 @@ public class TemplateHandler {
 	/*
 	 * 更新模板
 	 */
-<<<<<<< HEAD
-<<<<<<< HEAD
-	@RequestMapping(value = "/updateTemplate",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-=======
 	@RequestMapping(value = "/updateTemplate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
-	@RequestMapping(value = "/updateTemplate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	public ResponseEntity<ResultMessage> updateTemplate(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody Template template) {
 		ResultMessage result = new ResultMessage();
 		try {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			System.out.println(template);
-			if(template.isTemplateConfirm()){
-				templateService.reviseTemplate();
-=======
 			if (template.isTemplateConfirm() == 1) { //判断更新的模板是否设置成默认的模板，如果设置了，则把原来的默认模板给取消了
 				templateService.reviseTemplate();   
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
-			if (template.isTemplateConfirm() == 1) { //判断更新的模板是否设置成默认的模板，如果设置了，则把原来的默认模板给取消了
-				templateService.reviseTemplate();   
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			}
 			templateService.updateTemplate(template); // 添加模板
 			result.setResultInfo("更新成功");
@@ -120,23 +97,10 @@ public class TemplateHandler {
 	 * 删除模板
 	 */
 	@RequestMapping(value = "/deteleTemplate", produces = MediaType.APPLICATION_JSON_VALUE)
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public ResponseEntity<ResultMessage> deteleTemplate(@RequestBody Map<String,Object> map) {
-		ResultMessage result = new ResultMessage();
-		try {
-		      int templateId=(int) map.get("templateId");
-=======
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	public ResponseEntity<ResultMessage> deteleTemplate(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
 			int templateId = (int) map.get("templateId");  //获取templateId转化成int
-<<<<<<< HEAD
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			templateService.deleTemplate(templateId);
 			result.setResultInfo("删除成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
@@ -171,19 +135,6 @@ public class TemplateHandler {
 	 */
 
 	@RequestMapping(value = "getTemplate")
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public ResponseEntity<ResultMessage> getAllTemplate(@RequestBody Map<String,Object> map) {
-		ResultMessage result = new ResultMessage();
-		try {
-			String template=(String) map.get("templateId");
-			int templateId=Integer.parseInt(template);
-			result.setResultInfo("success");
-			Map<String, Object> Templatemap = new HashMap<String, Object>();
-			Templatemap.put("allTemplate", templateService.getTemplate(templateId));
-=======
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	public ResponseEntity<ResultMessage> getAllTemplate(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
@@ -192,10 +143,6 @@ public class TemplateHandler {
 			Map<String, Object> Templatemap = new HashMap<String, Object>();
 			Templatemap.put("allTemplate", templateService.getTemplate(templateId));
 			result.setResultInfo("获取成功");
-<<<<<<< HEAD
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			result.setResultParm(Templatemap);
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
