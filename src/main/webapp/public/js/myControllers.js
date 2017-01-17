@@ -212,7 +212,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	  }
 	  $scope.changePosition(oDiv, sent,getdivid);
 	}
-//确认上传模板
+  //确认上传模板
 	$scope.submitTemplate = function(){
 		if($("#qrcodeImg").width()!=null && $("#qrcodeImg").width()!=0 && $("#qrcodeImg").width()!=undefined){
 			template.templateQrcodeSize = $("#qrcodeImg").width()/450;
@@ -244,6 +244,8 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		xhr.send(templateFormDate);
 	}
 });
+
+
 //修改二维码 的controller
 hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.template = null;
@@ -342,7 +344,6 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.submitTemplate = function(){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
-		console.log($scope.template);
 		$http.post(updateQrcodeURL,$scope.template)
 		.success(function(response){
 			auth(response);
@@ -352,6 +353,7 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 		});
 	}
 });
+
 // 生成永久二维码 的controller
 hjcr.controller('createQCtrl',function($scope,$http){
    $scope.createQ = false;
@@ -529,7 +531,6 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	$http.get(getRoleURL)
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alert("请求得不到响应，请稍后重试...");
@@ -538,12 +539,10 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	$http.get(getPrivilegeURL)
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
 			$scope.privileges=response.resultParm.privilegeList;
 		}).error(function(){
 			alert("请求得不到响应，请稍后重试...");
 	});
-
 
 	// 是否显示权限
 	$scope.showPrivilegeFuc = function(index){
