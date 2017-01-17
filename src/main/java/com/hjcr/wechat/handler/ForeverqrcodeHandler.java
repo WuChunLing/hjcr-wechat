@@ -26,7 +26,6 @@ public class ForeverqrcodeHandler {
 	 * 获取永久二维码
 	 */
 	@RequestMapping(value = { "/getlastqrcode" }, produces = MediaType.APPLICATION_JSON_VALUE)
-
 	public ResponseEntity<ResultMessage> getlastqrcode(@RequestBody Map<String, Object> map,
 			HttpServletRequest request) {
 		ResultMessage result = new ResultMessage();

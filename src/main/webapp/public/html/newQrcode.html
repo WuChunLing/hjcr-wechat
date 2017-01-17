@@ -1,7 +1,7 @@
 <link href="css/newQrcode.css" rel="stylesheet" />
 
 <div class="newQrcode" ng-controller="newQCtrl">
-  <form id="myForm" role="form" name="template" ng-submit="submitTemplate()">
+  <form id="myForm" role="form" name="template" method="post" ng-submit="submitTemplate()">
    <div class="newQ-container">
      <div>
        <input id="template-name" readonly="readonly" ng-model="newQrcodeImg"
@@ -18,7 +18,7 @@
      </div>
      <div class="title-div">
        <label>模板标题:</label>
-       <input required id="templateName" maxlength="25" placeholder="填写模板标题" type="text"/>
+       <input ng-model="newQrcodeName" name="templateName" required id="templateName" maxlength="25" placeholder="填写模板标题" type="text"/>
        <div class="clear"></div>
      </div>
      <p>支持图片大小比例 为 640 * 1168 ,你可以拖动头像或者二维码的位置，或改变二维码的大小</p>

@@ -54,7 +54,7 @@ public class QRcodeService {
 
 	/*
 	 * 创建二维码
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public void QRcodecreat(String openid) throws IOException, WxErrorException {
@@ -105,7 +105,7 @@ public class QRcodeService {
 
 	/*
 	 * 扫描二维码成功后发送的信息
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public void QRcodemessage(String toUserid, String fromUseropenid) throws WxErrorException, IOException {
@@ -164,7 +164,7 @@ public class QRcodeService {
 
 	/*
 	 * s 获取用户数据
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public WxMpUser UserMessage(String openid) {
@@ -185,7 +185,7 @@ public class QRcodeService {
 
 	/*
 	 * 上传模板图片
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public String uploadPhoto(MultipartFile file, HttpServletRequest request) throws IOException {
@@ -213,12 +213,14 @@ public class QRcodeService {
 
 	// 获取选择的模板
 	public Template getTemplate() {
+
 		return (Template) templateImpl.getTemplatebyConfirm(1);
+
 	}
 
 	/*
 	 * 保存用户
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public String savaUser(String openid) {
@@ -239,7 +241,7 @@ public class QRcodeService {
 
 	/*
 	 * 通过用户openid获取用户id
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public User getUserbyopenid(String openid) {
@@ -249,7 +251,7 @@ public class QRcodeService {
 
 	/*
 	 * 设置层级关系
-	 * 
+	 *
 	 * @author 知鹏
 	 */
 	public String setUserHierarchy(int Userid, String fromUseropenid) {

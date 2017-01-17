@@ -1,15 +1,25 @@
 var hjcr = angular.module('hjcr', ['ui.router']);
-
-hjcr.run(function($rootScope,$state,$stateParams,$location){
+var auth = function(response) {
+	if(response.messageCode == '401') {
+		top.location.href = 'http://localhost:4000/noPrivilege';
+	} else {
+		return true;
+	}
+	return false;
+}
+var alertMes = function(data,dataType,iconType){
+	Notify(data, 'top-right', '5000', dataType, iconType, true);
+}
+// 重写http的post和get方法，做到拦截无权限操作
+hjcr.run(function($rootScope,$state,$stateParams,$location,$http){
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
-
 });
 
 hjcr.config(function($stateProvider,$urlRouterProvider) {
 
 	$urlRouterProvider.otherwise('/welcome');
-//二维码管理模块路由配置
+	//二维码管理模块路由配置
 	$stateProvider.state("checkQrcode",{
 		url:"/checkQrcode",
 		templateUrl: "html/checkQrcode.html"   //查看模板
@@ -22,18 +32,18 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 	}).state("updateQrcode",{
 		url:"/updateQrcode",
 		templateUrl: "html/updateQrcode.html",   //修改模板
-//账单管理
+	//账单管理
 	}).state("billManage",{
 		url:"/billManage",
 		templateUrl: "html/billManage.html",
 	}).state("myBill",{
 		url:"/myBill",
 		templateUrl: "html/myBill.html",
-//分润管理
+ //分润管理
 	}).state("profitManage",{
 		url:"/profitManage",
 		templateUrl: "html/profitManage.html",
-//权限管理
+ //权限管理
 	}).state("roleManage",{
 		url:"/roleManage",
 		templateUrl: "html/roleManage.html",
@@ -43,11 +53,11 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 	}).state("rightsManage",{
 		url:"/rightsManage",
 		templateUrl: "html/rightsManage.html",
-//数据统计
+ //数据统计
 	}).state("dataStatistic",{
 		url:"/dataStatistic",
 		templateUrl: "html/dataStatistic.html"
-// 系统管理模块路由配置
+ // 系统管理模块路由配置
 	}).state("dataBackup",{
 		url:"/dataBackup",
 		templateUrl: "html/dataBackup.html"

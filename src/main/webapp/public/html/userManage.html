@@ -18,14 +18,13 @@
         <tbody id="user-distribution" >
             <tr ng-repeat="user in users" key={{user.id}}>
                 <td class="name">
-                  <span ng-if="!user.editActive">{{user.username}}</span>
-                  <input ng-model="user.newuserName" ng-if="user.editActive" type="text" minlength="1" maxlength="8" ng-init="user.newuserName=user.username">
+                  <span >{{user.username}}</span>
+                  <!-- <input ng-model="user.newuserName" ng-if="user.editActive" type="text" minlength="1" maxlength="8" ng-init="user.newuserName=user.username"> -->
                 </td>
                 <td class="privilege">
                   <div ng-if="!user.editActive" id="user-privilege">{{user.rolename}}</div>
-
                   <select ng-if="user.editActive" ng-model="user.newuserRole" ng-init="user.newuserRole=user.roleId">
-                    <option ng-repeat="x in roles" value="{{x.id}}">{{x.rolename}}</option>
+                    <option ng-repeat="x in roles" value={{x.id}}>{{x.rolename}}</option>
                   </select>
                 </td>
                 <td class="password">
@@ -41,7 +40,6 @@
                 </td>
             </tr>
             <tr ng-if="showAddUser">
-             
                 <td>
                   <input type="text" name="newUserName" ng-model="newUser.username" required placeholder="用户名"/>
                 </td>

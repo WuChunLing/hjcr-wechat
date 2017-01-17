@@ -35,7 +35,7 @@ public class TemplateHandler {
 	/*
 	 * 添加模板
 	 */
-	@RequestMapping(value = "/addTemplate")
+	@RequestMapping(value = "/addTemplate",method=RequestMethod.POST)
 	public ResponseEntity<ResultMessage> addTemplate(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("file") MultipartFile file, Template template) {
 		System.out.println(file);
@@ -64,7 +64,12 @@ public class TemplateHandler {
 		if (!templateId.equals(null)){
 			map.put("template", (Object) templateService.getTemplate(Integer.parseInt(templateId)));
 		}
+<<<<<<< HEAD
+=======
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
+=======
 >>>>>>> 3f44769c3760c864ceae2da792fb653efd42b6d7
+>>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	}
 */
 	/*

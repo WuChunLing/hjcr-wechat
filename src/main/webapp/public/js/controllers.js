@@ -10,9 +10,9 @@ var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   �
 // 分润管理  接口
 var getProfitURL = preURL_project + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
 var updateProfitURL = preURL_project + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
-var getGoodsURL = preURL_project + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
-var deleteGoodsURL = preURL_project + 'deleteQrcode';												 //删除   商品分类
-var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
+var getGoodsURL = preURL_project + 'getOrderMoney';     //获取   商品分类  的销售提成比例
+var deleteGoodsURL = preURL_project + 'deteleOrderMoney';												 //删除   商品分类
+var updateGoodsURL = preURL_project +'updataOrderMoney';																		 //修改   商品分类
 // 权限管理的接口
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
@@ -79,7 +79,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 		.success(function(response){
 			$scope.qrcodes=response.resultParm.allTemplate;
 		}).error(function(response){
-			alert("请求得不到响应，请稍后刷新重试！");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 
 	// 修改模板
@@ -114,7 +114,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	$scope.showQrcode = false;
 	$scope.showToux = false;
 	$scope.templateConfirm = false;
-	
+
   //显示选择的模板图片
 	$scope.uploadImage = function(value){
 		 document.querySelector('#template-name').focus();
@@ -678,11 +678,18 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$scope.sureUpdateUser = function(index,id){
 		$http.post(updateUserURL,{
 			id:id,
+<<<<<<< HEAD
+			roleId:$scope.users[index].newuserRole,
+		})
+		.success(function(response){
+			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
+=======
 			roleId:$scope.users[index].newuserRole
 		})
 		.success(function(response){
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
 			alert(response.resultInfo);
+>>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			console.log(response);
 		}).error(function(){
 			alert("系统内部错误");

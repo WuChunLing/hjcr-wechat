@@ -1,38 +1,56 @@
-[
-  {
-   "templateId":"1",
-   "templateName":"2012信贷展业集合",
-   "templatePath":"imgs/1.jpg",
-   "templateConfirm":"false"
-   },
-   {
-    "templateId":"2",
-    "templateName":"2013信贷展业集合",
-    "templatePath":"imgs/1.jpg",
-    "templateConfirm":"false"
-  },
-  {
-   "templateId":"3",
-   "templateName":"2014信贷展业集合",
-   "templatePath":"imgs/1.jpg",
-   "templateConfirm":"true"
-  },
-  {
-   "templateId":"4",
-   "templateName":"2015信贷展业集合",
-   "templatePath":"imgs/1.jpg",
-   "templateConfirm":"false"
-  },
-  {
-   "templateId":"5",
-   "templateName":"2016信贷展业集合",
-   "templatePath":"imgs/1.jpg",
-   "templateConfirm":"false"
-  },
-  {
-   "templateId":"6",
-   "templateName":"2017信贷展业集合",
-   "templatePath":"imgs/1.jpg",
-   "templateConfirm":"false"
+{
+  "serviceResult": true,
+  "resultInfo": "success",
+  "resultParm": {
+    "allTemplate": [
+      {
+        "templateId": 0,
+        "templateName": "2014nian",
+        "templatePath": "imgs/1.jpg",
+        "templateQrcodeHigh": 110,
+        "templateQrcodeWide": 110,
+        "templateQrcodeSize": 100,
+        "templateHeadImgWide": 110,
+        "templateHeadImgHigh": 300,
+        "templateHeadImgUrl": 0,
+        "templateConfirm": "0"
+      },
+      {
+        "templateId": 14,
+        "templateName": "77",
+        "templatePath": "imgs/1.jpg",
+        "templateQrcodeHigh": 77,
+        "templateQrcodeWide": 77,
+        "templateQrcodeSize": 7,
+        "templateHeadImgWide": 7,
+        "templateHeadImgHigh": 777,
+        "templateHeadImgUrl": 7,
+        "templateConfirm": "0"
+      },
+      {
+        "templateId": 25,
+        "templateName": "25778",
+        "templatePath": "imgs/1.jpg",
+        "templateQrcodeHigh": 110,
+        "templateQrcodeWide": 110,
+        "templateQrcodeSize": 100,
+        "templateHeadImgWide": 110,
+        "templateHeadImgHigh": 300,
+        "templateHeadImgUrl": 0,
+        "templateConfirm": "1"
+      },
+      {
+        "templateId": 78,
+        "templateName": "升水",
+        "templatePath": "imgs/1.jpg",
+        "templateQrcodeHigh": 0,
+        "templateQrcodeWide": 0,
+        "templateQrcodeSize": 0,
+        "templateHeadImgWide": 0,
+        "templateHeadImgHigh": 0,
+        "templateHeadImgUrl": 0,
+        "templateConfirm": null
+      }
+    ]
   }
-]
+}
