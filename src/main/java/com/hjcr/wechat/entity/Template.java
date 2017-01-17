@@ -33,7 +33,11 @@ public class Template {
 	
 /*	private String templateHeadImgUrl; //微信用户头像路径
 	*/
+<<<<<<< HEAD
 	private boolean templateConfirm; //是否确定的模板
+=======
+	private int templateConfirm; //是否确定的模板
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 
 	
 
@@ -133,20 +137,32 @@ public class Template {
 
 
 
+<<<<<<< HEAD
 	public boolean isTemplateConfirm() {
+=======
+	public int isTemplateConfirm() {
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 		return templateConfirm;
 	}
 
 
 
+<<<<<<< HEAD
 	public void setTemplateConfirm(boolean templateConfirm) {
+=======
+	public void setTemplateConfirm(int templateConfirm) {
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 		this.templateConfirm = templateConfirm;
 	}
 
 
 
 	public Template(int templateId, String templateName, String templatePath, float templateQrcodeHigh,
+<<<<<<< HEAD
 			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, Boolean templateConfirm) {
+=======
+			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, int templateConfirm) {
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 		super();
 		this.templateId = templateId;
 		this.templateName = templateName;

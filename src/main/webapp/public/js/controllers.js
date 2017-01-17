@@ -79,7 +79,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 		.success(function(response){
 			$scope.qrcodes=response.resultParm.allTemplate;
 		}).error(function(response){
-			alert("请求得不到响应，请稍后刷新重试！");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 
 	// 修改模板
@@ -114,7 +114,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	$scope.showQrcode = false;
 	$scope.showToux = false;
 	$scope.templateConfirm = false;
-	
+
   //显示选择的模板图片
 	$scope.uploadImage = function(value){
 		 document.querySelector('#template-name').focus();
@@ -218,7 +218,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		var templateFormDate = new FormData(document.getElementById("myForm"));
 		for (var i in $scope.template) {
 			if ($scope.template.hasOwnProperty(i) === true){
-				templateFormDate.append(i,$scope.template[i]]);
+				templateFormDate.append(i,$scope.template[i]);
 			}
 		}
 		$http.post(newQrcodeURL,templateFormDate)
@@ -674,15 +674,11 @@ hjcr.controller('userCtrl',function($scope,$http){
 	}
 	$scope.sureUpdateUser = function(index,id){
 		$http.post(updateUserURL,{
-			userId:id,
-			userName:$scope.users[index].userName,
-			userRole:$scope.users[index].userRole,
-			userPassword:$scope.users[index].userPassword
+			id:id,
+			roleId:$scope.users[index].newuserRole,
 		})
 		.success(function(response){
-			$scope.users[index].userName = $scope.users[index].newuserName;
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
-			$scope.users[index].userPassword = $scope.users[index].newuserPassword;
 			console.log(response);
 		}).error(function(){
 			alert("系统内部错误");

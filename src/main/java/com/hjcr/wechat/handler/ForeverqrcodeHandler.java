@@ -26,20 +26,28 @@ public class ForeverqrcodeHandler {
 	 * 获取永久二维码
 	 */
 	@RequestMapping(value = { "/getlastqrcode" }, produces = MediaType.APPLICATION_JSON_VALUE)
+<<<<<<< HEAD
 	public ResponseEntity<ResultMessage> getlastqrcode(@RequestBody Map<String,Object> map,
+=======
+	public ResponseEntity<ResultMessage> getlastqrcode(@RequestBody Map<String, Object> map,
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 			HttpServletRequest request) {
 		ResultMessage result = new ResultMessage();
 
 		try {
+<<<<<<< HEAD
       String telephone=(String) map.get("telephone");
 			result.setResultInfo(qRcodeService.creatForeverQrcode(telephone, request));
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK); // 返回一个永久的二维码
+=======
+			String telephone = (String) map.get("telephone"); // 获取电话号码
+			result.setResultInfo(qRcodeService.creatForeverQrcode(telephone, request));// 返回一个永久的二维码
+			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK); 
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("error");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("获取失败");
 		}
 
 	}

@@ -28,7 +28,6 @@ public class OrdermoneyHandler {
 	@Autowired
 	private OrderMoneyService orderMoneyService;
 
-	
 	/*
 	 * 添加类别分配比例信息
 	 */
@@ -36,14 +35,12 @@ public class OrdermoneyHandler {
 	public ResponseEntity<ResultMessage> addOrderMoney(@RequestBody Ordermoney ordermoney) {
 		ResultMessage result = new ResultMessage();
 		try {
-			orderMoneyService.sava(ordermoney);
-			result.setResultInfo("success");
+			orderMoneyService.sava(ordermoney); // 添加信息
+			result.setResultInfo("添加成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("添加失败");
 		}
 
 	}
@@ -56,16 +53,14 @@ public class OrdermoneyHandler {
 	public ResponseEntity<ResultMessage> getOrderMoney() {
 		ResultMessage result = new ResultMessage();
 		try {
-			result.setResultInfo("success");
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("orderMoney", orderMoneyService.getOrderMoney());
+			Map<String, Object> map = new HashMap<String, Object>();//发送list<OrderMoney>
+			map.put("orderMoney", orderMoneyService.getOrderMoney());  //获取类别信息
 			result.setResultParm(map);
+			result.setResultInfo("获取成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("获取失败");
 		}
 	}
 
@@ -76,14 +71,12 @@ public class OrdermoneyHandler {
 	public ResponseEntity<ResultMessage> updataOrderMoney(@RequestBody Ordermoney ordermoney) {
 		ResultMessage result = new ResultMessage();
 		try {
-			orderMoneyService.update(ordermoney);
-			result.setResultInfo("success");
+			orderMoneyService.update(ordermoney); //更新信息
+			result.setResultInfo("更新成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("更新失败");
 		}
 
 	}
@@ -92,6 +85,7 @@ public class OrdermoneyHandler {
 	 * 删除类别分配比例信息
 	 */
 	@RequestMapping(value = "deteleOrderMoney", produces = MediaType.APPLICATION_JSON_VALUE)
+<<<<<<< HEAD
 	public ResponseEntity<ResultMessage> deteleOrderMoney(@RequestBody Map<String,Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
@@ -99,16 +93,19 @@ public class OrdermoneyHandler {
 			int orderMoneyId= (int) map.get("orderMoneyId");
 			orderMoneyService.delete(orderMoneyId);
 			result.setResultInfo("success");
+=======
+	public ResponseEntity<ResultMessage> deteleOrderMoney(@RequestBody Map<String, Object> map) {
+		ResultMessage result = new ResultMessage();
+		try {
+			int orderMoneyId = (int) map.get("orderMoneyId");  //从map中获取orderMoneyId转化成int
+			orderMoneyService.delete(orderMoneyId);  //删除信息
+			result.setResultInfo("删除成功");
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("删除失败");
 		}
 	}
 
-	
-	
-	
 }

@@ -100,7 +100,7 @@ public class Handler extends GenericController {
 		String nonce = request.getParameter("nonce");
 		String timestamp = request.getParameter("timestamp");
 		System.out.println("fuzhipeng");
-		String echoStr = request.getParameter("echostr");
+		String echoStr = request.getParameter("echostr");       //微信验证信息
 
 		if (StringUtils.isNotBlank(echoStr)) {
 			// 说明是一个仅仅用来验证的请求，回显echostr
@@ -145,9 +145,6 @@ public class Handler extends GenericController {
 
 	}
 
-	
-	
-
 	/*
 	 * 创建菜单
 	 */
@@ -175,8 +172,6 @@ public class Handler extends GenericController {
 		return "";
 	}
 
-	
-	
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
 	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 

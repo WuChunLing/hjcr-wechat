@@ -13,6 +13,10 @@ public interface TemplateImpl extends JpaRepository<Template, Integer> {
 	 * 通过Confirm获得二维码模板
 	 */
 	@Query("SELECT template FROM Template template WHERE template.templateConfirm = ?1 ")
+<<<<<<< HEAD
 	Template getTemplatebyConfirm(Boolean Confirm);
+=======
+	Template getTemplatebyConfirm(int Confirm);
+>>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
 
 }
