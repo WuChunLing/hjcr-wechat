@@ -23,7 +23,6 @@ public class AllocationHandler {
 	@Autowired
 	private AllocationService allocationService;
 
-	
 	/*
 	 * 获取分润分配比例信息
 	 */
@@ -32,27 +31,22 @@ public class AllocationHandler {
 		ResultMessage result = new ResultMessage();
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("allocation",allocationService.getAllocation());
-			result.setResultInfo("success");
+			map.put("allocation", allocationService.getAllocation()); // 获取分润信息
+			result.setResultInfo("查询成功");
 			result.setResultParm(map);
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("查询失败");
 		}
 	}
 
-	@ModelAttribute
-	public void getupdataAllocation(@RequestParam(value = "allocationId", required = false) Integer allocationId,
-			Map<String, Object> map) {
-		if (allocationId != null) {
-			map.put("allocation", (Object) allocationService.getAllocation());
-		}
-	}
-	
-	
+	/*
+	 * @ModelAttribute public void getupdataAllocation(@RequestParam(value =
+	 * "allocationId", required = false) Integer allocationId, Map<String,
+	 * Object> map) { if (allocationId != null) { map.put("allocation", (Object)
+	 * allocationService.getAllocation()); } }
+	 */
 	/*
 	 * 更新分润分配比例信息
 	 */
@@ -60,15 +54,13 @@ public class AllocationHandler {
 	public ResponseEntity<ResultMessage> updataAllocation(@RequestBody Allocation allocation) {
 		ResultMessage result = new ResultMessage();
 		try {
-			allocationService.updataAllocation(allocation);
-			result.setResultInfo("success");
+			allocationService.updataAllocation(allocation); // 更新分润信息
+			result.setResultInfo("更新成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("更新失败");
 		}
 	}
-	
+
 }

@@ -1,3 +1,12 @@
 {
-  "data":"success"
+  "serviceResult": true,
+  "resultInfo": "添加成功",
+  "resultParm": {
+    "role": {
+      "id": 53,
+      "note": null,
+      "rolename": "testtt",
+      "privileges": []
+    }
+  }
 }

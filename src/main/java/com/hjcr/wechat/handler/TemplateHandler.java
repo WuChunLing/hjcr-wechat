@@ -27,13 +27,11 @@ import com.hjcr.wechat.tools.ResultMessage;
 @Controller
 public class TemplateHandler {
 
-	
 	@Autowired
 	private TemplateService templateService;
 	@Autowired
 	private QRcodeService qRcodeService;
 
-	
 	/*
 	 * 添加模板
 	 */
@@ -45,20 +43,18 @@ public class TemplateHandler {
 		ResultMessage result = new ResultMessage();
 		System.out.println(template);
 		try {
-			path = qRcodeService.uploadPhoto(file, request);
+			path = qRcodeService.uploadPhoto(file, request);  //保存上传的模板文件
 			template.setTemplatePath(path); // 获取上传保存的路径
 			templateService.addTemplate(template); // 添加模板
-			result.setResultInfo("success");
+			result.setResultInfo("添加成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println("dd");
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("error");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("添加失败");
 		}
-		
 	}
+
 
 	/*@ModelAttribute
 	public void getTemplatebyupdata(@RequestBody Map<String,Object> templemap,
@@ -68,65 +64,48 @@ public class TemplateHandler {
 		if (!templateId.equals(null)){
 			map.put("template", (Object) templateService.getTemplate(Integer.parseInt(templateId)));
 		}
+>>>>>>> 3f44769c3760c864ceae2da792fb653efd42b6d7
 	}
 */
 	/*
 	 * 更新模板
 	 */
-	@RequestMapping(value = "/updateTemplate",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/updateTemplate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> updateTemplate(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody Template template) {
 		ResultMessage result = new ResultMessage();
 		try {
-			System.out.println(template);
-			if(template.isTemplateConfirm()){
-				templateService.reviseTemplate();
+			if (template.isTemplateConfirm() == 1) { //判断更新的模板是否设置成默认的模板，如果设置了，则把原来的默认模板给取消了
+				templateService.reviseTemplate();   
 			}
 			templateService.updateTemplate(template); // 添加模板
+			result.setResultInfo("更新成功");
+			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("error");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("更新失败"); 
 		}
-		result.setResultInfo("success");
-		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	
 	}
 
 	/*
 	 * 删除模板
 	 */
 	@RequestMapping(value = "/deteleTemplate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> deteleTemplate(@RequestBody Map<String,Object> map) {
+	public ResponseEntity<ResultMessage> deteleTemplate(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
-		      int templateId=(int) map.get("templateId");
+			int templateId = (int) map.get("templateId");  //获取templateId转化成int
 			templateService.deleTemplate(templateId);
 			result.setResultInfo("删除成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
-			result.setServiceResult(false);
-			result.setResultInfo("error");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			e.printStackTrace();
+			throw new SecurityException("删除失败"); 
 		}
 	}
 
-	/*
-	 * 修改默认模板
-	 */
-	public ResponseEntity<ResultMessage> reviseTemplate(@RequestParam("templateId") int templateId) {
-		ResultMessage result = new ResultMessage();
-		try {
-			templateService.deleTemplate(templateId);
-			result.setResultInfo("success");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
-		} catch (Exception e) {
-			result.setServiceResult(false);
-			result.setResultInfo("error");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
-		}
-	}
-	
+
 	/*
 	 * 获取所有模板信息
 	 */
@@ -135,39 +114,35 @@ public class TemplateHandler {
 	public ResponseEntity<ResultMessage> getAllTemplate() {
 		ResultMessage result = new ResultMessage();
 		try {
-			result.setResultInfo("success");
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("allTemplate", templateService.getAllTemplate());
+			map.put("allTemplate", templateService.getAllTemplate()); //获取所有模板信息
 			result.setResultParm(map);
+			result.setResultInfo("获取成功"); 
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("获取失败"); 
 		}
 	}
 
 	/*
 	 * 获取模板信息
 	 */
-	
+
 	@RequestMapping(value = "getTemplate")
-	public ResponseEntity<ResultMessage> getAllTemplate(@RequestBody Map<String,Object> map) {
+	public ResponseEntity<ResultMessage> getAllTemplate(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
-			String template=(String) map.get("templateId");
-			int templateId=Integer.parseInt(template);
-			result.setResultInfo("success");
+			String template = (String) map.get("templateId");//获取查看的模板的id转化成int
+			int templateId = Integer.parseInt(template);
 			Map<String, Object> Templatemap = new HashMap<String, Object>();
 			Templatemap.put("allTemplate", templateService.getTemplate(templateId));
+			result.setResultInfo("获取成功");
 			result.setResultParm(Templatemap);
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.setServiceResult(false);
-			result.setResultInfo("savaerror");
-			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+			throw new SecurityException("获取失败"); 
 		}
 	}
 }

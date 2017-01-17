@@ -23,8 +23,8 @@ public class UserService {
 	@Autowired
 	private UserImpl userImpl;
 
-	
 	public WxMpInMemoryConfigStorage config;
+
 	// 关联app用户
 	public String setUserForeignkey(String openid, int userid, String mobiphone) {
 		User user = userImpl.getUserbyOpenid(openid);
@@ -74,18 +74,16 @@ public class UserService {
 		return userImpl.getUserbyOpenid(openid);
 	}
 
-	public  String getOpenidbyuser(String userId){
+	public String getOpenidbyuser(String userId) {
 		int Userid = Integer.parseInt(userId);
 		return userImpl.getOpenidbyuser(Userid);
 	}
 
-	
-	
-	public String getUserInfortation(String openid){
-		//通过Openid获取User
-		User user= userImpl.getUserbyOpenid(openid);
-		if(user.getUserForeignkey()==null){
-			
+	public String getUserInfortation(String openid) {
+		// 通过Openid获取User
+		User user = userImpl.getUserbyOpenid(openid);
+		if (user.getUserForeignkey() == null) {
+
 			try {
 				config = new propFactory().WxMpInMemoryConfigStorageFactory();
 				WxMpService wxService = new WxMpServiceImpl();
@@ -96,7 +94,7 @@ public class UserService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		return "success";
 	}
