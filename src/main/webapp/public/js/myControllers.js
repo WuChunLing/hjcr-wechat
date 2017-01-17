@@ -8,11 +8,21 @@ var updateQrcodeURL =  preURL_post + 'updateQrcode';  										//  修改   模
 var createQrcodeURL = preURL_post + 'createQrcode';  										//  生成永久二维码
 var newQrcodeURL = preURL_post + 'newQrcode';   													//  新建   模板
 // 分润管理  接口
-var getProfitURL = preURL_get + 'profitManage.json';   //获取    一级二级代理的分润比例和优惠券面额
-var updateProfitURL = preURL_post + 'saveditExFirst';									 //修改   一级二级代理的分润比例和优惠券面额
-var getGoodsURL = preURL_get + 'goodsProfit.json';     //获取   商品分类  的销售提成比例
-var deleteGoodsURL = preURL_post + 'deleteQrcode';												 //删除   商品分类
-var updateGoodsURL = deleteGoodsURL;																		 //修改   商品分类
+var getAllocationURL = preURL_get + 'getAllocation.json';   //获取    一级二级代理的分润比例
+var getAllVoucherURL = preURL_get + 'getAllVoucher.json';   //获取    和优惠券面额
+var getOrderMoneyURL = preURL_get + 'getOrderMoney.json';   //获取    商品比例
+// 商品比例的 修改和删除
+var updataOrderMoneyURL = preURL_post + 'updataOrderMoney';
+var deteleOrderMoneyURL = preURL_post + 'deteleOrderMoney';
+// 更新一级代理比例
+var updatafirstAllocationURL = preURL_post +'updatafirstAllocation';
+// 更新二级代理比例
+var updatasecondAllocationURL = preURL_post +'updatasecondAllocation';
+// 更新一级优惠券
+var updateFirstVoucherURL = preURL_post + 'updateFirstVoucher';
+// 更新二级优惠券
+var updateSecondVoucherURL = preURL_post + 'updateSecondVoucher';
+
 
 // 权限管理的接口
 // 角色管理  获 增 删 改
@@ -386,19 +396,29 @@ hjcr.controller('createQCtrl',function($scope,$http){
 
 // 分润管理 的controller
 hjcr.controller('profitCtrl',function($scope,$http){
-	$http.get(getProfitURL)
-	.success(function(response){
-  	auth(response);
-		$scope.money=response.resultParm;
-	}).error(function(){
-		alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+	// 获取优惠券
+	$http.get(getAllVoucherURL)
+		.success(function(response){
+	  	auth(response);
+			$scope.voucher=response.resultParm.allVoucher;
+		}).error(function(){
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
-	$http.get(getGoodsURL)
-	.success(function(response){
-  	auth(response);
-		$scope.productions=response;
-	}).error(function(){
-		alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+	// 获取一二级代理分润比例
+	$http.get(getAllocationURL)
+		.success(function(response){
+	  	auth(response);
+			$scope.location=response.resultParm.allocation;
+		}).error(function(){
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+	});
+	// 获取商品比例
+	$http.get(getOrderMoneyURL)
+		.success(function(response){
+	  	auth(response);
+			$scope.productions=response.resultParm.orderMoney;
+		}).error(function(){
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 修改一级代理的优惠券面额
 	$scope.ifEditExFirst = false;
@@ -407,12 +427,12 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	}
 	$scope.saveditExFirst = function(){
 		var save_exFirst = $("#save-exFirst").val();
-		$http.post(updateProfitURL,{extensionMoneyFirst:save_exFirst})
+		$http.post(updateFirstVoucherURL,{money:save_exFirst})
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
 			$scope.ifEditExFirst = !$scope.ifEditExFirst;
-			$scope.money.extensionMoneyFirst = save_exFirst;
+			$scope.voucher[0].voucherMoney = save_exFirst;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -424,12 +444,12 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	}
 	$scope.saveditExSecond = function(){
 		var save_exSecond = $("#save-exSecond").val();
-		$http.post(updateProfitURL,{extensionMoneySecond:save_exSecond})
+		$http.post(updateSecondVoucherURL,{money:save_exSecond})
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
 			$scope.ifEditExSecond = !$scope.ifEditExSecond;
-			$scope.money.extensionMoneySecond = save_exSecond;
+			$scope.voucher[1].voucherMoney = save_exSecond;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -441,12 +461,18 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	}
 	$scope.savedOrderFirst = function(){
 		var save_orderFirst = $("#save-orderFirst").val()/100;
-		$http.post(updateProfitURL,{orderMoneyFirst:save_orderFirst})
+		$http.post(updatafirstAllocationURL,{orderMoneyFirst:save_orderFirst})
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
-			$scope.ifEditOrderFirst = !$scope.ifEditOrderFirst;
-			$scope.money.orderMoneyFirst = save_orderFirst;
+			// 获取一二级代理分润比例
+			$http.get(getAllocationURL)
+				.success(function(response){
+			  	auth(response);
+					$scope.location=response.resultParm.allocation;
+				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -458,12 +484,18 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	}
 	$scope.savedOrderSecond = function(){
 		var save_orderSecond = $("#save-orderSecond").val()/100;
-		$http.post(updateProfitURL,{orderMoneySecond:save_orderSecond})
+		$http.post(updatasecondAllocationURL,{orderMoneySecond:save_orderSecond})
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
-			$scope.ifEditOrderSecond= !$scope.ifEditOrderSecond;
-			$scope.money.orderMoneySecond = save_orderSecond;
+			// 获取一二级代理分润比例
+			$http.get(getAllocationURL)
+				.success(function(response){
+			  	auth(response);
+					$scope.location=response.resultParm.allocation;
+				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -491,11 +523,19 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$scope.showModal = false;
 	}
 	$scope.deleteGoods = function(){
-		$http.post(deleteGoodsURL,{orderMoneyId:$scope.deleteId})
+		$http.post(deteleOrderMoneyURL,{orderMoneyId:$scope.deleteId})
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
 			$scope.showModal = false;
+			// 获取商品比例
+			$http.get(getOrderMoneyURL)
+				.success(function(response){
+			  	auth(response);
+					$scope.productions=response.resultParm.orderMoney;
+				}).error(function(){
+					alertMes('删除失败！','warning','fa-warning');
+			});
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			$scope.showModal = false;
@@ -506,7 +546,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$scope.productions[index].editActive = !$scope.productions[index].editActive;
 	}
 	$scope.sureupdateGoods = function(index,id){
-		$http.post(updateGoodsURL,{
+		$http.post(updataOrderMoneyURL,{
 			orderMoneyId:id,
 			orderMoneyName:$scope.productions[index].newOrderMoneyName,
 			orderMoneyDistribution:$scope.productions[index].newOrderMoneyDistribution/100

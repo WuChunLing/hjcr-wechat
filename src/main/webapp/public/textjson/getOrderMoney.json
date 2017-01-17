@@ -1,0 +1,18 @@
+{
+  "serviceResult": true,
+  "resultInfo": "success",
+  "resultParm": {
+    "orderMoney": [
+      {
+        "orderMoneyDistribution": 0.1,
+        "orderMoneyId": 32,
+        "orderMoneyName": "你好呀"
+      },
+      {
+        "orderMoneyDistribution": 0.1,
+        "orderMoneyId": 83,
+        "orderMoneyName": "淡定"
+      }
+    ]
+  }
+}

@@ -16,10 +16,10 @@
               <tr>
                   <td>一级代理</td>
                   <td>
-                    <span ng-show="!ifEditExFirst" class="profit-num">{{money.extensionMoneyFirst}}</span>
-                    <input ng-show="ifEditExFirst"  id="save-exFirst" type="number" min="0" value="{{money.extensionMoneyFirst}}">
+                    <span ng-show="!ifEditExFirst" class="profit-num">{{voucher[0].voucherMoney}}</span>
+                    <input ng-show="ifEditExFirst"  id="save-exFirst" type="number" min="0" value="{{voucher[0].voucherMoney}}">
                   </td>
-                  <td data-num="{{money.extensionMoneyFirst}}">
+                  <td data-num="{{voucher[0].voucherMoney}}">
                       <a ng-show="!ifEditExFirst" ng-click="editExFirst()" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> 修改</a>
                       <a ng-show="ifEditExFirst" ng-click="saveditExFirst()" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
                       <a ng-show="ifEditExFirst" ng-click="editExFirst()" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> 取消</a>
@@ -28,10 +28,10 @@
               <tr>
                   <td>二级代理</td>
                   <td>
-                    <span ng-show="!ifEditExSecond" class="profit-num">{{money.extensionMoneySecond}}</span>
-                    <input ng-show="ifEditExSecond"  id="save-exSecond" type="number" min="0" value="{{money.extensionMoneySecond}}">
+                    <span ng-show="!ifEditExSecond" class="profit-num">{{voucher[1].voucherMoney}}</span>
+                    <input ng-show="ifEditExSecond"  id="save-exSecond" type="number" min="0" value="{{voucher[1].voucherMoney}}">
                   </td>
-                  <td data-num="{{money.extensionMoneyFirst}}">
+                  <td data-num="{{voucher[1].voucherMoney}}">
                       <a ng-show="!ifEditExSecond" ng-click="editExSecond()" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> 修改</a>
                       <a ng-show="ifEditExSecond" ng-click="saveditExSecond()" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
                       <a ng-show="ifEditExSecond" ng-click="editExSecond()" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> 取消</a>
@@ -60,10 +60,10 @@
               <tr>
                   <td>一级代理</td>
                   <td>
-                    <input ng-show="ifEditOrderFirst"  id="save-orderFirst" type="number" min="0" max="100" value="{{money.orderMoneyFirst*100}}">
-                    <span ng-show="!ifEditOrderFirst" class="profit-num">{{money.orderMoneyFirst*100}}</span><span>%</span>
+                    <input ng-show="ifEditOrderFirst"  id="save-orderFirst" type="number" min="0" max="100" value="{{location.orderMoneyFirst*100}}">
+                    <span ng-show="!ifEditOrderFirst" class="profit-num">{{location.orderMoneyFirst*100}}</span><span>%</span>
                   </td>
-                  <td data-num="{{money.orderMoneyFirst}}">
+                  <td data-num="{{location.orderMoneyFirst}}">
                       <a ng-show="!ifEditOrderFirst" ng-click="editOrderFirst()" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> 修改</a>
                       <a ng-show="ifEditOrderFirst" ng-click="savedOrderFirst()" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
                       <a ng-show="ifEditOrderFirst" ng-click="editOrderFirst()" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> 取消</a>
@@ -72,10 +72,10 @@
               <tr>
                   <td>二级代理</td>
                   <td>
-                    <input ng-show="ifEditOrderSecond"  id="save-orderSecond" type="number" min="0" max="100" value="{{money.orderMoneySecond*100}}">
-                    <span ng-show="!ifEditOrderSecond" class="profit-num">{{money.orderMoneySecond*100}}</span><span>%</span>
+                    <input ng-show="ifEditOrderSecond"  id="save-orderSecond" type="number" min="0" max="100" value="{{location.orderMoneySecond*100}}">
+                    <span ng-show="!ifEditOrderSecond" class="profit-num">{{location.orderMoneySecond*100}}</span><span>%</span>
                   </td>
-                  <td data-num="{{money.orderMoneySecond}}">
+                  <td data-num="{{location.orderMoneySecond}}">
                       <a ng-show="!ifEditOrderSecond" ng-click="editOrderSecond()" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> 修改</a>
                       <a ng-show="ifEditOrderSecond" ng-click="savedOrderSecond()" class="btn btn-success btn-xs save"><i class="fa fa-save"></i> 确认</a>
                       <a ng-show="ifEditOrderSecond" ng-click="editOrderSecond()" class="btn btn-warning btn-xs cancel"><i class="fa fa-times"></i> 取消</a>

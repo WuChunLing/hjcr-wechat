@@ -1,0 +1,20 @@
+{
+  "serviceResult": true,
+  "resultInfo": "获取成功",
+  "resultParm": {
+    "allVoucher": [
+      {
+        "voucherId": 1,
+        "voucherMoney": 30,
+        "voucherCord": "pUPl-wuGeKJ_XsOU25Mcws9qVLx0",
+        "voucherConfirm": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D13%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect"
+      },
+      {
+        "voucherId": 2,
+        "voucherMoney": 50,
+        "voucherCord": "pUPl-wtLxMPDGc8SnrfvwGLSKuEM",
+        "voucherConfirm": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3be6367203f983ac&redirect_uri=https%3A%2F%2Fmp.weixin.qq.com%2Fbizmall%2Fcardlandingpage%3Fbiz%3DMzI2MzEwMTI2NA%3D%3D%26page_id%3D27%26scene%3D1&response_type=code&scope=snsapi_base#wechat_redirect"
+      }
+    ]
+  }
+}
