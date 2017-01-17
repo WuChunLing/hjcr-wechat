@@ -5,3 +5,4 @@
 /src/main/resources/db.properties
 /.tern-project
 /src/main/webapp/node_modules
+/npm-debug.log
