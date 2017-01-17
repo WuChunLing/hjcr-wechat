@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -312,6 +313,7 @@ public class SystemHandler extends GenericController {
 	 * @author 宋
 	 * @return
 	 */
+//	@RequiresRoles("administrator")
 	@RequestMapping(value = "/getAllRole", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getAllRole() {
 		ResultMessage result = new ResultMessage();
@@ -338,7 +340,7 @@ public class SystemHandler extends GenericController {
 	/*
 	 * 根据用户名（登录账号）获取用户信息（测试所用）
 	 */
-	// @RequiresPermissions("system:getByName")
+	@RequiresPermissions("system:getByName")
 	@RequestMapping(value = "/getByName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getByName(String name) {
 		log.info("get System User by username");
@@ -352,7 +354,7 @@ public class SystemHandler extends GenericController {
 	/*
 	 * 根据用户id获取用户权限（测试所用）
 	 */
-	// @RequiresPermissions("system:getUserPrivilegeCode")
+	@RequiresPermissions("system:getUserPrivilegeCode")
 	@RequestMapping(value = "/getUserPrivilegeCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getUserPrivilegeCode(Integer userId) {
 		ResultMessage result = new ResultMessage();
@@ -365,7 +367,7 @@ public class SystemHandler extends GenericController {
 	/*
 	 * 根据用户id获取用户角色（测试所用）
 	 */
-	// @RequiresPermissions("system:getRoleName")
+	@RequiresPermissions("system:getRoleName")
 	@RequestMapping(value = "/getRoleName", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getRoleName(Integer userId) {
 		ResultMessage result = new ResultMessage();
