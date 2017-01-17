@@ -1,10 +1,6 @@
 <link href="css/deleteModel.css" rel="stylesheet" />
 <div id="user-div" ng-controller="userCtrl">
-<<<<<<< HEAD
-  <form role="form" ng-submit="sureAddUser()" method="post">
-=======
  <form role="form" ng-submit="sureAddUser()" method="post">
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
   <div class="well with-header  with-footer">
     <div class="header">用户表</div>
     <a id="editabledatatable_new" ng-click="addUser()" class="btn btn-default" style="margin-bottom:10px;">
@@ -27,10 +23,6 @@
                 </td>
                 <td class="privilege">
                   <div ng-if="!user.editActive" id="user-privilege">{{user.rolename}}</div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
                   <select ng-if="user.editActive" ng-model="user.newuserRole" ng-init="user.newuserRole=user.roleId">
                     <option ng-repeat="x in roles" value={{x.id}}>{{x.rolename}}</option>
                   </select>
@@ -48,11 +40,6 @@
                 </td>
             </tr>
             <tr ng-if="showAddUser">
-<<<<<<< HEAD
-
-=======
-             
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
                 <td>
                   <input type="text" name="newUserName" ng-model="newUser.username" required placeholder="用户名"/>
                 </td>

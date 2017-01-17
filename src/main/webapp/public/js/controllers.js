@@ -71,12 +71,12 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 });
 
 // 模板管理
-// 显示二维码 的controller
 hjcr.controller('checkQCtrl',function($scope,$http){
 
 	// 显示所有的模板
 	$http.get(getQrcodeURL)
 		.success(function(response){
+			auth(response);
 			$scope.qrcodes=response.resultParm.allTemplate;
 		}).error(function(response){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -97,12 +97,11 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 	$scope.deleteTemplate =function(){
 		$http.post(deleteQrcodeURL,{templateId:$scope.templateId})
 		.success(function(response){
-			alert(response.resultInfo);
-			console.log(response+' '+"删除了id为"+$scope.templateId+"的模板");
-			// 这里可以对response做判断，判断是否有权限，有则只需下一步操作
+			auth(response);
+			alertMes(response.resultInfo,'success','fa-check');
 			$scope.qrcodes.splice($scope.templateIndex,1);
 		}).error(function(response){
-			alert("请求得不到响应，请稍后刷新重试！");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 		$scope.showModal = !$scope.showModal;
 	}
@@ -114,7 +113,14 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	$scope.showQrcode = false;
 	$scope.showToux = false;
 	$scope.templateConfirm = false;
-
+	//模板信息
+	var template = {
+		"templateQrcodeHigh":520/820,
+		"templateQrcodeWide":150/450,
+		"templateHeadImgHigh":250/820,
+		"templateHeadImgWide":180/450,
+		"templateQrcodeSize":150/450,
+	};
   //显示选择的模板图片
 	$scope.uploadImage = function(value){
 		 document.querySelector('#template-name').focus();
@@ -171,12 +177,12 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	      obj.style.top = slideTop + 'px';
 
 				if(getdivid==='qrcode'){
-					$scope.template.templateQrcodeWide = slideLeft/450;
-					$scope.template.templateQrcodeHigh = slideTop/820;
+					template.templateQrcodeWide = slideLeft/450;
+					template.templateQrcodeHigh = slideTop/820;
 				}
 				else if (getdivid==='toux') {
-					$scope.template.templateHeadImgWide = slideLeft/450;
-					$scope.template.templateHeadImgHigh = slideTop/820;
+					template.templateHeadImgWide = slideLeft/450;
+					template.templateHeadImgHigh = slideTop/820;
 				}
 				return false;
 	    };
@@ -200,35 +206,36 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	  }
 	  $scope.changePosition(oDiv, sent,getdivid);
 	}
-	//确认上传模板
+  //确认上传模板
 	$scope.submitTemplate = function(){
-		//模板信息
-		$scope.template = {
-			"templateName":null,
-			"templateQrcodeHigh":520/820,
-			"templateQrcodeWide":150/450,
-			"templateHeadImgHigh":250/820,
-			"templateHeadImgWide":180/450,
-			"templateQrcodeSize":150/450,
-			"templateConfirm":false
-		};
-		$scope.template.templateName=$("#templateName").val();
-		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
-		$scope.template.templateConfirm = $scope.templateConfirm;
-		var templateFormDate = new FormData(document.getElementById("myForm"));
-		for (var i in $scope.template) {
-			if ($scope.template.hasOwnProperty(i) === true){
-				templateFormDate.append(i,$scope.template[i]);
-			}
+		if($("#qrcodeImg").width()!=null && $("#qrcodeImg").width()!=0 && $("#qrcodeImg").width()!=undefined){
+			template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 		}
-		$http.post(newQrcodeURL,templateFormDate)
-		.success(function(response){
-			alert("上传成功！");
-			console.log($scope.template);
-			console.log(templateFormDate);
-		}).error(function(){
-			alert("上传失败,请稍后重试...");
-		});
+		template.templateConfirm = $scope.templateConfirm===true?1:0;
+		var templateFormDate = new FormData(document.getElementById("myForm"));
+		templateFormDate.append("templateQrcodeHigh",template.templateQrcodeHigh);
+		templateFormDate.append("templateQrcodeWide",template.templateQrcodeWide);
+		templateFormDate.append("templateHeadImgHigh",template.templateHeadImgHigh);
+		templateFormDate.append("templateHeadImgWide",template.templateHeadImgWide);
+		templateFormDate.append("templateQrcodeSize",template.templateQrcodeSize);
+		templateFormDate.append("templateConfirm",template.templateConfirm);
+		var xhr = new XMLHttpRequest();
+    xhr.onload=function(event)
+    {
+      if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
+      {
+				alertMes("上传成功!",'success','fa-check');
+      }
+			else if(xhr.status == 401){
+				alertMes("您没有权限，操作失败!",'danger','fa-bolt');
+			}
+      else
+      {
+        alertMes("上传失败!",'warning','fa-warning');
+      }
+    };
+		xhr.open("POST", newQrcodeURL,true);
+		xhr.send(templateFormDate);
 	}
 });
 
@@ -236,12 +243,10 @@ hjcr.controller('newQCtrl',function($scope,$http){
 hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.template = null;
 	//显示要修改的模板的原始信息
-	console.log("1");
+	//显示要修改的模板的原始信息
 	$http.post(sureupdateQrcodeURL,{templateId:sessionStorage.templateId})
 		.success(function(response){
-			console.log("2");
 			$scope.template = response.resultParm.allTemplate;
-			console.log($scope.template);
 			var prevDiv = document.getElementsByClassName('templateImg')[0];
 			prevDiv.innerHTML = '<img class="templateImg" src="' + $scope.template.templatePath + '" />';
 			$scope.showQrcode = true;
@@ -258,7 +263,7 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 				left:$scope.template.templateHeadImgWide*450,
 			});
 		}).error(function(){
-			console.log("请求得不到响应，请稍后重试...");
+			alertMes("请求得不到响应，请稍后重试...",'warning','fa-warning');
 	});
 	//显示或移除二维码、头像
 	$scope.showQ = function(value){$scope.showQrcode = value;}
@@ -333,12 +338,12 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.submitTemplate = function(){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
-		console.log($scope.template);
 		$http.post(updateQrcodeURL,$scope.template)
 		.success(function(response){
-			alert("上传成功！");
+			auth(response);
+			alertMes(response.resultInfo,'success','fa-check');
 		}).error(function(){
-			alert("上传失败,请稍后重试...");
+			alertMes("修改失败,请稍后重试...",'warning','fa-warning');
 		});
 	}
 });
@@ -360,10 +365,12 @@ hjcr.controller('createQCtrl',function($scope,$http){
 		if($scope.showTip===false){
 			$http.post(createQrcodeURL,{userTelephone:$scope.phone})
 			.success(function(response){
+  			auth(response);
+				alertMes(response.resultInfo,'success','fa-check');
 				$scope.createQImg=response.templatePath;
 				$scope.createQ = true;
 			}).error(function(){
-				alert("请求未得到响应，请稍后重试！");
+				alertMes("请求未得到响应，请稍后重试！",'warning','fa-warning');
 				$scope.createQ = false;
 			});
 		}
