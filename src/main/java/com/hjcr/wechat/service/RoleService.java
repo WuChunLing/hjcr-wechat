@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.hjcr.wechat.entity.Role;
 import com.hjcr.wechat.entity.RolePrivilege;
+import com.hjcr.wechat.entity.SystemUser;
 import com.hjcr.wechat.impl.PrivilegeImpl;
 import com.hjcr.wechat.impl.RoleImpl;
 import com.hjcr.wechat.impl.RolePrivilegeImpl;
+import com.hjcr.wechat.impl.SystemUserImpl;
 
 @Service(value = "roleService")
 public class RoleService {
@@ -24,6 +26,9 @@ public class RoleService {
 	
 	@Autowired
 	private RolePrivilegeImpl rolePrivilegeImpl;
+	
+	@Autowired
+	private SystemUserImpl systemUserImpl;
 
 	// @Autowired
 	// private SystemUserImpl systemUserImpl;
@@ -96,6 +101,10 @@ public class RoleService {
 	}
 
 	public void delete(Role role) {
+		List<SystemUser> userList = systemUserImpl.fingUserByRole(role.getId());
+		if (userList.size() != 0) {
+			throw new SecurityException("某用户拥有该角色，不能删除；请先修改用户角色");
+		}
 		roleImpl.delete(role.getId());
 	}
 

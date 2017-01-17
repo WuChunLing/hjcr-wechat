@@ -86,6 +86,7 @@ public class OrdermoneyHandler {
 	 */
 	@RequestMapping(value = "deteleOrderMoney", produces = MediaType.APPLICATION_JSON_VALUE)
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public ResponseEntity<ResultMessage> deteleOrderMoney(@RequestBody Map<String,Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
@@ -94,13 +95,18 @@ public class OrdermoneyHandler {
 			orderMoneyService.delete(orderMoneyId);
 			result.setResultInfo("success");
 =======
+=======
+>>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	public ResponseEntity<ResultMessage> deteleOrderMoney(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
 			int orderMoneyId = (int) map.get("orderMoneyId");  //从map中获取orderMoneyId转化成int
 			orderMoneyService.delete(orderMoneyId);  //删除信息
 			result.setResultInfo("删除成功");
+<<<<<<< HEAD
 >>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
+=======
+>>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

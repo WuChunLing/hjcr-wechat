@@ -16,20 +16,10 @@
 		<property name="loginUrl" value="/login.html" />
 		<property name="filterChainDefinitions">
 			<value>
-				<!-- /system/login = anon
-				/system/** = authc -->
+				/system/login = anon
+				/index* = authc
+				/system/** = authc
 			</value>
 		</property>
 	</bean>
-	
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="exceptionMappings">
-            <props>
-                <prop key="org.apache.shiro.authz.UnauthorizedException">/noPrivilege</prop>
-            </props>
-        </property>
-    </bean>
-
-	
-
 </beans>

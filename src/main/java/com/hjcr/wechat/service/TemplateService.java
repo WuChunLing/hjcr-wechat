@@ -56,8 +56,11 @@ public class TemplateService {
 	/*
 	 * 修改默认模板
 	 */
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 	public void reviseTemplate() {
 		Template template = templateImpl.getTemplatebyConfirm(1);
 		System.out.println(template);
