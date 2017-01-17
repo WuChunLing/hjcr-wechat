@@ -38,8 +38,10 @@ public class TemplateHandler {
 	@RequestMapping(value = "/addTemplate")
 	public ResponseEntity<ResultMessage> addTemplate(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("file") MultipartFile file, Template template) {
+		System.out.println(file);
 		String path;
 		ResultMessage result = new ResultMessage();
+		System.out.println(template);
 		try {
 			path = qRcodeService.uploadPhoto(file, request);  //保存上传的模板文件
 			template.setTemplatePath(path); // 获取上传保存的路径
@@ -47,12 +49,24 @@ public class TemplateHandler {
 			result.setResultInfo("添加成功");
 			return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 		} catch (Exception e) {
+			System.out.println("dd");
 			e.printStackTrace();
 			throw new SecurityException("添加失败");
 		}
-
 	}
 
+
+	/*@ModelAttribute
+	public void getTemplatebyupdata(@RequestBody Map<String,Object> templemap,
+			Map<String, Object> map) {
+		String templateId=(String) templemap.get("templateId");
+		
+		if (!templateId.equals(null)){
+			map.put("template", (Object) templateService.getTemplate(Integer.parseInt(templateId)));
+		}
+>>>>>>> 3f44769c3760c864ceae2da792fb653efd42b6d7
+	}
+*/
 	/*
 	 * 更新模板
 	 */

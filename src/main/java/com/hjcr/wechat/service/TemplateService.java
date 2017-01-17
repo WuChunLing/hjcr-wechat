@@ -56,13 +56,13 @@ public class TemplateService {
 	/*
 	 * 修改默认模板
 	 */
-
 	public void reviseTemplate() {
 		Template template = templateImpl.getTemplatebyConfirm(1);
 		System.out.println(template);
 		template.setTemplateConfirm(0);
 		System.out.println(template);
 		templateImpl.save(template);
+
 	}
 
 }

@@ -319,6 +319,7 @@ public class QRcodeService {
 		// 获取模板信息
 		Template template = templateImpl.getTemplatebyConfirm(1);
 
+
 		// 拼接图片
 		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file);
 		// 保存文件

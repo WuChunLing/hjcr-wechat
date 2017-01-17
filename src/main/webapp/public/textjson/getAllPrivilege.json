@@ -1,0 +1,28 @@
+{
+  "serviceResult": true,
+  "resultParm": {
+    "privilegeList": [
+      {
+        "id": 1,
+        "note": "权限描述",
+        "privilegeName": "根据用户名获取用户信息",
+        "privilegeCode": "system:getByName",
+        "matchUrl": "/system/getByName"
+      },
+      {
+        "id": 2,
+        "note": "权限描述",
+        "privilegeName": "根据用户Id获取用户所有权限",
+        "privilegeCode": "system:getUserPrivilegeCode",
+        "matchUrl": "/system/getUserPrivilegeCode"
+      },
+      {
+        "id": 3,
+        "note": "权限描述",
+        "privilegeName": "根据Id获取用户角色",
+        "privilegeCode": "system:getRoleName",
+        "matchUrl": "/system/getRoleName"
+      }
+    ]
+  }
+}
