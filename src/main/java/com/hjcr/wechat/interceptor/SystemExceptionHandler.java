@@ -50,6 +50,7 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 			resultMessage.setServiceResult(false);
 			resultMessage.setMessageCode(401l);
 			resultMessage.setResultInfo("没有权限");
+			logger.info("resultMessage =>" + resultMessage.toJson());
 		} else {
 			resultMessage.setServiceResult(false);
 			resultMessage.setResultInfo("系统出错");

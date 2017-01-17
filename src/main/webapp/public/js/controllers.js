@@ -218,7 +218,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		var templateFormDate = new FormData(document.getElementById("myForm"));
 		for (var i in $scope.template) {
 			if ($scope.template.hasOwnProperty(i) === true){
-				templateFormDate.append(i,$scope.template[i]]);
+				templateFormDate.append(i,$scope.template[i]);
 			}
 		}
 		$http.post(newQrcodeURL,templateFormDate)
