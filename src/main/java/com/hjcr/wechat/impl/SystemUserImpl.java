@@ -21,5 +21,14 @@ public interface SystemUserImpl extends JpaRepository<SystemUser, Integer>{
 	@Query("select r.rolename from Role r ,SystemUser u where u.id = ?1 and u.roleId = r.id")
 	String findRoleName(Integer userId);
 
+	/**
+	 * 根据角色id查询用户
+	 * @author Kellan
+	 * @param id
+	 * @return
+	 */
+	@Query("select u from SystemUser u where u.roleId = ?1")
+	List<SystemUser> fingUserByRole(Integer roleId);
+
 	
 }

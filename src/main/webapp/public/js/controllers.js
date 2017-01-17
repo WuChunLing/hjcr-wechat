@@ -641,9 +641,9 @@ hjcr.controller('userCtrl',function($scope,$http){
 		$scope.deleteUserId = id;
 	};
 	$scope.sureDeleteUser =function(){
-		$http.post(deleteUserURL,{templateId:$scope.deleteUserId})
+		$http.post(deleteUserURL,{id:$scope.deleteUserId})
 		.success(function(response){
-			alert("删除成功！");
+			alert(response.resultInfo);
 			console.log(response);
 			console.log($scope.deleteUserId);
 		}).error(function(){
@@ -652,20 +652,23 @@ hjcr.controller('userCtrl',function($scope,$http){
 		$scope.showModal = !$scope.showModal;
 	}
 	// 新增用户
+	$scope.newUser = {};
 	$scope.addUser = function(){
 		$scope.showAddUser = !$scope.showAddUser;
 	}
-	$scope.newUser = {};
 	$scope.sureAddUser = function(){
-		$http.post(addUserURL,{
-				user:$scope.newUser
-			})
+		$http.post(addUserURL,$scope.newUser)
 			.success(function(response){
-				console.log(response);
-				console.log($scope.newUser);
+				alert(response.resultInfo);
+				$http.get(getUserURL)
+					.success(function(response){
+						$scope.users=response.resultParm.userList;
+					}).error(function(){
+						alert("请求未得到响应！请稍后刷新重试。");
+				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
-				alert("系统内部错误");
+				alert("请求未得到响应！请稍后刷新重试。");
 		});
 	}
 	// 修改用户
@@ -674,15 +677,12 @@ hjcr.controller('userCtrl',function($scope,$http){
 	}
 	$scope.sureUpdateUser = function(index,id){
 		$http.post(updateUserURL,{
-			userId:id,
-			userName:$scope.users[index].userName,
-			userRole:$scope.users[index].userRole,
-			userPassword:$scope.users[index].userPassword
+			id:id,
+			roleId:$scope.users[index].newuserRole
 		})
 		.success(function(response){
-			$scope.users[index].userName = $scope.users[index].newuserName;
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
-			$scope.users[index].userPassword = $scope.users[index].newuserPassword;
+			alert(response.resultInfo);
 			console.log(response);
 		}).error(function(){
 			alert("系统内部错误");

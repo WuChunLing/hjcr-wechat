@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -314,7 +313,7 @@ public class SystemHandler extends GenericController {
 	 * @author 宋
 	 * @return
 	 */
-	@RequiresRoles("administrator")
+//	@RequiresRoles("administrator")
 	@RequestMapping(value = "/getAllRole", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getAllRole() {
 		ResultMessage result = new ResultMessage();
