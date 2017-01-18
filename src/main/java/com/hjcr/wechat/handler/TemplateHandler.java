@@ -43,6 +43,9 @@ public class TemplateHandler {
 		ResultMessage result = new ResultMessage();
 		System.out.println(template);
 		try {
+			if (template.isTemplateConfirm() == 1) { //判断更新的模板是否设置成默认的模板，如果设置了，则把原来的默认模板给取消了
+				templateService.reviseTemplate();   
+			}
 			path = qRcodeService.uploadPhoto(file, request);  //保存上传的模板文件
 			template.setTemplatePath(path); // 获取上传保存的路径
 			templateService.addTemplate(template); // 添加模板

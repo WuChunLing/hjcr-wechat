@@ -191,11 +191,11 @@ public class CardService {
 		WxMpService wxService = new WxMpServiceImpl();
 		wxService.setWxMpConfigStorage(config);
 
-		String cardid = cardImpl.gerCardId(1);
+		//String cardid = cardImpl.gerCardId(1);
 
 		JSONObject jsonORG = new JSONObject();
 		JSONObject jsonOR2 = new JSONObject();
-		jsonOR2.element("card_id", cardid);
+		jsonOR2.element("card_id", "pUPl-wvUTabYQrYHPpk3wUHBcznM");
 		jsonORG.element("touser", touseropenid);
 		jsonORG.element("msgtype", "wxcard");
 		jsonORG.element("wxcard", jsonOR2);

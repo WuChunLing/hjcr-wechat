@@ -793,7 +793,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 			roleId:$scope.users[index].newuserRole,
 		})
 		.success(function(response){
-  		auth(response);
+			auth(response);
 			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
 		}).error(function(){

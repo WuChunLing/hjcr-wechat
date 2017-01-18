@@ -57,7 +57,7 @@ public class QRcodeService {
 	 *
 	 * @author 知鹏
 	 */
-	public void QRcodecreat(String openid) throws IOException, WxErrorException {
+	public void QRcodecreat(String openid,String path) throws IOException, WxErrorException {
 
 		try {
 			WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
@@ -84,7 +84,7 @@ public class QRcodeService {
 			Template template = templateImpl.getTemplatebyConfirm(1);
 
 			// 拼接图片
-			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file);
+			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file,path);
 			// 上传图片
 			WxMediaUploadResult res = wxService.mediaUpload("image", "jpg", image);
 			// 发送二维码图片
@@ -93,6 +93,7 @@ public class QRcodeService {
 			wxService.customMessageSend(message);
 		} catch (Exception e) {
 			// 发送错误信息给用户
+			e.printStackTrace();
 			WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
 			WxMpService wxService = new WxMpServiceImpl();
 			wxService.setWxMpConfigStorage(config);
@@ -321,9 +322,10 @@ public class QRcodeService {
 		// 获取模板信息
 		Template template = templateImpl.getTemplatebyConfirm(1);
 
+		String RealPath=request.getSession().getServletContext().getRealPath("");
 
 		// 拼接图片
-		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file);
+		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file,RealPath);
 		// 保存文件
 		String path = request.getSession().getServletContext().getRealPath("/");
 		File imagePath = new File(path + "qrcodeimage");
