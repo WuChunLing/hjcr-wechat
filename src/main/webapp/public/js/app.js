@@ -1,7 +1,7 @@
 var hjcr = angular.module('hjcr', ['ui.router']);
 var auth = function(response) {
-	if(response.messageCode == '401') {
-		top.location.href = 'http://localhost:4000/noPrivilege';
+	if(response.messageCode == 401) {
+		top.location.href = '/noPrivilege';
 	} else {
 		return true;
 	}
@@ -10,11 +10,11 @@ var auth = function(response) {
 var alertMes = function(data,dataType,iconType){
 	Notify(data, 'top-right', '5000', dataType, iconType, true);
 }
-// 重写http的post和get方法，做到拦截无权限操作
-hjcr.run(function($rootScope,$state,$stateParams,$location,$http){
-	$rootScope.$state = $state;
-	$rootScope.$stateParams = $stateParams;
-});
+// // 重写http的post和get方法，做到拦截无权限操作
+// hjcr.run(function($rootScope,$state,$stateParams,$location,$http){
+// 	$rootScope.$state = $state;
+// 	$rootScope.$stateParams = $stateParams;
+// });
 
 hjcr.config(function($stateProvider,$urlRouterProvider) {
 
@@ -64,6 +64,11 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 	}).state("systemLog",{
 		url:"/systemLog",
 		templateUrl:"html/systemLog.html"
+	// 修改登录密码
+	}).state("updatePwd",{
+		url:"/updatePwd",
+		templateUrl:"html/updatePwd.html"
+	// 欢迎页面
 	}).state("welcome",{
 		url:"/welcome",
 		templateUrl:"html/welcome.html"

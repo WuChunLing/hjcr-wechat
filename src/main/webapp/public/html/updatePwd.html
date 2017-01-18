@@ -1,0 +1,44 @@
+<div ng-controller="updatePwdCtrl">
+  <div class="col-lg-6 col-sm-6 col-xs-12">
+      <div class="widget">
+          <div class="widget-header bordered-bottom bordered-lightred">
+              <span class="widget-caption">修改登录密码</span>
+          </div>
+          <div class="widget-body">
+              <div id="horizontal-form">
+                  <form class="form-horizontal" method="post" ng-submit="updatePwd()" role="form">
+                      <div class="form-group">
+                          <label for="inputEmail3" class="col-sm-3 control-label no-padding-right">账号</label>
+                          <div class="col-sm-9">
+                              <p style="line-height: 32px;">{{username}}</p>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputPassword3"  class="col-sm-3 control-label no-padding-right">原密码</label>
+                          <div class="col-sm-9">
+                              <input type="password" required ng-model="oldPwd" class="form-control"  placeholder="请输入原密码">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputPassword3" class="col-sm-3 control-label no-padding-right">新密码</label>
+                          <div class="col-sm-9">
+                              <input type="password" required ng-model="newPwd" class="form-control"  placeholder="请输入新密码">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputPassword3" class="col-sm-3 control-label no-padding-right">确认新密码</label>
+                          <div class="col-sm-9">
+                              <input type="password" required ng-model="newPwd_repeat" class="form-control"  placeholder="请再次输入密码">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="col-sm-offset-9 col-sm-10">
+                              <button type="submit" class="btn btn-blue">提交</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
