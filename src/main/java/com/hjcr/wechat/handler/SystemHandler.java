@@ -53,10 +53,8 @@ public class SystemHandler extends GenericController {
 	 * 系统登录
 	 * 
 	 * @author 宋
-	 * @param username
-	 *            登录账号
-	 * @param password
-	 *            登录密码
+	 * @param username 登录账号
+	 * @param password 登录密码
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,18 +69,14 @@ public class SystemHandler extends GenericController {
 		if (systemUserService.findOneByName(user.getUsername()) == null) {
 			throw new SecurityException("该用户不存在");
 		}
-		String MD5Password = MD5Util
-				.md5(user.getPassword() + user.getUsername());
-		log.info("----------------完美分割线-------------------");
-		SecurityUtils.getSubject().login(
-				new UsernamePasswordToken(user.getUsername(), MD5Password));
+		String MD5Password = MD5Util.md5(user.getPassword() + user.getUsername());
+		SecurityUtils.getSubject().login(new UsernamePasswordToken(user.getUsername(), MD5Password));
 		result.setResultInfo("登录成功");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
 	/**
 	 * 获取系统所有用户.
-	 * 
 	 * @author 宋
 	 * @return
 	 */
@@ -99,10 +93,8 @@ public class SystemHandler extends GenericController {
 	 * 添加系统用户
 	 * 
 	 * @author 宋
-	 * @param username
-	 *            用户账号
-	 * @param password
-	 *            用户密码
+	 * @param username  用户账号
+	 * @param password 用户密码
 	 * @return
 	 */
 	@RequestMapping(value = "/addSystemUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -122,7 +114,6 @@ public class SystemHandler extends GenericController {
 
 	/**
 	 * 删除系统用户
-	 * 
 	 * @author 宋
 	 * @param id 
 	 * @return
@@ -182,12 +173,9 @@ public class SystemHandler extends GenericController {
 
 	/**
 	 * 添加系统角色
-	 * 
 	 * @author 宋
-	 * @param rolename
-	 *            角色名（必须）
-	 * @param note
-	 *            角色描述
+	 * @param rolename  角色名（必须）
+	 * @param note  角色描述
 	 * @return
 	 */
 	@RequestMapping(value = "/addRole", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -212,10 +200,8 @@ public class SystemHandler extends GenericController {
 
 	/**
 	 * 更新系统角色名
-	 * 
 	 * @author 宋
-	 * @param rolename
-	 *            角色名（必须）
+	 * @param rolename 角色名（必须）
 	 * @return
 	 */
 	@RequestMapping(value = "/updateRoleName", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -236,7 +222,6 @@ public class SystemHandler extends GenericController {
 	
 	/**
 	 * 删除系统角色
-	 * 
 	 * @author 宋
 	 * @param id 
 	 * @return
@@ -255,12 +240,9 @@ public class SystemHandler extends GenericController {
 
 	/**
 	 * 更新某个角色所拥有的权限
-	 * 
 	 * @author 宋
-	 * @param roleId
-	 *            角色id
-	 * @param privilegeId
-	 *            权限id
+	 * @param roleId   角色id
+	 * @param privilegeId 权限id
 	 * @return
 	 */
 	@RequestMapping(value = "/updateRolePrivilege", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -279,7 +261,6 @@ public class SystemHandler extends GenericController {
 
 	/**
 	 * 获取系统所有权限.
-	 * 
 	 * @author 宋
 	 * @return
 	 */
@@ -291,9 +272,8 @@ public class SystemHandler extends GenericController {
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
-	/*
+	/**
 	 * 获取系统所有角色
-	 * 
 	 * @author 宋
 	 * @return
 	 */
@@ -303,6 +283,19 @@ public class SystemHandler extends GenericController {
 		ResultMessage result = new ResultMessage();
 		List<Role> list = roleService.getAllRole();
 		result.getResultParm().put("roleList", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 退出系统
+	 * @author kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/logout", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> logout() {
+		ResultMessage result = new ResultMessage();
+		SecurityUtils.getSubject().logout();
+		result.setResultInfo("退出系统");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 
