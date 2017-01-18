@@ -1,5 +1,6 @@
 const preURL_project = "/hjcr-wechat/";
 
+
 // 模板管理  接口
 var deleteQrcodeURL = preURL_project + 'deteleTemplate';   										//  删除   模板
 var getQrcodeURL = preURL_project+'getAllTemplate';   												//  获取   所有的模板信息
@@ -7,6 +8,8 @@ var sureupdateQrcodeURL =  preURL_project + 'getTemplate';  										//  修改
 var updateQrcodeURL=preURL_project+'updateTemplate';                                                  //获取模板
 var createQrcodeURL = preURL_project + 'getlastqrcode';  										//  生成永久二维码
 var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   模板
+
+
 // 分润管理  接口
 var getAllocationURL = preURL_project + 'getAllocation';   //获取    一级二级代理的分润比例
 var getAllVoucherURL = preURL_project + 'getAllVoucher';   //获取    和优惠券面额
@@ -23,16 +26,22 @@ var updateFirstVoucherURL = preURL_project + 'updateFirstVoucher';
 // 更新二级优惠券
 var updateSecondVoucherURL = preURL_project + 'updateSecondVoucher';
 
+
 // 权限管理的接口
+// 角色
 var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 权限表
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
 var addRoleURL = preURL_project + 'system/addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
 var deleteRoleURL = preURL_project + 'system/deleteRole';    // 删除 角色
+// 用户
 var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用户表
 var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用户
 var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
 var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
+//修改个人登录密码的接口
+var updatePwdURL = preURL_project + 'system/updatePassword';
+
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
 var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
@@ -42,6 +51,8 @@ var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 �
 var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
 var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
 var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
+
+
 
 
 // 主页面 的controller
@@ -76,11 +87,14 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 			$scope.tableTitle = "模板管理-查看模板-新建模板";
 		}else if($location.path() === "/updateQrcode"){
 			$scope.tableTitle = "模板管理-查看模板-修改模板";
+		}else if($location.path() === "/updatePwd"){
+			$scope.tableTitle = "修改密码";
 		}
 	});
 });
 
 // 模板管理
+// 显示二维码 的controller
 hjcr.controller('checkQCtrl',function($scope,$http){
 
 	// 显示所有的模板
@@ -109,7 +123,13 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 		.success(function(response){
 			auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
-			$scope.qrcodes.splice($scope.templateIndex,1);
+			// $scope.qrcodes.splice($scope.templateIndex,1);
+			$http.get(getQrcodeURL)
+				.success(function(response){
+					auth(response);
+					$scope.qrcodes=response.resultParm.allTemplate;
+				}).error(function(response){
+			});
 		}).error(function(response){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -237,11 +257,11 @@ hjcr.controller('newQCtrl',function($scope,$http){
 				alertMes("上传成功!",'success','fa-check');
       }
 			else if(xhr.status == 401){
-				alertMes("您没有权限，操作失败!",'danger','fa-bolt');
+				alertMes("您没有权限，操作失败!",'warning','fa-warning');
 			}
       else
       {
-        alertMes("上传失败!",'warning','fa-warning');
+        alertMes("上传失败!",'danger','fa-bolt');
       }
     };
 		xhr.open("POST", newQrcodeURL,true);
@@ -252,7 +272,6 @@ hjcr.controller('newQCtrl',function($scope,$http){
 //修改二维码 的controller
 hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.template = null;
-	//显示要修改的模板的原始信息
 	//显示要修改的模板的原始信息
 	$http.post(sureupdateQrcodeURL,{templateId:sessionStorage.templateId})
 		.success(function(response){
@@ -528,7 +547,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 			  	auth(response);
 					$scope.productions=response.resultParm.orderMoney;
 				}).error(function(){
-					alertMes('删除失败！','warning','fa-warning');
+					alertMes('删除失败！','danger','fa-bolt');
 			});
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -548,9 +567,12 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		.success(function(response){
   		auth(response);
 			alertMes(response.resultInfo,'success','fa-check');
-			$scope.productions[index].orderMoneyName = $scope.productions[index].newOrderMoneyName;
-			$scope.productions[index].orderMoneyDistribution = $scope.productions[index].newOrderMoneyDistribution/100;
-			$scope.productions[index].editActive = !$scope.productions[index].editActive;
+			$http.get(getOrderMoneyURL)
+				.success(function(response){
+			  	auth(response);
+					$scope.productions=response.resultParm.orderMoney;
+				}).error(function(){
+			});
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -566,13 +588,14 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		.success(function(response){
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	$http.get(getPrivilegeURL)
 		.success(function(response){
+			auth(response);
 			$scope.privileges=response.resultParm.privilegeList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 显示权限
 	$scope.showPrivilegeFuc = function(index){
@@ -592,13 +615,18 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				id:$scope.deleteRoleId
 			})
 			.success(function(response){
-				console.log(response);
+  			auth(response);
+				alertMes(response.resultInfo,'info','fa-check');
 				$scope.showModal = !$scope.showModal;
-				alert(response.resultInfo);
-				console.log($scope.deleteRoleId);
+				$http.get(getRoleURL)
+					.success(function(response){
+  					auth(response);
+						$scope.roles=response.resultParm.roleList;
+					}).error(function(){
+				});
 			}).error(function(){
 				$scope.showModal = !$scope.showModal;
-				alert("系统内部错误");
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
 	// 添加角色
@@ -613,40 +641,54 @@ hjcr.controller('roleCtrl',function($scope,$http){
     {
       if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
       {
-        console.log("添加成功！");
+				alertMes('添加角色成功！','success','fa-check');
+				$http.get(getRoleURL)
+					.success(function(response){
+  					auth(response);
+						$scope.roles=response.resultParm.roleList;
+					}).error(function(){
+				});
       }
+			else if(xhr.status == 401){
+				alertMes('无权限操作！','danger','fa-bolt');
+			}
       else
       {
-        console.log("添加失败！");
+        alertMes('添加角色失败！','danger','fa-bolt');
       }
     };
 		xhr.open("POST", addRoleURL,true);
 		xhr.send(new FormData(formElement));
 		$scope.showRoleModel = !$scope.showRoleModel;
 	}
-	// 修改角色名字和描述
+	// 显示 修改角色 名称和 角色   的 对话框
 	$scope.updateRoleModel = false;
 	$scope.updateRoleName = function(id){
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 		$scope.updateRoleId = id;
 	}
+	// 确认修改 角色的名称和说明
 	$scope.sureUpdate = function(){
-		$http.post(updateRoleNameURL,{
-			roleId:$scope.updateRoleId,
-			roleName:$scope.roleName,
-			roleDescribe:$scope.roleDescribe
+		$http.post(updateRoleURL,{
+			id:$scope.updateRoleId,
+			rolename:$scope.roleName,
+			describe:$scope.roleDescribe
 		})
 		.success(function(response){
-			alert("删除成功！");
-			console.log(response);
-			console.log($scope.updateRoleId);
-			console.log($scope.roleName);
-			console.log($scope.roleDescribe);
+  		auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
+			$http.get(getRoleURL)
+				.success(function(response){
+  				auth(response);
+					$scope.roles=response.resultParm.roleList;
+				}).error(function(){
+			});
 		}).error(function(){
-			alert("系统内部错误");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 	}
+
 	// 修改 角色权限
 	$scope.updateRole = function(id,privilege){
 		$http.post(updateRoleURL,{
@@ -654,40 +696,47 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				privilegeId:privilege
 			})
 			.success(function(response){
-				console.log(response);
-				console.log(id + ' ' + privilege);
+				auth(response);
+				alertMes(response.resultInfo,'info','fa-check');
 				var edit = new Array();
 				for (var i = 0; i < $scope.roles.length; i++) {
 					edit[i] = $scope.roles[i].editActive;
 				}
 				$http.get(getRoleURL)
 					.success(function(response){
-						$scope.roles=response;
+  					auth(response);
+						$scope.roles=response.resultParm.roleList;
 						for (var i = 0; i < $scope.roles.length; i++) {
 							$scope.roles[i].editActive = edit[i];
 						}
 					}).error(function(){
-						alert("错误！请刷新重试。");
+						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 				});
 			}).error(function(){
-				alert("系统内部错误");
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
 });
+
 // 用户管理 controller
 hjcr.controller('userCtrl',function($scope,$http){
-	// 获取角色表和权限表
+	// 获取用户表
 	$http.get(getUserURL)
 		.success(function(response){
+			auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users=response.resultParm.userList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
+	// 获取角色表
 	$http.get(getRoleURL)
 		.success(function(response){
+			auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alert("错误！请刷新重试。");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 删除用户确认弹框
 	$scope.showModal = false;
@@ -698,11 +747,17 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$scope.sureDeleteUser =function(){
 		$http.post(deleteUserURL,{id:$scope.deleteUserId})
 		.success(function(response){
-			alert(response.resultInfo);
-			console.log(response);
-			console.log($scope.deleteUserId);
+  		auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
+			$http.get(getUserURL)
+				.success(function(response){
+  				auth(response);
+					$scope.users=response.resultParm.userList;
+				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
 		}).error(function(){
-			alert("系统内部错误");
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 		$scope.showModal = !$scope.showModal;
 	}
@@ -714,16 +769,18 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$scope.sureAddUser = function(){
 		$http.post(addUserURL,$scope.newUser)
 			.success(function(response){
-				alert(response.resultInfo);
+  			auth(response);
+				alertMes(response.resultInfo,'info','fa-check');
 				$http.get(getUserURL)
 					.success(function(response){
+  					auth(response);
 						$scope.users=response.resultParm.userList;
 					}).error(function(){
-						alert("请求未得到响应！请稍后刷新重试。");
+						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
-				alert("请求未得到响应！请稍后刷新重试。");
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
 	// 修改用户
@@ -737,8 +794,8 @@ hjcr.controller('userCtrl',function($scope,$http){
 		})
 		.success(function(response){
 			auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
-			console.log(response);
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -763,7 +820,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 						$scope.pageArr[i] = i+1;
 					}
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
@@ -772,7 +829,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		.success(function(response){
 			$scope.billMoney=response;
 		}).error(function(){
-			alert("请求未得到服务器响应，请稍后重试...");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 自动调用获取第一页订单信息
 	$scope.getPageBill(1);
@@ -792,13 +849,13 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 						$scope.pageArr[i] = i+1;
 					}
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 			$http.post(getBillMoneyByIdURL,{billId:id})
 				.success(function(response){
 					$scope.billMoney=response;
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
@@ -815,13 +872,13 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 						$scope.pageArr[i] = i+1;
 					}
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 			$http.post(getBillMoneyByDateURL,{billDate:date})
 				.success(function(response){
 					$scope.billMoney=response;
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
@@ -835,7 +892,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					$scope.pageArr[i] = i+1;
 				}
 			}).error(function(){
-				alert("请求未得到服务器响应，请稍后重试...");
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
 });
@@ -854,7 +911,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 						$scope.pageArr[i] = i+1;
 					}
 				}).error(function(){
-					alert("请求未得到服务器响应，请稍后重试...");
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
@@ -864,8 +921,30 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 			$scope.user=response;
 			$scope.user.userId = sessionStorage.userId;
 		}).error(function(){
-			alert("请求未得到服务器响应，请稍后重试...");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 自动调用获取第一页订单信息
 	$scope.getPageMyBill(1,sessionStorage.userId);
+});
+
+
+// 用户修改自己的登录密码
+hjcr.controller('updatePwdCtrl',function($http,$scope){
+	$scope.username = sessionStorage.username;
+	$scope.updatePwd = function(){
+		if($scope.newPwd === $scope.newPwd_repeat){
+			console.log($scope.oldPwd);console.log($scope.newPwd);console.log($scope.newPwd_repeat);
+			$http.post(updatePwdURL,{
+				username:$scope.username,
+				oldPassword:$scope.oldPwd,
+				newPassword:$scope.newPwd
+			})
+			.success(function(response){
+  			auth(response);
+				alertMes(response.resultInfo,'success','fa-check');
+			}).error(function(){
+				alertMes("请求未得到响应，请稍后重试！",'warning','fa-warning');
+			});
+		}
+	}
 });

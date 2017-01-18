@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '', 'index.html'));
 });
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'viws', 'login.html'));
+  res.sendFile(path.join(__dirname, '', 'login.html'));
 });
 app.get('/noPrivilege', (req, res) => {
   res.sendFile(path.join(__dirname, '', 'noPrivilege.html'));

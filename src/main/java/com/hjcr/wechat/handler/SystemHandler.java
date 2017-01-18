@@ -290,24 +290,8 @@ public class SystemHandler extends GenericController {
 		result.getResultParm().put("privilegeList", list);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
-
-	/**
-	 * 根据角色id获取该角色拥有的权限
-	 * 
-	 * @author 宋
-	 * @param roleId
-	 *            角色id
-	 * @return
-	 */
-	@RequestMapping(value = "/getPrivilegeByRoleId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getPrivilegeByRoleId(Integer roleId) {
-		ResultMessage result = new ResultMessage();
-		List<Privilege> list = privilegeService.getPrivilegeByRoleId(roleId);
-		result.getResultParm().put("privilegeList", list);
-		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
-	}
-
-	/**
+	
+	/*
 	 * 获取系统所有角色
 	 * 
 	 * @author 宋
@@ -322,12 +306,19 @@ public class SystemHandler extends GenericController {
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 
-	/**
-	 * 获取系统用户的角色信息
-	 * 
-	 * @author 宋
-	 * @param userId
-	 * @return
+	/*
+	 * 根据角色id获取该角色拥有的权限（测试所用）
+	 */
+	@RequestMapping(value = "/getPrivilegeByRoleId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getPrivilegeByRoleId(Integer roleId) {
+		ResultMessage result = new ResultMessage();
+		List<Privilege> list = privilegeService.getPrivilegeByRoleId(roleId);
+		result.getResultParm().put("privilegeList", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+
+	/*
+	 * 获取系统用户的角色信息（测试所用）
 	 */
 	@RequestMapping(value = "/getRoleByUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getRoleByUser(Integer userId) {
