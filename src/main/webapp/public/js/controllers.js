@@ -39,7 +39,8 @@ var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用
 var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用户
 var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
 var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
-
+//修改个人登录密码的接口
+var updatePwdURL = preURL_project + 'system/updatePassword';
 
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -51,8 +52,7 @@ var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查�
 var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
 var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
-// 修改个人登录密码的接口
-var updatePwdURL = preURL_post + 'updatePwd';
+
 
 
 // 主页面 的controller

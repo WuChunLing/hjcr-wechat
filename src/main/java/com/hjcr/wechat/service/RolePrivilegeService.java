@@ -12,7 +12,7 @@ public class RolePrivilegeService {
 	@Autowired
 	private RolePrivilegeImpl rolePrivilegeImpl;
 
-	public Boolean updateRolePrivilege(RolePrivilege rp) {
+	public synchronized Boolean updateRolePrivilege(RolePrivilege rp) {
 		RolePrivilege db_rp = rolePrivilegeImpl.findOneByRoleAndPrivilege(rp.getRoleId(),rp.getPrivilegeId());
 		if (db_rp == null) {//如何数据库没有，则添加
 			rolePrivilegeImpl.save(rp);
