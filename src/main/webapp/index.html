@@ -10,8 +10,8 @@
     <link href="assets/css/typicons.min.css" rel="stylesheet" />
     <link href="assets/css/animate.min.css" rel="stylesheet" />
     <link  href="assets/css/app.css" rel="stylesheet"/>
-
-    <script src=" assets/js/skins.min.js"></script>
+    <link  href="css/style.css" rel="stylesheet"/>
+    <script src="assets/js/skins.min.js"></script>
 
 </head>
 <body ng-controller="hjcrCtrl">
@@ -51,7 +51,7 @@
                 <div class="sidebar-collapse" id="sidebar-collapse">
                     <i class="collapse-icon fa fa-bars"></i>
                 </div>
-                <a href="/login" style="float: right;line-height: 45px;margin-right: 12px;">退出登录</a>
+                <a ng-click="loginOut()" style="float: right;line-height: 45px;margin-right: 12px;">退出登录</a>
             </div>
         </div>
     </div>
@@ -125,7 +125,8 @@
     <!--Basic Scripts-->
     <script src="assets/js/jquery-2.0.3.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
     <!--Beyond Scripts-->
     <script src="assets/js/beyond.min.js"></script>
 

@@ -11,9 +11,9 @@
          "templateHeadImgHigh":0.5914634146341463,
          "templateHeadImgWide":0.42444444444444446,
          "templateQrcodeSize":0.2866666666666667,
-         "templateConfirm":true,
+         "templateConfirm":1,
          "templatePath":"imgs/1.jpg"
       }
-    
+
   }
 }

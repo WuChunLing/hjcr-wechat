@@ -12,7 +12,7 @@
     <div class="qrcode" ng-repeat="qrcode in qrcodes">
 
       <div >
-        <h6 ng-class="qrcode.templateConfirm==='true'?'selected':'none'">{{qrcode.templateName}}</h6>
+        <h6 ng-class="qrcode.templateConfirm===1?'selected':'none'">{{qrcode.templateName}}</h6>
       </div>
 
       <img style="width:180px;height:328px;"src={{qrcode.templatePath}}>
@@ -29,7 +29,7 @@
   <!-- 删除确认弹框 -->
   <div class="modal-preview"  ng-class="showModal?'show':'noshow'">
     <div class="modal modal-primary">
-      <div class="modal-dialog">
+      <div class="modal-dialog" style="z-index:1000">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" ng-click="deleteQrcode()" data-dismiss="modal" aria-hidden="true">×</button>
@@ -46,8 +46,12 @@
       </div>
     </div>
   </div>
-
   <div class="mask" ng-class="showModal?'show':'noshow'"></div>
 
   <div class="clear"></div>
 </div>
+<script>
+$(function() {
+  $( ".modal-preview" ).draggable();
+});
+</script>

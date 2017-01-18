@@ -1,0 +1,23 @@
+.mask{
+  position:fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  background: grey;
+  opacity: 0.6;
+  z-index: 999;
+}
+.modal-preview{
+  z-index: 1000;
+  position: fixed;
+  top: 30%;
+  left:30%;
+  width: 280px;
+}
+.show{
+  display: block;
+}
+.noshow{
+  display: none;
+}

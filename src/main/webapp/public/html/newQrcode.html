@@ -1,5 +1,4 @@
 <link href="css/newQrcode.css" rel="stylesheet" />
-
 <div class="newQrcode" ng-controller="newQCtrl">
   <form id="myForm" role="form" name="template" method="post" ng-submit="submitTemplate()">
    <div class="newQ-container">
@@ -24,16 +23,12 @@
      <p>支持图片大小比例 为 640 * 1168 ,你可以拖动头像或者二维码的位置，或改变二维码的大小</p>
      <!-- 模板二维码编辑区域 -->
      <div class="edit-contianer">
-       <div id="edit-temp" class="edit-template">
+       <div id="edit-temp" class="containment-wrapper edit-template">
          <div class="templateImg"></div>
-         <div id="qrcode" class="edit-img qrcode"  ng-mousemove="move('qrcode')" ng-show="showQrcode">
-            <span class="br" ></span>
-            <span class="bl" ></span>
-            <span class="tr" ></span>
-            <span class="tl" ></span>
+         <div id="qrcode" class="draggable ui-widget-content edit-img qrcode" ng-show="showQrcode">
             <img  id="qrcodeImg" src="imgs/qrcode.png"  />
          </div>
-         <div id="toux" ng-mousemove="move('toux')" class="edit-img toux" ng-show="showToux">
+         <div id="toux"  class="draggable ui-widget-content edit-img toux" ng-show="showToux">
             <img  src="imgs/toux.jpg"/>
          </div>
        </div>
@@ -47,7 +42,6 @@
          <div class="edit-qrcode">
            <a class="btn btn-default" ng-click="showQ(true)"><i class="glyphicon glyphicon-plus"></i>添加二维码</a>
            <a class="btn btn-default" ng-click="showQ(false)"><i class="glyphicon glyphicon-minus"></i>移除二维码</a>
-           <!-- <a class="btn btn-default" ng-click="resetImg()"><i class="glyphicon glyphicon-arrow-left"></i>还原二维码</a> -->
          </div>
          <div class="edit-toux">
            <a class="btn btn-default" ng-click="showT(true)"><i class="glyphicon glyphicon-plus"></i>添加头像</a>
@@ -60,4 +54,19 @@
     <div class="clear"></div>
   </form>
 </div>
-<script src="js/changeSize.js"></script>
+<!-- <script src="js/changeSize.js"></script> -->
+<script>
+  $(function() {
+    $( "#qrcode" ).resizable({
+      aspectRatio: 1 / 1
+    });
+    $( "#qrcode" ).draggable({
+      containment: "#edit-temp",
+      scroll: false
+    });
+    $( "#toux" ).draggable({
+      containment: "#edit-temp",
+      scroll: false
+    });
+  });
+  </script>
