@@ -146,6 +146,12 @@ public class Template {
 
 
 
+	public int getTemplateConfirm() {
+		return templateConfirm;
+	}
+
+
+
 	public Template(int templateId, String templateName, String templatePath, float templateQrcodeHigh,
 
 			float templateQrcodeWide, float templateQrcodeSize, float templateHeadImgWide, float templateHeadImgHigh, int templateConfirm) {

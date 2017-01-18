@@ -8,9 +8,9 @@ var updateQrcodeURL=preURL_project+'updateTemplate';                            
 var createQrcodeURL = preURL_project + 'getlastqrcode';  										//  生成永久二维码
 var newQrcodeURL = preURL_project + 'addTemplate';   													//  新建   模板
 // 分润管理  接口
-var getAllocationURL = preURL_project + 'getAllocation.json';   //获取    一级二级代理的分润比例
-var getAllVoucherURL = preURL_project + 'getAllVoucher.json';   //获取    和优惠券面额
-var getOrderMoneyURL = preURL_project + 'getOrderMoney.json';   //获取    商品比例
+var getAllocationURL = preURL_project + 'getAllocation';   //获取    一级二级代理的分润比例
+var getAllVoucherURL = preURL_project + 'getAllVoucher';   //获取    和优惠券面额
+var getOrderMoneyURL = preURL_project + 'getOrderMoney';   //获取    商品比例
 // 商品比例的 修改和删除
 var updataOrderMoneyURL = preURL_project + 'updataOrderMoney';
 var deteleOrderMoneyURL = preURL_project + 'deteleOrderMoney';
@@ -733,21 +733,14 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$scope.sureUpdateUser = function(index,id){
 		$http.post(updateUserURL,{
 			id:id,
-<<<<<<< HEAD
 			roleId:$scope.users[index].newuserRole,
 		})
 		.success(function(response){
+			auth(response);
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
-=======
-			roleId:$scope.users[index].newuserRole
-		})
-		.success(function(response){
-			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
-			alert(response.resultInfo);
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
 			console.log(response);
 		}).error(function(){
-			alert("系统内部错误");
+			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 		$scope.users[index].editActive = !$scope.users[index].editActive;
 	}

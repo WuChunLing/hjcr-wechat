@@ -128,8 +128,9 @@ public class Handler extends GenericController {
 			}
 			if (inMessage.getEvent().equals("CLICK") && inMessage.getEventKey().equals("0")) {
 				// 生成二维码且发送给用户
+				String path=request.getSession().getServletContext().getRealPath("");//获取当前项目路径
 				avoidRepetition(response);// 微信三次验证，排重
-				qRcodeService.QRcodecreat(inMessage.getFromUserName());
+				qRcodeService.QRcodecreat(inMessage.getFromUserName(),path);
 			}
 
 			if (inMessage.getEventKey() != null && inMessage.getEventKey().indexOf("qrscene") != -1) {
@@ -175,7 +176,13 @@ public class Handler extends GenericController {
 	@RequestMapping(value = { "/Test" }, produces = { "application/json;charset=UTF-8" })
 	public void Test(HttpServletRequest request) throws WxErrorException, IOException {
 
-		cardService.updateFirstVoucher("666");
+	/*	String path=request.getSession().getServletContext().getRealPath("");
+		String TemplatePath=".\\image\64welcome.jpg";
+		 TemplatePath=TemplatePath.replaceFirst(".\\", path);
+		 System.out.println(TemplatePath);
+		String TemplatePath=".\\image\\64welcome.jpg";
+		System.out.println(path+TemplatePath.substring(2));*/
+		System.out.println(cardService.sendCard("oUPl-wh3UehzmwaztIQzkvcuS3rE"));
 	}
 
 	/*
