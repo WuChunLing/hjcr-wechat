@@ -9,22 +9,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Cacheable
 @Table(name = "privilege")
 @Entity
 public class Privilege implements Serializable {
 	private int id;
 
-	private String note;
+	private String privilegeName; //权限名
 
-	private String privilegeName;
-
-	/**
-	 * 权限编号. user:*,user:delete,user:create,user:update
-	 */
+	
+	// 权限编号. user:*,user:delete,user:create,user:update
 	private String privilegeCode;
 
-	private String matchUrl;
+	private String matchUrl;  //权限url
+	
+	private String note;  //权限描述
 
 	private static final long serialVersionUID = 1L;
 

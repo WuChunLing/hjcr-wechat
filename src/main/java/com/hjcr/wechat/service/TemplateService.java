@@ -59,9 +59,11 @@ public class TemplateService {
 	public void reviseTemplate() {
 		Template template = templateImpl.getTemplatebyConfirm(1);
 		System.out.println(template);
+		if(template!=null){
 		template.setTemplateConfirm(0);
+		templateImpl.save(template);}
 		System.out.println(template);
-		templateImpl.save(template);
+		
 
 	}
 

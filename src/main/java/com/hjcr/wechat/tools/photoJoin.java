@@ -51,11 +51,16 @@ public class photoJoin {
 			 * }
 			 */
 
-	final public InputStream photoJoinImage(Template template, String HeadImgUrl, File file) throws IOException {
+	final public InputStream photoJoinImage(Template template, String HeadImgUrl, File file,String path) throws IOException {
 
 		 BufferedImage image= ImageIO.read(file);//二维码
 		//BufferedImage image = ImageIO.read(new File("D://14.jpg"));// 测试二维码
-		BufferedImage bg = ImageIO.read(new File(template.getTemplatePath()));// 获取模板图片
+		
+		 
+		 String TemplatePath=template.getTemplatePath();
+		 TemplatePath=path+TemplatePath.substring(2);
+		 System.out.println(TemplatePath);
+		BufferedImage bg = ImageIO.read(new File(TemplatePath));// 获取模板图片
 		BufferedImage HeadImg = getBufferedImage(HeadImgUrl);// 获取头像图片
 		// BufferedImage HeadImg = ImageIO.read(new File("D://2.jpg"));//
 		// 测试获取头像图片
@@ -65,7 +70,7 @@ public class photoJoin {
 		int height = image.getHeight(null) > bg.getHeight() * 50 / 10 ? (bg.getHeight() * 5 / 10)
 				: image.getWidth(null);
 
-		int size = (int)template.getTemplateQrcodeSize();
+		int size =(int) (bg.getWidth()*template.getTemplateQrcodeSize());
 		
 		int width1=(int) (bg.getWidth()*template.getTemplateQrcodeWide());
 		int high1=(int) (bg.getHeight()*template.getTemplateQrcodeHigh());
@@ -73,12 +78,12 @@ public class photoJoin {
 		g.drawImage(image, width1,high1, size, size, null);// 绘制二维码
 		g.dispose();
 		bg.flush();
-
-		int width2=(int) (bg.getWidth()*template.getTemplateHeadImgWide());
+		int weixinsize =(int) (bg.getWidth()*70/450);
+		int width2=(int) (bg.getWidth()*template.getTemplateHeadImgWide()-5);
 		int high2=(int) (bg.getHeight()*template.getTemplateHeadImgHigh());
-		
+		System.out.println(width2+"高"+high2);
 		Graphics2D QR = bg.createGraphics();
-		QR.drawImage(HeadImg,width2,high2, size, size, null);// 绘制微信头像
+		QR.drawImage(HeadImg,width2,high2,weixinsize, weixinsize, null);// 绘制微信头像
 		 BufferedImage newBufferedImage = new BufferedImage(bg.getWidth(), bg.getHeight(), BufferedImage.TYPE_INT_RGB);  
 	        newBufferedImage.createGraphics().drawImage(bg, 0, 0, Color.WHITE, null);  
 		File weixinfile = new File("file");

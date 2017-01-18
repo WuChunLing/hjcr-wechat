@@ -1,6 +1,5 @@
 const preURL_project = "/hjcr-wechat/";
 
-
 // 模板管理  接口
 var deleteQrcodeURL = preURL_project + 'deteleTemplate';   										//  删除   模板
 var getQrcodeURL = preURL_project+'getAllTemplate';   												//  获取   所有的模板信息
@@ -39,7 +38,10 @@ var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用
 var addUserURL = preURL_project + 'system/addSystemUser';    			// 新增  用户
 var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用户 角色
 var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
-
+//修改个人登录密码的接口
+var updatePwdURL = preURL_project + 'system/updatePassword';
+// 退出登录
+var loginOutURL = preURL_project + 'system/loginOut';
 
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -51,10 +53,9 @@ var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查�
 var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
 var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
-// 修改个人登录密码的接口
-var updatePwdURL = preURL_post + 'updatePwd';
-// 退出登录
-var loginOutURL = preURL_post + 'loginOut';
+
+
+
 
 // 主页面 的controller
 hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
@@ -619,7 +620,6 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getUserURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users=response.resultParm.userList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -628,7 +628,6 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getRoleURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -649,7 +648,6 @@ hjcr.controller('userCtrl',function($scope,$http){
   				auth(response);
 					$scope.users=response.resultParm.userList;
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -671,7 +669,6 @@ hjcr.controller('userCtrl',function($scope,$http){
   					auth(response);
 						$scope.users=response.resultParm.userList;
 					}).error(function(){
-						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
@@ -688,7 +685,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 			roleId:$scope.users[index].newuserRole,
 		})
 		.success(function(response){
-  		auth(response);
+			auth(response);
 			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
 		}).error(function(){
@@ -706,7 +703,6 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.getPageBill = function(num){
 		if((num!=$scope.currentNum) && (num===1 || (num>1&&num<=$scope.bills.totalPage))){
 			$scope.currentNum = num;
-			console.log(num);
 			$http.post(getBillURL,{page:num})
 				.success(function(response){
 					$scope.bills=response;

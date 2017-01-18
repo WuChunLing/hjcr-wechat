@@ -54,9 +54,9 @@ public class AllocationHandler {
 	public ResponseEntity<ResultMessage> updatafirstAllocation(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
-			float orderMoneyFirst = (float) map.get("orderMoneyFirst");  //从map中获取orderMoneyId转化成int
+			double orderMoneyFirst = (double) map.get("orderMoneyFirst");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
-			float orderMoneySecond=1-orderMoneyFirst;
+			double orderMoneySecond=1-orderMoneyFirst;
 			Allocation allocation=allocationService.getAllocation();
 			allocation.setOrderMoneyFirst(orderMoneyFirst);
 			allocation.setOrderMoneySecond(orderMoneySecond);

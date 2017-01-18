@@ -10,19 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+//后台管理系统用户
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Cacheable
 @Table(name = "system_user")
 @Entity
 public class SystemUser implements Serializable {
-	private Integer id;
+	private Integer id; //主键
+ 
+	private String username; //登录账号
 
-	private String username;
+	private String password;  //登录密码
 
-	private String password;
-
-	private Integer roleId;
+	private Integer roleId;  //角色id
 	
-	private String rolename;
+	private String rolename;  //角色名
 
 	private static final long serialVersionUID = 1L;
 

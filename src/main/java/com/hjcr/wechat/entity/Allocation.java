@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Cacheable
 @Table(name = "allocation")
 @Entity
@@ -14,8 +17,8 @@ public class Allocation {
 
 	// 分配的比例
 	private int allocationId;
-	private float orderMoneyFirst; // 一級代理
-	private float orderMoneySecond;// 二級代理
+	private double orderMoneyFirst; // 一級代理
+	private double orderMoneySecond;// 二級代理
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -27,19 +30,19 @@ public class Allocation {
 		this.allocationId = allocationId;
 	}
 
-	public float getOrderMoneyFirst() {
+	public double getOrderMoneyFirst() {
 		return orderMoneyFirst;
 	}
 
-	public void setOrderMoneyFirst(float orderMoneyFirst) {
+	public void setOrderMoneyFirst(double orderMoneyFirst) {
 		this.orderMoneyFirst = orderMoneyFirst;
 	}
 
-	public float getOrderMoneySecond() {
+	public double getOrderMoneySecond() {
 		return orderMoneySecond;
 	}
 
-	public void setOrderMoneySecond(float orderMoneySecond) {
+	public void setOrderMoneySecond(double orderMoneySecond) {
 		this.orderMoneySecond = orderMoneySecond;
 	}
 
