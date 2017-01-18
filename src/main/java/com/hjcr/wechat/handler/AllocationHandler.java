@@ -73,6 +73,7 @@ public class AllocationHandler {
 	public ResponseEntity<ResultMessage> updatasecondAllocation(@RequestBody Map<String, Object> map) {
 		ResultMessage result = new ResultMessage();
 		try {
+			System.out.println("ffff");
 			float orderMoneySecond = (float) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
 			float orderMoneyFirst=1-orderMoneySecond;

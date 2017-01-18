@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 {
-  "status":401,
+  "messageCode":402,
   "serviceResult": true,
   "resultParm": {
     "userList": [
@@ -28,33 +27,3 @@
     ]
   }
 }
-=======
-{
-  "serviceResult": true,
-  "resultParm": {
-    "userList": [
-      {
-        "id": 1,
-        "username": "kellan",
-        "password": "123456",
-        "roleId": 1,
-        "rolename": "admin"
-      },
-      {
-        "id": 2,
-        "username": "toff",
-        "password": "123456",
-        "roleId": 2,
-        "rolename": "administrator"
-      },
-      {
-        "id": 44,
-        "username": "kellan1",
-        "password": "e1e969cea61f7e2987319ae68e8cee83",
-        "roleId": 2,
-        "rolename": "administrator"
-      }
-    ]
-  }
-}
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0

@@ -1,36 +1,5 @@
 <link href="css/roleManage.css" rel="stylesheet" />
 <div id="role-div">
-<<<<<<< HEAD
-  <div ng-controller="roleCtrl" >
-    <div class="well with-header with-footer">
-      <div class="header bordered-sky">
-          角色树<i style="float:right;cursor:pointer;" class="fa fa-plus green" ng-click="addRole()">添加角色</i>
-      </div>
-      <div id="roleTree" class="tree tree-plus-minus" ng-repeat="role in roles">
-        <div class="tree-folder" key={{role.id}}>
-            <div class="tree-folder-header">
-                <div class="tree-folder-name">{{role.rolename}}</div>
-                <i ng-if="!role.editActive" class="fa fa-folder" ng-click="showPrivilegeFuc($index)">查看其拥有的权限</i>
-                <i ng-if="role.editActive" class="fa fa-folder-open" ng-click="showPrivilegeFuc($index)"></i>
-                <div class="tree-actions">
-                  <i class="fa fa-edit warning" ng-click="updateRoleName(role.id)"></i>
-                  <!--  修改角色的名称和角色描述  -->
-                  <i class="fa fa-trash-o danger" ng-click="deleteRole(role.id)"></i>
-                  <!--  删除角色 -->
-                </div>
-            </div>
-            <div class="tree-folder-content" ng-if="role.editActive" >
-              <div class="tree-item" ng-repeat="privilege in privileges">
-                  <input type="checkbox" ng-click="updateRole(role.id,privilege.id)" ng-checked='{{role.privileges}}.includes("{{privilege.privilegeName}}")'/>
-                  <div class="tree-item-name">{{privilege.privilegeName}}</div>
-              </div>
-            </div>
-        </div>
-      </div>
-      <div class="footer">
-          你可以对角色的权限进行操作
-      </div>
-  </div>
 	<div ng-controller="roleCtrl">
 		<div class="well with-header with-footer">
 			<div class="header bordered-sky">
@@ -66,7 +35,6 @@
 			<div class="footer">你可以对角色的权限进行操作</div>
 		</div>
 
-
     <!-- 删除确认弹框 -->
     <div class="modal-preview"  ng-class="showModal?'show':'noshow'">
       <div class="modal modal-primary">
@@ -88,7 +56,6 @@
       </div>
     </div>
     <div class="mask" ng-class="showModal?'show':'noshow'"></div>
-    <!-- <button class="btn btn-danger" onclick="javascript: Notify('Something Went Wrong!', 'top-right', '5000', 'danger', 'fa-bolt', true); return false;">Danger</button> -->
     <!-- 添加新角色弹框 -->
     <div class="widget add-role-model" ng-show="showRoleModel">
         <div class="widget-header bordered-bottom bordered-blue">

@@ -46,8 +46,8 @@
         password:pwd
     },function(data){
 	    if(data.serviceResult){
-	        console.log("g");
-	        location.href = "http://localhost:8080/hjcr-wechat/index.html";
+					sessionStorage.username = $("#name").val();
+	        location.href = "/";
 	      }
 	      else {
 	        alert(data.resultInfo);
