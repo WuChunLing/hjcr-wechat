@@ -45,7 +45,8 @@
 <script>
   $(function() {
     $( "#qrcode" ).resizable({
-      aspectRatio: 1 / 1
+      aspectRatio: 1 / 1,
+      containment: "#edit-temp"
     });
     $( "#qrcode" ).draggable({
       containment: "#edit-temp",
