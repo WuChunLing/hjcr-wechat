@@ -1,6 +1,5 @@
 const preURL_project = "/hjcr-wechat/";
 
-
 // 模板管理  接口
 var deleteQrcodeURL = preURL_project + 'deteleTemplate';   										//  删除   模板
 var getQrcodeURL = preURL_project+'getAllTemplate';   												//  获取   所有的模板信息
@@ -41,6 +40,8 @@ var updateUserURL = preURL_project + 'system/updateUserRole';    // 修改 用�
 var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用户
 //修改个人登录密码的接口
 var updatePwdURL = preURL_project + 'system/updatePassword';
+// 退出登录
+var loginOutURL = preURL_project + 'system/loginOut';
 
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -51,6 +52,7 @@ var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 �
 var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
 var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
 var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
+
 
 
 
@@ -91,6 +93,11 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 			$scope.tableTitle = "修改密码";
 		}
 	});
+	$scope.loginOut = function(){
+		$http.get(loginOutURL,function(response){
+			location.href = '/login';
+		});
+	}
 });
 
 // 模板管理
@@ -170,77 +177,21 @@ hjcr.controller('newQCtrl',function($scope,$http){
   //显示或移除二维码、头像
 	$scope.showQ = function(value){$scope.showQrcode = value;}
 	$scope.showT = function(value){$scope.showToux = value;}
-  //移动二维码和头像的位置
-	$scope.changePosition = function(obj,sent,getdivid){
-	  var dmW = document.documentElement.clientWidth || document.body.clientWidth;
-	  var dmH = document.documentElement.clientHeight || document.body.clientHeight;
-	  var sent = sent || {};
-	  var l = sent.l || 0;
-	  var r = sent.r || dmW - obj.offsetWidth;
-	  var t = sent.t || 0;
-	  var b = sent.b || dmH - obj.offsetHeight;
-	  var n = sent.n || 10;
-	  obj.onmousedown = function (ev){
-	    var oEvent = ev || event;
-	    var sentX = oEvent.clientX - obj.offsetLeft;
-	    var sentY = oEvent.clientY - obj.offsetTop;
-	    document.onmousemove = function (ev){
-	      var oEvent = ev || event;
-
-	      var slideLeft = oEvent.clientX - sentX;
-	      var slideTop = oEvent.clientY - sentY;
-
-	      if(slideLeft <= l){
-	        slideLeft = l;
-	      }
-	      if(slideLeft >= r){
-	        slideLeft = r;
-	      }
-	      if(slideTop <= t){
-	        slideTop = t;
-	      }
-	      if(slideTop >= b){
-	        slideTop = b;
-	      }
-
-	      obj.style.left = slideLeft + 'px';
-	      obj.style.top = slideTop + 'px';
-
-				if(getdivid==='qrcode'){
-					template.templateQrcodeWide = slideLeft/450;
-					template.templateQrcodeHigh = slideTop/820;
-				}
-				else if (getdivid==='toux') {
-					template.templateHeadImgWide = slideLeft/450;
-					template.templateHeadImgHigh = slideTop/820;
-				}
-				return false;
-	    };
-	    document.onmouseup = function (){
-	      document.onmousemove = null;
-	      document.onmouseup = null;
-	    }
-
-	    return false;
-	  }
-	}
-	$scope.move = function(getdivid) {
-	  var oDiv = document.getElementById(getdivid);
-	  var oParent = document.getElementsByClassName('edit-template')[0];
-	  var sent = {
-	    l: 0, //设置div在父元素的活动范围，10相当于给父div设置padding-left：10;
-	    r: oParent.offsetWidth - oDiv.offsetWidth, // offsetWidth:当前对象的宽度， offsetWidth = width+padding+border
-	    t: 0,
-	    b: oParent.offsetHeight - oDiv.offsetHeight,
-	    n: 0
-	  }
-	  $scope.changePosition(oDiv, sent,getdivid);
-	}
   //确认上传模板
 	$scope.submitTemplate = function(){
 		if($("#qrcodeImg").width()!=null && $("#qrcodeImg").width()!=0 && $("#qrcodeImg").width()!=undefined){
 			template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 		}
+		var offset = $('.templateImg').offset();
+		var offsetQ = $('#qrcodeImg').offset();
+		var offsetT = $('#toux').offset();
+		// 二维码的 top 和 left 偏移比例
+		template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
+		template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
+		// 头像的 top 和 left 偏移比例
+		template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
+		template.templateHeadImgWide = (offsetT.left-offset.left)/450;
+
 		template.templateConfirm = $scope.templateConfirm===true?1:0;
 		var templateFormDate = new FormData(document.getElementById("myForm"));
 		templateFormDate.append("templateQrcodeHigh",template.templateQrcodeHigh);
@@ -248,7 +199,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 		templateFormDate.append("templateHeadImgHigh",template.templateHeadImgHigh);
 		templateFormDate.append("templateHeadImgWide",template.templateHeadImgWide);
 		templateFormDate.append("templateQrcodeSize",template.templateQrcodeSize);
-		templateFormDate.append("templateConfirm",template.templateConfirm);
+		templateFormDate.append("templateConfirm",template.templateConfirm==true?1:0);
 		var xhr = new XMLHttpRequest();
     xhr.onload=function(event)
     {
@@ -269,6 +220,7 @@ hjcr.controller('newQCtrl',function($scope,$http){
 	}
 });
 
+
 //修改二维码 的controller
 hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.template = null;
@@ -276,6 +228,7 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 	$http.post(sureupdateQrcodeURL,{templateId:sessionStorage.templateId})
 		.success(function(response){
 			$scope.template = response.resultParm.allTemplate;
+			$scope.select = $scope.template.templateConfirm==1?true:false;
 			var prevDiv = document.getElementsByClassName('templateImg')[0];
 			prevDiv.innerHTML = '<img class="templateImg" src="' + $scope.template.templatePath + '" />';
 			$scope.showQrcode = true;
@@ -297,76 +250,19 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 	//显示或移除二维码、头像
 	$scope.showQ = function(value){$scope.showQrcode = value;}
 	$scope.showT = function(value){$scope.showToux = value;}
-	//移动二维码和头像的位置
-	$scope.changePosition = function(obj,sent,getdivid){
-	  var dmW = document.documentElement.clientWidth || document.body.clientWidth;
-	  var dmH = document.documentElement.clientHeight || document.body.clientHeight;
-	  var sent = sent || {};
-	  var l = sent.l || 0;
-	  var r = sent.r || dmW - obj.offsetWidth;
-	  var t = sent.t || 0;
-	  var b = sent.b || dmH - obj.offsetHeight;
-	  var n = sent.n || 10;
-	  obj.onmousedown = function (ev){
-	    var oEvent = ev || event;
-	    var sentX = oEvent.clientX - obj.offsetLeft;
-	    var sentY = oEvent.clientY - obj.offsetTop;
-	    document.onmousemove = function (ev){
-	      var oEvent = ev || event;
-
-	      var slideLeft = oEvent.clientX - sentX;
-	      var slideTop = oEvent.clientY - sentY;
-
-	      if(slideLeft <= l){
-	        slideLeft = l;
-	      }
-	      if(slideLeft >= r){
-	        slideLeft = r;
-	      }
-	      if(slideTop <= t){
-	        slideTop = t;
-	      }
-	      if(slideTop >= b){
-	        slideTop = b;
-	      }
-
-	      obj.style.left = slideLeft + 'px';
-	      obj.style.top = slideTop + 'px';
-
-				if(getdivid==='qrcode'){
-					$scope.template.templateQrcodeWide = slideLeft/450;
-					$scope.template.templateQrcodeHigh = slideTop/820;
-				}
-				else if (getdivid==='toux') {
-					$scope.template.templateHeadImgWide = slideLeft/450;
-					$scope.template.templateHeadImgHigh = slideTop/820;
-				}
-				return false;
-	    };
-	    document.onmouseup = function (){
-	      document.onmousemove = null;
-	      document.onmouseup = null;
-	    }
-
-	    return false;
-	  }
-	}
-	$scope.move = function(getdivid) {
-	  var oDiv = document.getElementById(getdivid);
-	  var oParent = document.getElementsByClassName('edit-template')[0];
-	  var sent = {
-	    l: 0, //设置div在父元素的活动范围，10相当于给父div设置padding-left：10;
-	    r: oParent.offsetWidth - oDiv.offsetWidth, // offsetWidth:当前对象的宽度， offsetWidth = width+padding+border
-	    t: 0,
-	    b: oParent.offsetHeight - oDiv.offsetHeight,
-	    n: 0
-	  }
-	  $scope.changePosition(oDiv, sent,getdivid);
-	}
 	//确认修改模板
 	$scope.submitTemplate = function(){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
+		var offset = $('.templateImg').offset();
+		var offsetQ = $('#qrcodeImg').offset();
+		var offsetT = $('#toux').offset();
+		// 二维码的 top 和 left 偏移比例
+		template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
+		template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
+		// 头像的 top 和 left 偏移比例
+		template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
+		template.templateHeadImgWide = (offsetT.left-offset.left)/450;
 		$http.post(updateQrcodeURL,$scope.template)
 		.success(function(response){
 			auth(response);
@@ -724,7 +620,6 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getUserURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users=response.resultParm.userList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -733,7 +628,6 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getRoleURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -754,7 +648,6 @@ hjcr.controller('userCtrl',function($scope,$http){
   				auth(response);
 					$scope.users=response.resultParm.userList;
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -776,7 +669,6 @@ hjcr.controller('userCtrl',function($scope,$http){
   					auth(response);
 						$scope.users=response.resultParm.userList;
 					}).error(function(){
-						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
@@ -811,7 +703,6 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.getPageBill = function(num){
 		if((num!=$scope.currentNum) && (num===1 || (num>1&&num<=$scope.bills.totalPage))){
 			$scope.currentNum = num;
-			console.log(num);
 			$http.post(getBillURL,{page:num})
 				.success(function(response){
 					$scope.bills=response;

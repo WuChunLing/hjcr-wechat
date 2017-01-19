@@ -12,21 +12,17 @@
      <div class="edit-contianer">
        <div id="edit-temp" class="edit-template">
          <div class="templateImg"></div>
-         <div id="qrcode" class="edit-img qrcode"  ng-mousemove="move('qrcode')" ng-show="showQrcode">
-            <span class="br" ></span>
-            <span class="bl" ></span>
-            <span class="tr" ></span>
-            <span class="tl" ></span>
+         <div id="qrcode" class="draggable ui-widget-content edit-img qrcode" ng-show="showQrcode">
             <img  id="qrcodeImg" src="imgs/qrcode.png"  />
          </div>
-         <div id="toux" ng-mousemove="move('toux')" class="edit-img toux" ng-show="showToux">
+         <div id="toux"  class="draggable ui-widget-content edit-img toux" ng-show="showToux">
             <img  src="imgs/toux.jpg"/>
          </div>
        </div>
        <div class="operation" >
          <div class="checkbox">
            <label>
-             <input type="checkbox" ng-model="template.templateConfirm" class="template-confirm colored-success" checked="checked">
+             <input type="checkbox" ng-model="select" class="template-confirm colored-success" checked="checked">
              <span class="text">设为默认模板</span>
            </label>
          </div>
@@ -45,4 +41,20 @@
      <div class="clear"></div>
     </form>
    </div>
-<script src="js/changeSize.js"></script>
+<!-- <script src="js/changeSize.js"></script> -->
+<script>
+  $(function() {
+    $( "#qrcode" ).resizable({
+      aspectRatio: 1 / 1,
+      containment: "#edit-temp"
+    });
+    $( "#qrcode" ).draggable({
+      containment: "#edit-temp",
+      scroll: false
+    });
+    $( "#toux" ).draggable({
+      containment: "#edit-temp",
+      scroll: false
+    });
+  });
+  </script>

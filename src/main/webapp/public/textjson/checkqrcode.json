@@ -13,7 +13,7 @@
         "templateHeadImgWide": 110,
         "templateHeadImgHigh": 300,
         "templateHeadImgUrl": 0,
-        "templateConfirm": "0"
+        "templateConfirm": 0
       },
       {
         "templateId": 14,
@@ -25,7 +25,7 @@
         "templateHeadImgWide": 7,
         "templateHeadImgHigh": 777,
         "templateHeadImgUrl": 7,
-        "templateConfirm": "0"
+        "templateConfirm": 0
       },
       {
         "templateId": 25,
@@ -37,7 +37,7 @@
         "templateHeadImgWide": 110,
         "templateHeadImgHigh": 300,
         "templateHeadImgUrl": 0,
-        "templateConfirm": "1"
+        "templateConfirm": 1
       },
       {
         "templateId": 78,
@@ -49,7 +49,7 @@
         "templateHeadImgWide": 0,
         "templateHeadImgHigh": 0,
         "templateHeadImgUrl": 0,
-        "templateConfirm": null
+        "templateConfirm": 0
       }
     ]
   }

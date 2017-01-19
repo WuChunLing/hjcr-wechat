@@ -130,10 +130,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" ng-click="closeModel()" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title">删除模板</h4>
+            <h4 class="modal-title">删除商品类别</h4>
           </div>
           <div class="modal-body">
-            <p>确认删除此模板？</p>
+            <p>确认删除此商品类别？</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="closeModel()">取消</button>
@@ -145,3 +145,8 @@
   </div>
   <div class="mask" ng-class="showModal?'show':'noshow'"></div>
 </div>
+<script>
+$(function() {
+  $( ".modal-preview" ).draggable();
+});
+</script>

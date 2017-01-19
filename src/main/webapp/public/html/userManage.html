@@ -1,4 +1,3 @@
-<link href="css/deleteModel.css" rel="stylesheet" />
 <div id="user-div" ng-controller="userCtrl">
  <form role="form" ng-submit="sureAddUser()" method="post">
   <div class="well with-header  with-footer">
@@ -65,7 +64,7 @@
     </div>
   </div>
   <!-- 删除确认弹框 -->
-  <div class="modal-preview"  ng-if="showModal">
+  <div class="modal-preview "  ng-class="showModal?'show':'noshow'">
     <div class="modal modal-primary">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -85,4 +84,10 @@
     </div>
   </div>
   <div class="mask" ng-if="showModal"></div>
+  <div class="clear"></div>
 </div>
+<script>
+$(function() {
+  $( ".modal-preview" ).draggable();
+});
+</script>
