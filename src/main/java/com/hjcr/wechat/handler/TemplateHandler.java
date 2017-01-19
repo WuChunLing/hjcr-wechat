@@ -11,12 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hjcr.wechat.entity.Template;
@@ -59,22 +57,6 @@ public class TemplateHandler {
 	}
 
 
-	/*@ModelAttribute
-	public void getTemplatebyupdata(@RequestBody Map<String,Object> templemap,
-			Map<String, Object> map) {
-		String templateId=(String) templemap.get("templateId");
-		
-		if (!templateId.equals(null)){
-			map.put("template", (Object) templateService.getTemplate(Integer.parseInt(templateId)));
-		}
-<<<<<<< HEAD
-=======
->>>>>>> 1440158e66f78701f46d444388cc003dae3f7ff5
-=======
->>>>>>> 3f44769c3760c864ceae2da792fb653efd42b6d7
->>>>>>> 3369541ff6d29fea17db742242cdad3d2fb415f0
-	}
-*/
 	/*
 	 * 更新模板
 	 */
