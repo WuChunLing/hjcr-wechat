@@ -45,6 +45,42 @@ public class DrawMoneyWayHandler {
 	}
 	
 	/**
+	 * 获取某用户的默认提现方式
+	 * @author Kellan
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value = "/getDafultWayByUserId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getDafultWayByUserId(@RequestBody Integer userId) {
+		log.info("获取某用户的默认提现方式getDafultWayByUserId");
+		if (userId == null) {
+			throw new SecurityException("数据有误");
+		}
+		ResultMessage result = new ResultMessage();
+		DrawMoneyWay way = drawMoneyWayService.getDafultWayByUserId(userId);
+		result.getResultParm().put("way",way);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 获取某用户所有提现方式
+	 * @author Kellan
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserWay", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getUserWay(@RequestBody Integer userId) {
+		log.info("获取某用户所有提现方式getUserWay");
+		if (userId == null) {
+			throw new SecurityException("数据有误");
+		}
+		ResultMessage result = new ResultMessage();
+		List<DrawMoneyWay> list = drawMoneyWayService.getUserWay(userId);
+		result.getResultParm().put("list",list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
 	 * 添加新的提现方式.
 	 * @author Kellan
 	 * @param way
@@ -94,7 +130,7 @@ public class DrawMoneyWayHandler {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> update(@RequestBody DrawMoneyWay way) {
-		log.info("根据id删除提现方式");
+		log.info("更新提现方式");
 		if (way.getId() == null) {
 			throw new SecurityException("数据有误");
 		}

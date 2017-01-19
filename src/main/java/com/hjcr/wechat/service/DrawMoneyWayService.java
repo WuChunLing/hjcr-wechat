@@ -48,6 +48,20 @@ public class DrawMoneyWayService {
 		DrawMoneyWay flush = drawMoneyWayImpl.saveAndFlush(way);
 		return flush.getId() == null ? false:true;
 	}
+
+	/*
+	 * 获取某用户的默认提现方式
+	 */
+	public DrawMoneyWay getDafultWayByUserId(Integer userId) {
+		return drawMoneyWayImpl.getDafultWayByUserId(userId);
+	}
+
+	/*
+	 * 获取某用户所有提现方式
+	 */
+	public List<DrawMoneyWay> getUserWay(Integer userId) {
+		return drawMoneyWayImpl.getUserWay(userId);
+	}
 	
 	
 }
