@@ -87,8 +87,7 @@ public class DrawMoneyRecord {
 	public String toString() {
 		return "DrawMoneyRecord [id=" + id + ", userId=" + userId + ", wayId="
 				+ wayId + ", money=" + money + ", creatTime=" + creatTime
-				+ ", status=" + status + ", drawMoneyWay=" + drawMoneyWay.toString()
-				+ ", user=" + user.toString() + "]";
+				+ ", status=" + status  + "]";
 	}
 	
 }

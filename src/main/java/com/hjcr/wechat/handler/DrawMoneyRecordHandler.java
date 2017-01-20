@@ -1,10 +1,15 @@
 package com.hjcr.wechat.handler;
 
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +41,28 @@ public class DrawMoneyRecordHandler {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getAll() {
+	public ResponseEntity<Page<DrawMoneyRecord>> getAll(Integer currentPage, Integer size) {
 		log.info("获取所有提现记录");
 		ResultMessage result = new ResultMessage();
-		List<DrawMoneyRecord> list = drawMoneyRecordService.getAll();
+		Sort sort = new Sort(Direction.DESC,"creatTime");
+		Pageable pageable = new PageRequest(currentPage,size,sort);
+		Page<DrawMoneyRecord> list = drawMoneyRecordService.getAll(pageable);
+		result.getResultParm().put("list", list);
+		return new ResponseEntity<Page<DrawMoneyRecord>>(list, HttpStatus.OK);
+	}
+	
+	/**
+	 * 获取用户自身提现账单.
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getByUserId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getAll(Integer userId, Integer currentPage, Integer size) {
+		log.info("获取用户自身提现账单");
+		ResultMessage result = new ResultMessage();
+		Sort sort = new Sort(Direction.DESC, "creatTime");
+		Pageable pageable = new PageRequest(currentPage, size, sort);
+		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByUserId(pageable,userId);
 		result.getResultParm().put("list", list);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
@@ -99,7 +122,7 @@ public class DrawMoneyRecordHandler {
 			throw new SecurityException("数据有误");
 		}
 		ResultMessage result = new ResultMessage();
-		if (!drawMoneyRecordService.update(record)) {
+		if (!drawMoneyRecordService.update(record.getId(),record.getStatus())) {
 			throw new SecurityException("更新失败");
 		}
 		result.setResultInfo("更新成功");
