@@ -44,9 +44,6 @@ public class QRcodeService {
 	private UserImpl userImpl;
 
 	@Autowired
-	private CardService cardService;
-
-	@Autowired
 	private ForeverqrcodeImpl foreverqrcodeImpl;
 
 	@Autowired

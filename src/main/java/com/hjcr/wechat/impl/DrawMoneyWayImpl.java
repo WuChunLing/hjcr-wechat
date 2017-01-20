@@ -18,7 +18,7 @@ public interface DrawMoneyWayImpl extends JpaRepository<DrawMoneyWay, Integer>{
 	/*
 	 * 获取某用户所有提现方式
 	 */
-	@Query("select d form DrawMoneyWay d where d.userId = ?1")
+	@Query("select d from DrawMoneyWay d where d.userId = ?1")
 	List<DrawMoneyWay> getUserWay(Integer userId);
 
 	

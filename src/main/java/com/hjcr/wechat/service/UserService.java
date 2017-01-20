@@ -1,10 +1,13 @@
 package com.hjcr.wechat.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.impl.UserImpl;
@@ -59,14 +62,14 @@ public class UserService {
 		return "success";
 	}
 
-	// 获取用户的一级代理
-	public List<User> getFirstAgent(int userid) {
-		return userImpl.getFirstAgent(userid);
+	// 获取用户的下的一级代理
+	public List<User> getFirstChildrenAgent(int userid) {
+		return userImpl.getFirstChildrenAgent(userid);
 	}
 
-	// 获取用户的二级代理
-	public List<User> getSecondAgent(int userid) {
-		return userImpl.getSecondAgent(userid);
+	// 获取用户的下的二级代理
+	public List<User> getSecondChildrenAgent(int userid) {
+		return userImpl.getSecondChildrenAgent(userid);
 	}
 
 	// 获取用户的通过openid
@@ -78,6 +81,7 @@ public class UserService {
 		int Userid = Integer.parseInt(userId);
 		return userImpl.getOpenidbyuser(Userid);
 	}
+
 
 	public String getUserInfortation(String openid) {
 		// 通过Openid获取User
@@ -98,4 +102,31 @@ public class UserService {
 		}
 		return "success";
 	}
+	
+	
+	/*
+	 *获取一二级代理
+	 */
+
+	public List<User> getfAllUser(int userid){
+		User user=userImpl.findOne(userid);
+		String hierarchy = user.getUserHierarchy();
+		if(!hierarchy.equals(null)){
+		String[] st = hierarchy.split("/"); // 获取层级关系
+		List list=new ArrayList<User>();
+		
+		int userfirstid=Integer.valueOf(st[1]);
+		list.add(userImpl.findOne(userfirstid));
+		if(st.length>2){
+			int usersecondid=Integer.valueOf(st[2]);
+			list.add(userImpl.findOne(usersecondid));
+		}
+		return list;
+		}
+		return null;
+	}
+	
+	
+	
+	
 }

@@ -182,7 +182,8 @@ public class Handler extends GenericController {
 		 System.out.println(TemplatePath);
 		String TemplatePath=".\\image\\64welcome.jpg";
 		System.out.println(path+TemplatePath.substring(2));*/
-		System.out.println(cardService.sendCard("oUPl-wh3UehzmwaztIQzkvcuS3rE"));
+		//System.out.println(cardService.sendCard("oUPl-wh3UehzmwaztIQzkvcuS3rE"));
+		System.out.println(wxuserService.getfAllUser(44));
 	}
 
 	/*

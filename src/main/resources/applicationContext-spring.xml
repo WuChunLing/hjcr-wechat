@@ -55,7 +55,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
 	<jpa:repositories base-package="com.hjcr.wechat"
 		entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
