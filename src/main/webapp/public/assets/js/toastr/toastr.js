@@ -1,9 +1,9 @@
 ﻿/*
  * Toastr
  * Version 2.0.1
- * Copyright 2012 John Papa and Hans Fjällemark.  
- * All Rights Reserved.  
- * Use, reproduction, distribution, and modification of this code is subject to the terms and 
+ * Copyright 2012 John Papa and Hans Fjällemark.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
  * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
  *
  * Author: John Papa and Hans Fjällemark
@@ -254,14 +254,14 @@
                 var PlaySound = 0;
                 PlaySound = 1;
                 if (isIE8orlower() == 0) {
-                    var audioElement = document.createElement("audio");
-                    audioElement.setAttribute("src", "assets/sound/alert.mp3");
-                    $.get();
-                    audioElement.addEventListener("load", function () {
-                        audioElement.play()
-                    }, true);
-                    audioElement.pause();
-                    audioElement.play()
+                    // var audioElement = document.createElement("audio");
+                    // audioElement.setAttribute("src", "assets/sound/alert.mp3");
+                    // $.get();
+                    // audioElement.addEventListener("load", function () {
+                    //     audioElement.play()
+                    // }, true);
+                    // audioElement.pause();
+                    // audioElement.play()
                 }
 
                 if (options.debug && console) {

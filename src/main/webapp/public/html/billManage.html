@@ -44,7 +44,7 @@
             <div class="flip-scroll">
               <div class="form-group" style="width:240px;float:right;">
                   <span class="input-icon">
-                      <input type="text" ng-model="checkbillId" class="form-control input" placeholder="按订单号查询订单信息">
+                      <input type="text" ng-model="checkbillId" ng-keyup="keyupId()" class="form-control input" placeholder="按订单号查询订单信息">
                       <i ng-click="checkBillById(checkbillId)" class="glyphicon glyphicon-search blue"></i>
                   </span>
               </div>
@@ -52,9 +52,9 @@
                   <div class="controls">
                       <div class="input-group">
                           <span class="input-group-addon">
-                              <i class="fa fa-calendar" ng-click="checkBillByDate()"></i>
+                              <i class="fa fa-calendar" ng-click="checkByDate()"></i>
                           </span>
-                          <input type="text" ng-model="checkbillDate" placeholder="按时间查询某一时间段的订单" class="form-control" id="reservation">
+                          <input type="text" ng-keyup="keykeyupDate()" ng-model="checkbillDate" placeholder="按时间查询某一时间段的订单" class="form-control" id="reservation">
                       </div>
 
                   </div>
@@ -131,11 +131,11 @@
                   </table>
             </div>
             <ul class="pagination" style="margin-top:20px;">
-                <li ng-click="getPageBill(currentNum-1)" ng-class="currentNum===1?'disabled':''"><a>«</a></li>
-                <li ng-click="getPageBill(page)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                <li ng-click="selectPost(currentNum-1,id,date)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
+                <li ng-click="selectPost(page,id,date)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="getPageBill(currentNum+1)" ng-class="currentNum===bills.totalPage?'disabled':''"><a>»</a></li>
+                <li ng-click="selectPost(currentNum+1,id,date)" ng-class="currentPage===bills.totalPage?'disabled':''"><a>»</a></li>
             </ul>
           </div>
       </div>

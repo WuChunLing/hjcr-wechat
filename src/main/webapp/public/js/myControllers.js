@@ -744,26 +744,49 @@ hjcr.controller('userCtrl',function($scope,$http){
 // 账单管理
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
+	$scope.bills = null;// 总订单记录
+	$scope.totalPage = 1;//全部页数
+	$scope.currentPage = 0;//当前页码
+	$scope.billMoney = 0;// 总金额信息
+	$scope.pageArr;// 页码数组
+	$scope.id = null;
+	$scope.date = null;
+	// 生成页码数组
+	$scope.getPage = function(num){
+		$scope.pageArr = new Array();
+		for(var i=0;i<num;i++){
+			$scope.pageArr[i] = i+1;
+		}
+	}
+	// post请求后常用套路
+	$scope.postFuc = function(response){
+		auth(response);
+		alertMes(response.resultInfo,'info','fa-info-circle');
+		$scope.bills=response;
+		$scope.totalPage = response.totalPage;
+		$scope.currentPage = response.currentPage;
+		$scope.getPage($scope.totalPage);
+	}
+
 	//获取   第n页的订单记录
+	$scope.getBill = function(num){
+		$scope.id = null;
+		$scope.date = null;
+		$http.post(getBillURL,
+			{
+				page:num,
+				pageNum:15
+			})
+			.success(function(response){
+				$scope.postFuc(response);
+			}).error(function(){
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+		});
+	}
 	$scope.getPageBill = function(num){
-		if( num!=$scope.currentNum && num>=1 && num<=$scope.bills.totalPage ){
-			$scope.currentNum = num;
-			$http.post(getBillURL,
-				{
-					page:num,
-					pageNum:15
-				})
-				.success(function(response){
-					auth(response);
-					alertMes(response.resultInfo,'info','fa-info-circle');
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
-					}
-				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-			});
+		console.log("调用总订单信息"+num);
+		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+			$scope.getBill(num);
 		}
 	}
 	//获取总订单 的金额信息
@@ -775,27 +798,30 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
-	$scope.getPageBill(1);$scope.getBillMoney();
+
+	$scope.getPageBill(1);
+	$scope.getBillMoney();
 
 	//通过订单号查询 订单
 	$scope.checkBillById = function(id){
+		$scope.id = id;
 		if(id!=null && id!='' && id!=' '){
 			$http.post(getBillByIdURL,
 				{
 					billId:id
 				})
 				.success(function(response){
-					auth(response);
-					alertMes(response.resultInfo,'info','fa-info-circle');
-					$scope.bills=response;
-					$scope.billMoney=$scope.bills[0].billMoney;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
-					}
+					$scope.postFuc(response);
+					$scope.billMoney.billMoney=response.bill[0].billMoney;
+					$scope.billMoney.billProfit=response.bill[0].billProfit;
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
+		}
+	}
+	$scope.keyupId = function(){
+		if(window.event.keyCode == 13){
+			$scope.checkBillById($scope.checkbillId);
 		}
 	}
 
@@ -807,16 +833,35 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					page:page
 				})
 				.success(function(response){
-					auth(response);
-					alertMes(response.resultInfo,'info','fa-info-circle');
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
-					}
+					$scope.postFuc(response);
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
+	}
+	$scope.checkByDate = function(){
+		var date = $("#reservation").val();
+		if(date!=''&&date!=null){
+			var dateArr = date.split(" 至 ");
+			$scope.currentPage = 0;
+			$scope.date = true;
+			$scope.checkBillByDate(dateArr[0],dateArr[1],1);
+			$scope.getMoneyByDate(dateArr[0],dateArr[1]);
+		}
+	}
+	$scope.keykeyupDate = function(){
+		if(window.event.keyCode == 13){
+			$scope.checkByDate();
+		}
+	}
+	$scope.checkDateByPage = function(num){
+		console.log("按日期查询"+num);
+		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+			var date = $("#reservation").val();
+			if(date!=''&&date!=null){
+				var dateArr = date.split(" 至 ");
+				$scope.checkBillByDate(dateArr[0],dateArr[1],num);
+			}
+		}
 	}
 	//通过时间段查询的订单  的总金额信息
 	$scope.getMoneyByDate = function(start,end){
@@ -832,16 +877,25 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 
 	// 返回总订单表
 	$scope.backToAllBill = function(){
-		$scope.getPageBill(1);$scope.getBillMoney();
+		$scope.currentPage = 0;
+		$scope.getPageBill(1);
+		$scope.getBillMoney();
+		$scope.id = null;
+		$scope.date = null;
 	}
 
-	$scope.checkByDate = function(){
-		var date = $("#reservation").val();
-		var dateArr = date.splice(" 至 ");
-		console.log(dateArr);
+	// 页码标志 调用
+	$scope.selectPost = function(num,id,date){
+		if(id!=null){
+			return  false;
+		}
+		else if(date!=null){
+			$scope.checkDateByPage(num);
+		}
+		else {
+			$scope.getPageBill(num);
+		}
 	}
-
-
 });
 // 个人订单控制器
 hjcr.controller('myBillCtrl',function($scope,$http){
