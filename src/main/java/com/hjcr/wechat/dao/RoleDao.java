@@ -1,11 +1,11 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.Role;
 
-public interface RoleImpl extends JpaRepository<Role, Integer>{
+public interface RoleDao extends JpaRepository<Role, Integer>{
 
 	/**
 	 * 根据用户Id获取用具角色

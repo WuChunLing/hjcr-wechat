@@ -1,37 +1,11 @@
 package com.hjcr.wechat.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.hjcr.wechat.entity.Role;
-import com.hjcr.wechat.entity.RolePrivilege;
-import com.hjcr.wechat.entity.SystemUser;
-import com.hjcr.wechat.impl.PrivilegeImpl;
-import com.hjcr.wechat.impl.RoleImpl;
-import com.hjcr.wechat.impl.RolePrivilegeImpl;
-import com.hjcr.wechat.impl.SystemUserImpl;
 
-@Service(value = "roleService")
-public class RoleService {
+public interface RoleService {
 
-	@Autowired
-	private RoleImpl roleImpl;
-
-	@Autowired
-	private PrivilegeImpl privilegeImpl;
-	
-	@Autowired
-	private RolePrivilegeImpl rolePrivilegeImpl;
-	
-	@Autowired
-	private SystemUserImpl systemUserImpl;
-
-	// @Autowired
-	// private SystemUserImpl systemUserImpl;
 
 	/**
 	 * 添加角色信息
@@ -41,22 +15,7 @@ public class RoleService {
 	 * @param list
 	 * @return
 	 */
-	public Role addRole(Role role, Integer[] list) {
-		List<Integer> lis = new ArrayList<Integer>(Arrays.asList(list));
-		if (lis.isEmpty()) {
-			return roleImpl.save(role);
-		} else {
-			role = roleImpl.save(role);
-			RolePrivilege rp = null;
-			for(Integer id : list){
-				rp = new RolePrivilege();
-				rp.setRoleId(role.getId());
-				rp.setPrivilegeId(id);
-				rolePrivilegeImpl.save(rp);
-			}
-			return role;
-		}
-	}
+	public Role addRole(Role role, Integer[] list);
 
 	/**
 	 * 获取所有角色
@@ -64,17 +23,7 @@ public class RoleService {
 	 * @author Kellan
 	 * @return
 	 */
-	public List<Role> getAllRole() {
-		List<Role> list = roleImpl.findAll();
-		for (Role role : list) {
-			List<String> privilegeList = privilegeImpl
-					.getPrivilegeNameByRoleId(role.getId());
-			if (!(privilegeList.size() == 0)) {
-				role.setPrivileges(privilegeList);
-			}
-		}
-		return list;
-	}
+	public List<Role> getAllRole();
 
 	/**
 	 * 根据用户id获取用户角色
@@ -83,9 +32,7 @@ public class RoleService {
 	 * @param userId
 	 * @return
 	 */
-	public Role getRoleByUser(Integer userId) {
-		return roleImpl.getRoleByUser(userId);
-	}
+	public Role getRoleByUser(Integer userId);
 
 	/**
 	 * 更新系统用户角色名称.
@@ -94,18 +41,11 @@ public class RoleService {
 	 * @param rolename
 	 * @return
 	 */
-	public Role updateRoleName(Role role) {
-		Role old_role = roleImpl.findOne(role.getId());
-		old_role.setRolename(role.getRolename());
-		return roleImpl.saveAndFlush(old_role);
-	}
+	public Role updateRoleName(Role role);
 
-	public void delete(Role role) {
-		List<SystemUser> userList = systemUserImpl.fingUserByRole(role.getId());
-		if (userList.size() != 0) {
-			throw new SecurityException("某用户拥有该角色，不能删除；请先修改用户角色");
-		}
-		roleImpl.delete(role.getId());
-	}
+	/*
+	 * 删除角色
+	 */
+	public void delete(Role role);
 
 }

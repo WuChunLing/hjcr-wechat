@@ -1,13 +1,15 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.hjcr.wechat.entity.SystemUser;
 
-public interface SystemUserImpl extends JpaRepository<SystemUser, Integer>{
+@Repository("systemUserDao")
+public interface SystemUserDao extends JpaRepository<SystemUser, Integer>{
 
 	/*
 	 * 根据系统用户名（账号）查询系统用户.

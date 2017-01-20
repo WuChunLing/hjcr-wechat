@@ -28,6 +28,7 @@ public class DrawMoneyRecord {
 	private String creatTime;  //创建时间
 	private Integer status; //提现状态 （1：待审核  2：提现成功  3：提现失败）
 	private DrawMoneyWay drawMoneyWay;
+	private User user; //用户信息
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
@@ -75,11 +76,19 @@ public class DrawMoneyRecord {
 	public void setDrawMoneyWay(DrawMoneyWay drawMoneyWay) {
 		this.drawMoneyWay = drawMoneyWay;
 	}
+	@Transient
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	@Override
 	public String toString() {
 		return "DrawMoneyRecord [id=" + id + ", userId=" + userId + ", wayId="
 				+ wayId + ", money=" + money + ", creatTime=" + creatTime
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", drawMoneyWay=" + drawMoneyWay.toString()
+				+ ", user=" + user.toString() + "]";
 	}
 	
 }

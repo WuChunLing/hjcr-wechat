@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hjcr.wechat.dao.UserDao;
 import com.hjcr.wechat.entity.Allocation;
 import com.hjcr.wechat.entity.Ordermoney;
 import com.hjcr.wechat.entity.Template;
 import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.entity.Voucher;
-import com.hjcr.wechat.impl.UserImpl;
 import com.hjcr.wechat.service.AllocationService;
 import com.hjcr.wechat.service.CardService;
 import com.hjcr.wechat.service.OrderMoneyService;
@@ -66,7 +66,7 @@ import net.sf.json.JSONObject;
 public class Handler extends GenericController {
 
 	@Autowired
-	private UserImpl user;
+	private UserDao user;
 
 	protected WxMpMessageRouter wxMpMessageRouter;
 

@@ -1,4 +1,4 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.Privilege;
 
-public interface PrivilegeImpl extends JpaRepository<Privilege, Integer>{
+public interface PrivilegeDao extends JpaRepository<Privilege, Integer>{
 
 	/**
 	 * 获取角色拥有的权限

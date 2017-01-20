@@ -2,69 +2,36 @@ package com.hjcr.wechat.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.hjcr.wechat.entity.Template;
-import com.hjcr.wechat.impl.TemplateImpl;
 
-@Service
-public class TemplateService {
-
-	@Autowired
-	private TemplateImpl templateImpl;
+public interface TemplateService {
 
 	/*
 	 * 获取模板
 	 */
-	public Template getTemplate(int templateId) {
-		return templateImpl.findOne(templateId);
-	}
+	public Template getTemplate(int templateId);
 
 	/*
 	 * 更新模板
 	 */
-	public void updateTemplate(Template template) {
-
-		templateImpl.saveAndFlush(template);
-
-	}
+	public void updateTemplate(Template template);
 
 	/*
 	 * 删除模板
 	 */
-	public void deleTemplate(int templateId) {
-
-		templateImpl.delete(templateId);
-
-	}
+	public void deleTemplate(int templateId);
 
 	// 添加模板
-	public void addTemplate(Template template) {
-
-		templateImpl.saveAndFlush(template);
-
-	}
+	public void addTemplate(Template template);
 
 	/*
 	 * 获取所有模板
 	 */
-	public List<Template> getAllTemplate() {
-		return templateImpl.findAll();
-	}
+	public List<Template> getAllTemplate();
 
 	/*
 	 * 修改默认模板
 	 */
-	public void reviseTemplate() {
-		Template template = templateImpl.getTemplatebyConfirm(1);
-		System.out.println(template);
-		if(template!=null){
-		template.setTemplateConfirm(0);
-		templateImpl.save(template);}
-		System.out.println(template);
-		
-
-	}
+	public void reviseTemplate();
 
 }

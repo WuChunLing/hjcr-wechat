@@ -1,4 +1,4 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.User;
 
-public interface UserImpl extends JpaRepository<User, Integer> {
+public interface UserDao extends JpaRepository<User, Integer> {
 
 	/*
 	 * 通过openId获得用户信息
