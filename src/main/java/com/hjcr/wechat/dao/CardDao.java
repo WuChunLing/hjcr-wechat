@@ -1,11 +1,11 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.Voucher;
 
-public interface CardImpl extends JpaRepository<Voucher, Integer> {
+public interface CardDao extends JpaRepository<Voucher, Integer> {
 
 	/*
 	 * 通过获得cardId

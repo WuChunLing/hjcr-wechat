@@ -1,9 +1,9 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hjcr.wechat.entity.Ordermoney;
 
-public interface OrdermoneyImpl extends JpaRepository<Ordermoney, Integer> {
+public interface OrdermoneyDao extends JpaRepository<Ordermoney, Integer> {
 
 }

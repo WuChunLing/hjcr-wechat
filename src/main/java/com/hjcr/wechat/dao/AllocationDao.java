@@ -1,9 +1,9 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hjcr.wechat.entity.Allocation;
 
-public interface AllocationImpl extends JpaRepository<Allocation,Integer>{
+public interface AllocationDao extends JpaRepository<Allocation,Integer>{
 
 }

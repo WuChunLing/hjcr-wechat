@@ -22,7 +22,7 @@ import com.hjcr.wechat.tools.ResultMessage;
  */
 
 @Controller
-@RequestMapping(value = "/drawmoneyway")
+@RequestMapping(value = "/drawway")
 public class DrawMoneyWayHandler {
 	
 	@Autowired
@@ -86,7 +86,7 @@ public class DrawMoneyWayHandler {
 	 * @param way
 	 * @return
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> add(@RequestBody DrawMoneyWay way) {
 		log.info("保存新的提现方式");
 		if (way.getUserId() == null) {
@@ -108,7 +108,7 @@ public class DrawMoneyWayHandler {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> delete(@RequestBody Integer id) {
 		log.info("根据id删除提现方式");
 		if (id == null) {
@@ -128,7 +128,7 @@ public class DrawMoneyWayHandler {
 	 * @param way
 	 * @return
 	 */
-	@RequestMapping(value = "/update", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> update(@RequestBody DrawMoneyWay way) {
 		log.info("更新提现方式");
 		if (way.getId() == null) {

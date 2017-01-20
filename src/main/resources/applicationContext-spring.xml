@@ -11,12 +11,12 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
-	<context:component-scan base-package="com.hjcr.wechat">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
-	</context:component-scan>
+	<context:component-scan base-package="com.hjcr.wechat" />
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan> -->
+	
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 
 	<context:property-placeholder location="classpath:db.properties" />
 
@@ -50,15 +50,19 @@
 		</property>
 		<property name="sharedCacheMode" value="ENABLE_SELECTIVE"></property>
 	</bean>
-
+	
+	<jpa:repositories base-package="com.hjcr.wechat.dao"
+		entity-manager-factory-ref="entityManagerFactory" 
+		transaction-manager-ref="transactionManager"></jpa:repositories>
+	
+    <!-- 事务管理 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="dataSource" ref = "dataSource"></property>
 		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
 	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-	<jpa:repositories base-package="com.hjcr.wechat"
-		entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
+	
 
 
 

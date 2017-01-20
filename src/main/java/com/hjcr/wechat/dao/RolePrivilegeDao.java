@@ -1,11 +1,11 @@
-package com.hjcr.wechat.impl;
+package com.hjcr.wechat.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.RolePrivilege;
 
-public interface RolePrivilegeImpl extends JpaRepository<RolePrivilege, Integer>{
+public interface RolePrivilegeDao extends JpaRepository<RolePrivilege, Integer>{
 
 	/*
 	 * 查询某角色是否拥有某权限
