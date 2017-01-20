@@ -1,0 +1,19 @@
+{
+  "serviceResult": true,
+  "totalPage":2,
+  "currentPage":1,
+  "resultParm":  {
+    "recordList": [
+      {
+        "userId": 1,
+        "username": "kellan",
+        "money": "500",
+        "way": 1,
+        "createTime": "01/12/2016",
+        "realName":"宋文光",
+        "phone":"13413609014",
+        "number":"565626561534"
+      }
+    ]
+  }
+}

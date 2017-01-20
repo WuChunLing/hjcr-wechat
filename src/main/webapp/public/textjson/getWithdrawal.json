@@ -1,0 +1,39 @@
+{
+  "serviceResult": true,
+  "totalPage":8,
+  "currentPage":8,
+  "resultParm":  {
+    "recordList": [
+      {
+        "userId": 1,
+        "username": "kellan",
+        "money": "500",
+        "way": 1,
+        "createTime": "01/12/2016",
+        "realName":"宋文光",
+        "phone":"13413609014",
+        "number":"565626561534"
+      },
+      {
+        "userId": 2,
+        "username": "linda",
+        "money": "800",
+        "way": 2,
+        "createTime": "01/12/2016",
+        "realName":"琳达",
+        "phone":"13413609014",
+        "number":"565626561534"
+      },
+      {
+        "userId": 3,
+        "username": "panda",
+        "money": "300",
+        "way": 1,
+        "createTime": "01/12/2016",
+        "realName":"潘达",
+        "phone":"13413609014",
+        "number":"565626561534"
+      }
+    ]
+  }
+}

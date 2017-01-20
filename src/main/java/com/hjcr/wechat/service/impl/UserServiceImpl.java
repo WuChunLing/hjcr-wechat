@@ -1,6 +1,7 @@
 package com.hjcr.wechat.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +63,12 @@ public class UserServiceImpl implements UserService{
 
 	// 获取用户的一级代理
 	public List<User> getFirstAgent(int userid) {
-		return userDao.getFirstAgent(userid);
+		return userDao.getFirstChildrenAgent(userid);
 	}
 
 	// 获取用户的二级代理
-	public List<User> getSecondAgent(int userid) {
-		return userDao.getSecondAgent(userid);
+	public List<User> getSecondChildrenAgent(int userid) {
+		return userDao.getSecondChildrenAgent(userid);
 	}
 
 	// 获取用户的通过openid
@@ -78,6 +79,24 @@ public class UserServiceImpl implements UserService{
 	public String getOpenidbyuser(String userId) {
 		int Userid = Integer.parseInt(userId);
 		return userDao.getOpenidbyuser(Userid);
+	}
+	
+	public List<User> getfAllUser(int userid){
+		User user=userDao.findOne(userid);
+		String hierarchy = user.getUserHierarchy();
+		if(!hierarchy.equals(null)){
+		String[] st = hierarchy.split("/"); // 获取层级关系
+		List<User> list=new ArrayList<User>();
+		
+		int userfirstid=Integer.valueOf(st[1]);
+		list.add(userDao.findOne(userfirstid));
+		if(st.length>2){
+			int usersecondid=Integer.valueOf(st[2]);
+			list.add(userDao.findOne(usersecondid));
+		}
+		return list;
+		}
+		return null;
 	}
 
 	public String getUserInfortation(String openid) {

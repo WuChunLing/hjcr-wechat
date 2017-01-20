@@ -54,7 +54,9 @@ public class AllocationHandler {
 		try {
 			double orderMoneyFirst = (double) map.get("orderMoneyFirst");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
-			double orderMoneySecond=1-orderMoneyFirst;
+			double orderMoneySecond=1.00000-orderMoneyFirst;
+			System.out.println(orderMoneyFirst);
+			System.out.println(orderMoneySecond);
 			Allocation allocation=allocationService.getAllocation();
 			allocation.setOrderMoneyFirst(orderMoneyFirst);
 			allocation.setOrderMoneySecond(orderMoneySecond);
@@ -72,9 +74,9 @@ public class AllocationHandler {
 		ResultMessage result = new ResultMessage();
 		try {
 			System.out.println("ffff");
-			float orderMoneySecond = (float) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
+			double orderMoneySecond = (float) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
-			float orderMoneyFirst=1-orderMoneySecond;
+			double orderMoneyFirst=1-orderMoneySecond;
 			Allocation allocation=allocationService.getAllocation();
 			allocation.setOrderMoneyFirst(orderMoneyFirst);
 			allocation.setOrderMoneySecond(orderMoneySecond);

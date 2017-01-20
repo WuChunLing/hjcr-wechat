@@ -41,7 +41,7 @@ var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用
 //修改个人登录密码的接口
 var updatePwdURL = preURL_project + 'system/updatePassword';
 // 退出登录
-var loginOutURL = preURL_project + 'system/loginOut';
+var loginOutURL = preURL_post + 'loginOut';
 
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -254,15 +254,16 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 	$scope.submitTemplate = function(){
 		$scope.template.templateName=$("#templateName").val();
 		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
+		$scope.template.templateConfirm=($scope.select==true?1:0);
 		var offset = $('.templateImg').offset();
 		var offsetQ = $('#qrcodeImg').offset();
 		var offsetT = $('#toux').offset();
 		// 二维码的 top 和 left 偏移比例
-		template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
-		template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
+		$scope.template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
+		$scope.template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
 		// 头像的 top 和 left 偏移比例
-		template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
-		template.templateHeadImgWide = (offsetT.left-offset.left)/450;
+		$scope.template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
+		$scope.template.templateHeadImgWide = (offsetT.left-offset.left)/450;
 		$http.post(updateQrcodeURL,$scope.template)
 		.success(function(response){
 			auth(response);
@@ -620,6 +621,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getUserURL)
 		.success(function(response){
 			auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
 			$scope.users=response.resultParm.userList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -628,6 +630,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getRoleURL)
 		.success(function(response){
 			auth(response);
+			alertMes(response.resultInfo,'info','fa-check');
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -648,6 +651,7 @@ hjcr.controller('userCtrl',function($scope,$http){
   				auth(response);
 					$scope.users=response.resultParm.userList;
 				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -669,6 +673,7 @@ hjcr.controller('userCtrl',function($scope,$http){
   					auth(response);
 						$scope.users=response.resultParm.userList;
 					}).error(function(){
+						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
@@ -703,6 +708,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.getPageBill = function(num){
 		if((num!=$scope.currentNum) && (num===1 || (num>1&&num<=$scope.bills.totalPage))){
 			$scope.currentNum = num;
+			console.log(num);
 			$http.post(getBillURL,{page:num})
 				.success(function(response){
 					$scope.bills=response;
