@@ -1,0 +1,9 @@
+{
+  "serviceResult": true,
+  "resultParm": {
+    "recordMoney":
+      {
+        "money":888
+      }
+  }
+}

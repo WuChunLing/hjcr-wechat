@@ -707,6 +707,7 @@
         _longDateFormat : {
             LT : "h:mm A",
             L : "MM/DD/YYYY",
+            // L : "MM/DD/YYYY-MM-DD",
             LL : "MMMM D YYYY",
             LLL : "MMMM D YYYY LT",
             LLLL : "dddd, MMMM D YYYY LT"

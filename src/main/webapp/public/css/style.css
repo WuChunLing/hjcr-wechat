@@ -23,3 +23,14 @@
 .noshow{
   display: none;
 }
+#logout{
+  float:right;
+  line-height: 45px;
+  margin-right: 12px;
+  cursor:pointer;
+  text-decoration: none;
+  color: #fff;
+}
+#logout:hover{
+  font-size: 16px;
+}
