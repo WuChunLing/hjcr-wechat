@@ -17,13 +17,14 @@ public class User {
 
 	
 	private int userId;
-	private String headImgUrl;
-	private String userName;
-	private String userOpenid;
-	private String userHierarchy;
-	private Integer userForeignkey;
-	private String userMobiphone;
-	private String UnionID;
+	private String headImgUrl;  //微信头像url
+	private String userName;   //微信名
+	private String userOpenid;   //微信用户在公众号的id
+	private String userHierarchy;  //微信用户的祖辈关系
+	private Integer userForeignkey; //app用户id
+	private String userMobiphone;  //手机
+	private String UnionID;   //微信用户在公众号与app上的共同id
+	private Float balance;  //用户余额
 	
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -76,6 +77,13 @@ public class User {
 	public void setUnionID(String unionID) {
 		UnionID = unionID;
 	}
+	public Float getBalance() {
+		return balance;
+	}
+	public void setBalance(Float balance) {
+		this.balance = balance;
+	}
+	
 	public User(int userId, String headImgUrl, String userName, String userOpenid, String userHierarchy,
 			Integer userForeignkey, String userMobiphone) {
 		super();
@@ -99,10 +107,10 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", headImgUrl=" + headImgUrl + ", userName=" + userName + ", userOpenid="
-				+ userOpenid + ", userHierarchy=" + userHierarchy + ", userForeignkey=" + userForeignkey
-				+ ", userMobiphone=" + userMobiphone + "]";
+		return "User [userId=" + userId + ", headImgUrl=" + headImgUrl
+				+ ", userName=" + userName + ", userOpenid=" + userOpenid
+				+ ", userHierarchy=" + userHierarchy + ", userForeignkey="
+				+ userForeignkey + ", userMobiphone=" + userMobiphone
+				+ ", UnionID=" + UnionID + ", balance=" + balance + "]";
 	}
-	
-	
 }

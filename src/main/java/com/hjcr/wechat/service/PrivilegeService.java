@@ -14,10 +14,21 @@ public class PrivilegeService {
 	@Autowired
 	private PrivilegeImpl privilegeImpl;
 
+	/**
+	 * 获取所有权限列表.
+	 * @author Kellan
+	 * @return
+	 */
 	public List<Privilege> getAllPrivilege() {
 		return privilegeImpl.findAll();
 	}
 
+	/**
+	 * 获取某角色所拥有的权限列表.
+	 * @author Kellan
+	 * @param roleId
+	 * @return
+	 */
 	public List<Privilege> getPrivilegeByRoleId(Integer roleId) {
 		return privilegeImpl.getPrivilegeByRoleId(roleId);
 	}
