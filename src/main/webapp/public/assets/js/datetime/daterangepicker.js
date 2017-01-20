@@ -119,8 +119,8 @@
             this.applyClass = 'btn-blue';
             this.cancelClass = 'btn-default';
 
-            this.format = 'MM/DD/YYYY';
-            this.separator = ' - ';
+            this.format = 'YYYY-MM-DD';
+            this.separator = ' 至 ';
 
             this.locale = {
                 applyLabel: 'Apply',
@@ -461,7 +461,7 @@
                     left: this.parentEl.offset().left - this.parentEl.scrollLeft()
                 };
             }
-            
+
             if (this.opens == 'left') {
                 this.container.css({
                     top: this.element.offset().top + this.element.outerHeight() - parentOffset.top,

@@ -1,0 +1,119 @@
+<div ng-controller="recordManageCtrl">
+  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+      <div class="databox radius-bordered databox-shadowed databox-graded">
+          <div class="databox-left bg-orange">
+              <div class="databox-piechart">
+                  <span class="white font-200"><i class="fa fa-jpy"></i></span>
+              </div>
+          </div>
+          <div class="databox-right">
+              <span class="databox-number orange">{{money.finish}}</span>
+              <div class="databox-text darkgray">总提现金额</div>
+              <div class="databox-stat orange radius-bordered">
+                  <i class="stat-icon icon-lg fa fa-tasks"></i>
+              </div>
+          </div>
+
+      </div>
+  </div>
+  <div class="col-xs-12 col-md-12">
+      <div class="widget">
+          <div class="widget-header  with-footer">
+              <span class="widget-caption">已完成的提现记录表</span>
+              <span ng-click="" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+          </div>
+
+          <div class="widget-body" style="height: auto;">
+
+            <div class="flip-scroll">
+              <!-- <div class="form-group" style="width:240px;float:right;">
+                  <span class="input-icon">
+                      <input type="text" ng-model="checkrecordId" class="form-control input" placeholder="按用户名查询提现记录">
+                      <i ng-click="" class="glyphicon glyphicon-search blue"></i>
+                  </span>
+              </div> -->
+              <div class="form-group" style="width:250px;float:left;">
+                  <div class="controls">
+                      <div class="input-group">
+                          <span ng-click="checkByDate(2)" class="input-group-addon">
+                              <i class="fa fa-calendar" ng-click=""></i>
+                          </span>
+                          <input type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
+                      </div>
+
+                  </div>
+              </div>
+                  <table class="table table-bordered table-striped table-condensed flip-content">
+                      <thead class="flip-content bordered-palegreen">
+                          <tr>
+                              <th>
+                                  序号
+                              </th>
+                              <th>
+                                  用户
+                              </th>
+                              <th>
+                                  提现金额（元）
+                              </th>
+                              <th class="numeric">
+                                  提现方式
+                              </th>
+                              <th class="numeric">
+                                  提现号码
+                              </th>
+                              <th class="numeric">
+                                  真实姓名
+                              </th>
+                              <th class="numeric">
+                                  手机号码
+                              </th>
+                              <th class="numeric">
+                                  时间
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="record in record.finish">
+                            <td>
+                                {{(currentPage[1]-1)*15+$index+1}}
+                            </td>
+                            <td>
+                              <a ui-sref="myWithdrawal" ng-click="checkMyWithdrawal(record.userId)">{{record.username}}</a>
+                            </td>
+                            <td>
+                                {{record.money}}
+                            </td>
+                            <td class="numeric">
+                                {{record.way==1?'银行卡':'支付宝'}}
+                            </td>
+                            <td class="numeric">
+                              {{record.number}}
+                            </td>
+                            <td class="numeric">
+                              {{record.realName}}
+                            </td>
+                            <td class="numeric">
+                              {{record.phone}}
+                            </td>
+                            <td class="numeric">
+                              {{record.createTime}}
+                            </td>
+                        </tr>
+                      </tbody>
+                  </table>
+            </div>
+            <ul class="pagination" style="margin-top:20px;">
+                <li ng-click="getPage(currentPage[1]-1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPage(page,2)" ng-show="totalPage[1]>1" ng-repeat="page in pageArr[1]" ng-class="currentPage[1]===page?'active':''">
+                  <a>{{page}}</a>
+                </li>
+                <li ng-click="getPage(currentPage[1]+1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
+            </ul>
+          </div>
+      </div>
+  </div>
+</div>
+<script>
+//--Bootstrap Date Range Picker--
+      $('#reservation').daterangepicker();
+</script>

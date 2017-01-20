@@ -1,0 +1,110 @@
+<div ng-controller="myRecordCtrl">
+  <div class="myMessage" style="margin-left:15px;">
+    <div class="databox databox-sm databox-halved databox-shadowed databox-vertical no-margin-bottom" style="width:425px;">
+      <div class="bg-white padding-10" style="height:100%;width:297px;float:left">
+          <div class="col-lg-4 col-sm-4 col-xs-4">
+              <img src="{{user.userPortrait}}" style="width:75px; height:75px;" class="image-circular bordered-3 bordered-palegreen">
+          </div>
+          <div class="col-lg-8 col-sm-8 col-xs-8 text-align-left padding-10">
+            <span class="databox-header carbon no-margin">{{user.userName}}</span>
+            <span class="databox-text lightcarbon no-margin">手机号码：{{user.userMobiphone}}</span>
+          </div>
+      </div>
+      <div class="no-padding text-align-center bordered-left bordered-platinum" style="float:left;height:100%;width:127px;">
+        <div style="vertical-align:middle;margin-top:26px">
+          <span class="databox-number lightcarbon no-margin pink">￥{{user.userMoney}}</span>
+          <span class="databox-text sonic-silver  no-margin">总提现金额</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-md-12" style="margin-top:12px;">
+      <div class="widget">
+          <div class="widget-header  with-footer">
+              <span class="widget-caption">个人提现记录表</span>
+              <span ng-click="" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+          </div>
+
+          <div class="widget-body" style="height: auto;">
+
+            <div class="flip-scroll">
+                  <table class="table table-bordered table-striped table-condensed flip-content">
+                      <thead class="flip-content bordered-palegreen">
+                          <tr>
+                              <th>
+                                  序号
+                              </th>
+                              <th>
+                                  用户
+                              </th>
+                              <th>
+                                  提现金额（元）
+                              </th>
+                              <th class="numeric">
+                                  提现方式
+                              </th>
+                              <th class="numeric">
+                                  提现号码
+                              </th>
+                              <th class="numeric">
+                                  真实姓名
+                              </th>
+                              <th class="numeric">
+                                  手机号码
+                              </th>
+                              <th class="numeric">
+                                  时间
+                              </th>
+                              <th class="numeric">
+                                  状态
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="record in record.finish">
+                            <td>
+                                {{(currentPage[2]-1)*15+$index+1}}
+                            </td>
+                            <td>
+                              {{record.username}}
+                            </td>
+                            <td>
+                                {{record.money}}
+                            </td>
+                            <td class="numeric">
+                                {{record.way==1?'银行卡':'支付宝'}}
+                            </td>
+                            <td class="numeric">
+                              {{record.number}}
+                            </td>
+                            <td class="numeric">
+                              {{record.realName}}
+                            </td>
+                            <td class="numeric">
+                              {{record.phone}}
+                            </td>
+                            <td class="numeric">
+                              {{record.createTime}}
+                            </td>
+                            <td class="numeric">
+                              {{record.createTime}}
+                            </td>
+                        </tr>
+                      </tbody>
+                  </table>
+            </div>
+            <ul class="pagination" style="margin-top:20px;">
+                <li ng-click="getPage(currentPage[2]-1,2)" ng-show="totalPage[2]>1" ng-class="currentPage[2]===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPage(page,2)" ng-show="totalPage[2]>1" ng-repeat="page in pageArr[2]" ng-class="currentPage[2]===page?'active':''">
+                  <a>{{page}}</a>
+                </li>
+                <li ng-click="getPage(currentPage[2]+1,2)" ng-show="totalPage[2]>1" ng-class="currentPage[2]===totalPage[2]?'disabled':''"><a>»</a></li>
+            </ul>
+          </div>
+      </div>
+  </div>
+</div>
+<script>
+//--Bootstrap Date Range Picker--
+      $('#reservation').daterangepicker();
+</script>

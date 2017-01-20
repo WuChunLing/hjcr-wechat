@@ -39,6 +39,19 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 	}).state("myBill",{
 		url:"/myBill",
 		templateUrl: "html/myBill.html",
+	//提现管理
+	}).state("withdrawalFinish",{
+		url:"/withdrawalFinish",
+		templateUrl: "html/withdrawalFinish.html",
+	}).state("withdrawalWait",{
+		url:"/withdrawalWait",
+		templateUrl: "html/withdrawalWait.html",
+	}).state("withdrawalReject",{
+		url:"/withdrawalReject",
+		templateUrl: "html/withdrawalReject.html",
+	}).state("myWithdrawal",{
+		url:"/myWithdrawal",
+		templateUrl: "html/myWithdrawal.html",
  //分润管理
 	}).state("profitManage",{
 		url:"/profitManage",
