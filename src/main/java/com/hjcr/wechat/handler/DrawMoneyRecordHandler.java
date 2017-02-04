@@ -33,6 +33,8 @@ public class DrawMoneyRecordHandler {
 	@Autowired
 	private DrawMoneyRecordService drawMoneyRecordService;
 	
+
+	
 	private final Logger log = LoggerFactory.getLogger(DrawMoneyRecordHandler.class);
 
 	/**
@@ -64,6 +66,22 @@ public class DrawMoneyRecordHandler {
 		Pageable pageable = new PageRequest(currentPage, size, sort);
 		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByUserId(pageable,userId);
 		result.getResultParm().put("list", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 获取各个状态的总额度.
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getStatusTotal", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getStatusTotal() {
+		log.info("获取各个状态的总额度");
+		ResultMessage result = new ResultMessage();
+		Map<String, Object> total = drawMoneyRecordService.getStatusTotal();
+		result.getResultParm().put("apply",total.get("apply"));
+		result.getResultParm().put("success",total.get("success"));
+		result.getResultParm().put("reject",total.get("reject"));
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

@@ -1,5 +1,8 @@
 package com.hjcr.wechat.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,6 +30,14 @@ public interface DrawMoneyRecordService {
 	 */
 	public boolean update(Integer id, Integer status);
 
+	/*
+	 * 根据用户id获取用户的个人提现账单
+	 */
 	public Page<DrawMoneyRecord> getByUserId(Pageable pageable, Integer userId);
+
+	/*
+	 * 获取各个状态的总额度.
+	 */
+	public Map<String,Object> getStatusTotal();
 
 }

@@ -1,6 +1,8 @@
 package com.hjcr.wechat.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,11 +89,29 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		} 
 		record.setStatus(status);
 		DrawMoneyRecord flush = drawMoneyRecordDao.saveAndFlush(record);
-		return flush.getId() == null ? false:true;
+		
+		if (flush.getId() == null)
+			throw new SecurityException("更新失败");
+		else
+			return true;
+	}
+	
+	/*
+	 * 获取各个状态的总额度.
+	 */
+	public Map<String, Object> getStatusTotal() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		Double apply = drawMoneyRecordDao.getApplyTotal();
+		Double success = drawMoneyRecordDao.getSuccessTotal();
+		Double reject = drawMoneyRecordDao.getRejectTotal();
+		map.put("apply",apply);
+		map.put("success",success);
+		map.put("reject",reject);
+		return map;
 	}
 
 	/*
-	 * 给返回结果套上user和提现方式的信息
+	 * 给返回结果套上用户user和提现方式way的信息
 	 */
 	private List<DrawMoneyRecord> setUserAndWay(List<DrawMoneyRecord> list) {
 		if (list.size() != 0) {
@@ -134,4 +154,6 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		}
 		
 	}
+
+	
 }
