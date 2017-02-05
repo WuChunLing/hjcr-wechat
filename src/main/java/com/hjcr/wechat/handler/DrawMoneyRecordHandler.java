@@ -1,7 +1,5 @@
 package com.hjcr.wechat.handler;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.hjcr.wechat.entity.DrawMoneyRecord;
+import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.service.DrawMoneyRecordService;
+import com.hjcr.wechat.service.UserService;
 import com.hjcr.wechat.tools.ResultMessage;
 
 /*
@@ -32,6 +32,9 @@ public class DrawMoneyRecordHandler {
 	
 	@Autowired
 	private DrawMoneyRecordService drawMoneyRecordService;
+	
+	@Autowired
+	private UserService userService;
 	
 
 	
@@ -53,13 +56,15 @@ public class DrawMoneyRecordHandler {
 		return new ResponseEntity<Page<DrawMoneyRecord>>(list, HttpStatus.OK);
 	}
 	
+	
+	
 	/**
 	 * 获取用户自身提现账单.
 	 * @author Kellan
 	 * @return
 	 */
 	@RequestMapping(value = "/getByUserId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getAll(Integer userId, Integer currentPage, Integer size) {
+	public ResponseEntity<ResultMessage> getByUserId(Integer userId, Integer currentPage, Integer size) {
 		log.info("获取用户自身提现账单");
 		ResultMessage result = new ResultMessage();
 		Sort sort = new Sort(Direction.DESC, "creatTime");
@@ -70,18 +75,51 @@ public class DrawMoneyRecordHandler {
 	}
 	
 	/**
+	 * 获取用户信息与提现总金额.
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getUserInfo(Integer userId) {
+		log.info("获取用户信息与提现总金额.");
+		ResultMessage result = new ResultMessage();
+		Double total = drawMoneyRecordService.getUserTotal(userId);
+		User user = userService.findOne(userId);
+		result.getResultParm().put("user", user);
+		result.getResultParm().put("total", total);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 根据状态获取提现账单.
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getByStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getByStatus(Integer status, Integer currentPage, Integer size, String startDate, String endDate) {
+		log.info("获取用户自身提现账单");
+		ResultMessage result = new ResultMessage();
+		Sort sort = new Sort(Direction.DESC, "creatTime");
+		Pageable pageable = new PageRequest(currentPage, size, sort);
+		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByStatus(pageable,status,startDate,endDate);
+		result.getResultParm().put("list", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
 	 * 获取各个状态的总额度.
 	 * @author Kellan
 	 * @return
 	 */
 	@RequestMapping(value = "/getStatusTotal", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getStatusTotal() {
+	public ResponseEntity<ResultMessage> getStatusTotal(Integer status, String startDate, String endDate) {
 		log.info("获取各个状态的总额度");
 		ResultMessage result = new ResultMessage();
-		Map<String, Object> total = drawMoneyRecordService.getStatusTotal();
-		result.getResultParm().put("apply",total.get("apply"));
-		result.getResultParm().put("success",total.get("success"));
-		result.getResultParm().put("reject",total.get("reject"));
+		if (status == null) {
+			throw new SecurityException("数据有误");
+		}
+		Double total = drawMoneyRecordService.getStatusTotal(status,startDate,endDate);
+		result.getResultParm().put("total",total);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
