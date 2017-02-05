@@ -1,5 +1,6 @@
 package com.hjcr.wechat.handler;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +55,11 @@ public class AllocationHandler {
 		try {
 			double orderMoneyFirst = (double) map.get("orderMoneyFirst");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
-			double orderMoneySecond=1.00000-orderMoneyFirst;
+			
+			BigDecimal bd1 = new BigDecimal(Double.toString(orderMoneyFirst)); 
+			BigDecimal bd2 = new BigDecimal(Double.toString(1)); 
 			System.out.println(orderMoneyFirst);
+			double orderMoneySecond=bd2.subtract(bd1).doubleValue(); 
 			System.out.println(orderMoneySecond);
 			Allocation allocation=allocationService.getAllocation();
 			allocation.setOrderMoneyFirst(orderMoneyFirst);
@@ -74,7 +78,7 @@ public class AllocationHandler {
 		ResultMessage result = new ResultMessage();
 		try {
 			System.out.println("ffff");
-			double orderMoneySecond = (float) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
+			double orderMoneySecond = (double) map.get("orderMoneySecond");  //从map中获取orderMoneyId转化成int
 			//allocationService.updataAllocation(allocation); // 更新分润信息
 			double orderMoneyFirst=1-orderMoneySecond;
 			Allocation allocation=allocationService.getAllocation();

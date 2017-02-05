@@ -34,7 +34,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import net.sf.json.JSONObject;
 
 @Service("qRcodeServiceImpl")
-public class QRcodeServiceImpl implements QRcodeService{
+public class QRcodeServiceImpl implements QRcodeService {
 
 	@Autowired
 	private TemplateDao templateDao;
@@ -53,7 +53,7 @@ public class QRcodeServiceImpl implements QRcodeService{
 	 *
 	 * @author 知鹏
 	 */
-	public void QRcodecreat(String openid,String path) throws IOException, WxErrorException {
+	public void QRcodecreat(String openid, String path) throws IOException, WxErrorException {
 
 		try {
 			WxMpInMemoryConfigStorage config = new propFactory().WxMpInMemoryConfigStorageFactory();
@@ -80,7 +80,7 @@ public class QRcodeServiceImpl implements QRcodeService{
 			Template template = templateDao.getTemplatebyConfirm(1);
 
 			// 拼接图片
-			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file,path);
+			InputStream image = new photoJoin().photoJoinImage(template, HeadImgUrl, file, path);
 			// 上传图片
 			WxMediaUploadResult res = wxService.mediaUpload("image", "jpg", image);
 			// 发送二维码图片
@@ -318,10 +318,10 @@ public class QRcodeServiceImpl implements QRcodeService{
 		// 获取模板信息
 		Template template = templateDao.getTemplatebyConfirm(1);
 
-		String RealPath=request.getSession().getServletContext().getRealPath("");
+		String RealPath = request.getSession().getServletContext().getRealPath("");
 
 		// 拼接图片
-		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file,RealPath);
+		InputStream in = new photoJoin().photoJoinImage(template, user.getHeadImgUrl(), file, RealPath);
 		// 保存文件
 		String path = request.getSession().getServletContext().getRealPath("/");
 		File imagePath = new File(path + "qrcodeimage");

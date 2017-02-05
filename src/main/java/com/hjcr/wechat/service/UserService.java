@@ -24,6 +24,6 @@ public interface UserService {
 	/*
 	 *获取一二级代理
 	 */
-	public List<User> getfAllUser(int userid);
+	public List<User> getAllfirstUser(int userid);
 	
 }

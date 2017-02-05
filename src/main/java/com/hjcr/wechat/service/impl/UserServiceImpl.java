@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService{
 		return userDao.getOpenidbyuser(Userid);
 	}
 	
-	public List<User> getfAllUser(int userid){
+	public List<User> getAllfirstUser(int userid){
 		User user=userDao.findOne(userid);
 		String hierarchy = user.getUserHierarchy();
 		if(!hierarchy.equals(null)){

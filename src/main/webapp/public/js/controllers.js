@@ -41,7 +41,7 @@ var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用
 //修改个人登录密码的接口
 var updatePwdURL = preURL_project + 'system/updatePassword';
 // 退出登录
-var loginOutURL = preURL_post + 'loginOut';
+var loginOutURL = preURL_project + 'loginOut';
 
 // 账单管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -257,7 +257,7 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 		$scope.template.templateConfirm=($scope.select==true?1:0);
 		var offset = $('.templateImg').offset();
 		var offsetQ = $('#qrcodeImg').offset();
-		var offsetT = $('#toux').offset();
+		var offsetT = $('#touxImg').offset();
 		// 二维码的 top 和 left 偏移比例
 		$scope.template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
 		$scope.template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
