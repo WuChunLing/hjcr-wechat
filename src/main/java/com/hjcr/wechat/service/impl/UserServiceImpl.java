@@ -118,4 +118,9 @@ public class UserServiceImpl implements UserService{
 		}
 		return "success";
 	}
+
+	@Override
+	public User findOne(Integer userId) {
+		return userDao.findOne(userId);
+	}
 }

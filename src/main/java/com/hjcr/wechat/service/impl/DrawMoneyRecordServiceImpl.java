@@ -162,4 +162,9 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 
 	}
 
+	//获取用户提现总金额
+	public Double getUserTotal(Integer userId) {
+		return drawMoneyRecordDao.getUserTotal(userId,2);
+	}
+
 }

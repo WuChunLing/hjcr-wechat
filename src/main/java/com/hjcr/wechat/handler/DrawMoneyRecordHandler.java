@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.hjcr.wechat.entity.DrawMoneyRecord;
+import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.service.DrawMoneyRecordService;
+import com.hjcr.wechat.service.UserService;
 import com.hjcr.wechat.tools.ResultMessage;
 
 /*
@@ -30,6 +32,9 @@ public class DrawMoneyRecordHandler {
 	
 	@Autowired
 	private DrawMoneyRecordService drawMoneyRecordService;
+	
+	@Autowired
+	private UserService userService;
 	
 
 	
@@ -66,6 +71,22 @@ public class DrawMoneyRecordHandler {
 		Pageable pageable = new PageRequest(currentPage, size, sort);
 		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByUserId(pageable,userId);
 		result.getResultParm().put("list", list);
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 获取用户信息与提现总金额.
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserInfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getUserInfo(Integer userId) {
+		log.info("获取用户信息与提现总金额.");
+		ResultMessage result = new ResultMessage();
+		Double total = drawMoneyRecordService.getUserTotal(userId);
+		User user = userService.findOne(userId);
+		result.getResultParm().put("user", user);
+		result.getResultParm().put("total", total);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

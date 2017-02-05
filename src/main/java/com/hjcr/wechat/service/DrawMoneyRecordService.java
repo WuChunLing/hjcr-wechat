@@ -26,6 +26,11 @@ public interface DrawMoneyRecordService {
 	 * 更新状态
 	 */
 	public boolean update(Integer id, Integer status);
+	
+	/*
+	 * 获取用户提现总额
+	 */
+	public Double getUserTotal(Integer userId);
 
 	/*
 	 * 根据用户id获取用户的个人提现账单
@@ -41,5 +46,7 @@ public interface DrawMoneyRecordService {
 	 * 根据状态获取提现记录
 	 */
 	public Page<DrawMoneyRecord> getByStatus(Pageable pageable, Integer status, String startDate, String endDate);
+
+	
 
 }

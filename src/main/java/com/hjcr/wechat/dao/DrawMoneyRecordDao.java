@@ -31,6 +31,10 @@ public interface DrawMoneyRecordDao
 	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = ?1 and r.creatTime >= ?2 and r.creatTime <= ?3")
 	Double getSumByStatus(Integer status, String startDate, String endDate);
 
+	//获取用户提现总金额
+	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.userId=?1 and r.status = ?2")
+	Double getUserTotal(Integer userId, int stauts);
+
 	
 
 }

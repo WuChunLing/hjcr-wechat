@@ -25,5 +25,10 @@ public interface UserService {
 	 *获取一二级代理
 	 */
 	public List<User> getfAllUser(int userid);
+
+	/*
+	 * 根据id获取用户信息.
+	 */
+	public User findOne(Integer userId);
 	
 }
