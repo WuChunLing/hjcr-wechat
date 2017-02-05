@@ -1,0 +1,16 @@
+{
+  "serviceResult": true,
+  "resultParm": {
+    "total": 222,
+    "user": {
+      "userId": 21,
+      "headImgUrl": "http://wx.qlogo.cn/mmopen/eHEMOF2hOemG7tCo9eEv4FZPDmj2ia0KqBmZkBfflXNiaIyGtp8I1alYQia0yIO67gXEmkdKwbmKmBOZzwptRcvWAygWPZ8RyKC/0",
+      "userName": "─=≡Σ( つ•̀ω•́)つ",
+      "userOpenid": "oUPl-wh3UehzmwaztIQzkvcuS3rE",
+      "userHierarchy": "/23",
+      "userForeignkey": 0,
+      "userMobiphone": "13413609014",
+      "balance": 200
+    }
+  }
+}

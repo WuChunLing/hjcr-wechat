@@ -43,7 +43,7 @@ var updatePwdURL = preURL_project + 'system/updatePassword';
 // 退出登录
 var loginOutURL = preURL_project + 'loginOut';
 
-// 账单管理的接口
+// 分润记账管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
 var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
 var getBillMoneyURL = preURL_project + 'getBillMoney.json'; //获取总订单 的金额信息
@@ -52,6 +52,22 @@ var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 �
 var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
 var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
 var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
+
+// 提现管理的接口   (4个接口)
+
+	// 按或者不按时间段查询  状态为 xx  的第n页  提现记录
+	// 按或者不按时间段查询  状态为 xx  的总金额信息
+	var getWithdrawalURL = preURL_project + 'getWithdrawal';
+	var getWithdrawalMoneyURL = preURL_project + 'getWithdrawalMoney';
+	// 对待审核的提现记录的操作
+	// 通过
+	var allowURL = preURL_project + 'allow';
+	// 拒绝
+	var rejectURL = preURL_project + 'reject';
+
+// 个人提现记录 的接口 (2个)
+var getMyWithdrawalURL = preURL_project + 'getMyWithdrawal'; //获取 用户为xx 的 第n页 提现记录
+var getMyInfoURL = preURL_project + 'getMyInfo'; //获取 用户为xx 的 用户信息
 
 
 
@@ -72,9 +88,9 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 		}else if($location.path() === "/rightsManage"){
 			$scope.tableTitle = "权限管理-权限管理";
 		}else if($location.path() === "/billManage"){
-			$scope.tableTitle = "账单管理";
+			$scope.tableTitle = "分润记账管理";
 		}else if($location.path() === "/myBill"){
-			$scope.tableTitle = "账单管理-个人账单";
+			$scope.tableTitle = "分润记账管理-个人账单";
 		}else if($location.path() === "/profitManage"){
 			$scope.tableTitle = "分润管理";
 		}else if($location.path() === "/dataStatistic"){
@@ -701,7 +717,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 });
 
 
-// 账单管理
+// 分润记账管理
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
 	// 获得第n页的订单信息  的方法
@@ -844,4 +860,263 @@ hjcr.controller('updatePwdCtrl',function($http,$scope){
 			});
 		}
 	}
+});
+
+// 提现管理的controller
+hjcr.controller('recordManageCtrl',function($scope,$http,$location){
+	// 提现记录
+	$scope.record = {
+		"wait":null,
+		"finish":null,
+		"reject":null
+	}
+	// 提现金额
+	$scope.money = {
+		"wait":null,
+		"finish":null
+		// "reject":null
+	}
+	// 总页数
+	$scope.totalPage = [1,1,1];
+	// 页码数组
+	$scope.pageArr = new Array(3);
+	for (var i = 0; i < 3; i++) {
+		$scope.pageArr[i] = new Array();
+	}
+	// 当前页数
+	$scope.currentPage = [0,0,0];
+
+  // 当前时间段，状态
+	$scope.startDate = null;
+	$scope.endDate = null;
+	$scope.status = 1;
+
+	$scope.showModal = false;
+
+	// 获取总金额信息
+	// 按时间段或者不按时间段 以及 按状态获取
+	$scope.getMoney = function(start,end,status){
+		$http.get(getWithdrawalMoneyURL,{
+				startDate:start,
+				endDate:end,
+				status:status
+			})
+			.success(function(response){
+				auth(response);
+				switch (status) {
+					case 1:$scope.money.wait=response.resultParm.total;break;
+					case 2:$scope.money.finish=response.resultParm.total;break;
+					case 3:$scope.money.reject=response.resultParm.total;break;
+				}
+			}).error(function(){
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+		});
+	}
+
+	// 获取记录信息
+	// 按时间段或者不按时间段  根据状态 获得第n页的提现记录
+	$scope.getPage = function(start,end,num,status){
+		if(num>=1 && num<=$scope.totalPage[status-1] ){
+			$http.get(getWithdrawalURL,{
+					startDate:start,
+					endDate:end,
+					currentPage:num-1,
+					status:status,
+					size:15
+				})
+				.success(function(response){
+					auth(response);
+					$scope.totalPage[status-1] = response.resultParm.totalPages;
+					$scope.currentPage[status-1] = response.resultParm.currentPage+1;
+					switch (status) {
+						case 1:$scope.record.wait=response.resultParm.list;break;
+						case 2:$scope.record.finish=response.resultParm.list;break;
+						case 3:$scope.record.reject=response.resultParm.list;break;
+						default:break;
+					}
+					for(var i=0;i<$scope.totalPage[status-1];i++){
+						$scope.pageArr[status-1][i] = i+1;
+					}
+				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
+		}
+	}
+
+	// 按时间段查询订单
+	$scope.checkByDate = function(status){
+		var date = $("#reservation").val();
+		if(date!='' && date!=null){
+			var dateArr = date.split(" 至 ");
+			$scope.startDate = dateArr[0];
+			$scope.endDate = dateArr[1];
+			$scope.status = status;
+			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+			$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
+		}
+	}
+	$scope.keyupDate = function(status){
+		if(window.event.keyCode == 13){
+			$scope.checkByDate(status);
+		}
+	}
+
+	// 查看某个用户的相关提现记录
+	$scope.checkMyWithdrawal = function(id){
+		sessionStorage.userIdWithdrawal = id;
+	}
+
+	// // 返回总订单表
+	// $scope.backTo = function(status){
+	// 	$scope.getMoney(null,null,data);
+	// 	$scope.getPage(null,null,status,data);
+	// }
+
+	if($location.path() === "/withdrawalWait"){$scope.status=1;$scope.startDate=null;$scope.endDate=null;}
+	if($location.path() === "/withdrawalFinish"){$scope.status=2;$scope.startDate=null;$scope.endDate=null;}
+	if($location.path() === "/withdrawalReject"){$scope.status=3;$scope.startDate=null;$scope.endDate=null;}
+	$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+	$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
+
+	$scope.closeModel = function(){
+		$scope.showModal = !$scope.showModal;
+	}
+
+	// 通过提现申请
+	$scope.sure = function(name,money,id){
+		$scope.showModelTian = {
+			"id":id,
+			"name":name,
+			"money":money,
+			"status":true
+		}
+		$scope.showModal = !$scope.showModal;
+	}
+	// 拒绝提现申请
+	$scope.reject = function(name,money,id){
+		$scope.showModelTian = {
+			"id":id,
+			"name":name,
+			"money":money,
+			"status":false
+		}
+		$scope.showModal = !$scope.showModal;
+	}
+	//提现申请操作的  确认弹框
+	$scope.tixianModel = function(){
+		var url;
+		if($scope.showModelTian.status===true){
+			url = allowURL;
+		}
+		else {
+			url = rejectURL;
+		}
+		$http.post(url,
+			{
+				id:$scope.showModelTian.id
+			})
+			.success(function(response){
+				auth(response);
+				alertMes(response.data,'info','fa-info-circle');
+				$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+				$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage[$scope.status-1],$scope.status);
+				$scope.showModal = !$scope.showModal;
+			}).error(function(){
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+		});
+	}
+});
+
+
+// 个人提现的 controller
+hjcr.controller('myRecordCtrl',function($scope,$http){
+	$scope.records = {};
+	$scope.userInfo = {};
+	$scope.currentPage = 0;
+	$scope.totalPage = 1;
+	$scope.id = sessionStorage.userIdWithdrawal;
+	// 获得用户id为id 的 第n页的订单信息  的方法
+	$scope.getPage = function(num,id){
+		if(num>=1 && num<=$scope.totalPage ){
+			$http.get(getMyWithdrawalURL,{
+					currentPage:num-1,
+					userId:id,
+					size:15
+				}).success(function(response){
+	  				auth(response);
+						$scope.records = response.resultParm.list;
+						$scope.currentPage = response.resultParm.currentPage+1;
+						$scope.totalPage = response.resultParm.totalPages;
+						$scope.pageArr = new Array();
+						for(var i=0;i<response.resultParm.totalPages;i++){
+							$scope.pageArr[i] = i+1;
+						}
+					}).error(function(){
+						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
+		}
+	}
+	$scope.getMoney = function(){
+		// 获得个人信息
+		$http.get(getMyInfoURL,{userId:sessionStorage.userId})
+			.success(function(response){
+	  		auth(response);
+				$scope.user=response.resultParm;
+			}).error(function(){
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+		});
+	}
+
+	// 自动调用获取第一页订单信息
+	$scope.getPage(1,$scope.id);
+	$scope.getMoney();
+	$scope.showModal = false;
+	$scope.closeModel = function(){
+		$scope.showModal = !$scope.showModal;
+	}
+
+	// 通过提现申请
+	$scope.sure = function(name,money,id){
+		$scope.showModelTian = {
+			"id":id,
+			"name":name,
+			"money":money,
+			"status":true
+		}
+		$scope.showModal = !$scope.showModal;
+	}
+	// 拒绝提现申请
+	$scope.reject = function(name,money,id){
+		$scope.showModelTian = {
+			"id":id,
+			"name":name,
+			"money":money,
+			"status":false
+		}
+		$scope.showModal = !$scope.showModal;
+	}
+	//提现申请操作的  确认弹框
+	$scope.tixianModel = function(){
+		var url;
+		if($scope.showModelTian.status===true){
+			url = allowURL;
+		}
+		else {
+			url = rejectURL;
+		}
+		$http.post(url,
+			{
+				id:$scope.showModelTian.id
+			})
+			.success(function(response){
+				auth(response);
+				alertMes(response.data,'info','fa-info-circle');
+				$scope.getMoney();
+				$scope.getPage($scope.currentPage,$scope.id);
+				$scope.showModal = !$scope.showModal;
+			}).error(function(){
+				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+		});
+	}
+
 });

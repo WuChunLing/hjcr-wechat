@@ -1,0 +1,103 @@
+{
+  "serviceResult": true,
+  "resultParm": {
+    "totalPages": 3,
+    "currentPage": 0,
+    "list": [
+      {
+        "id": 92,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-20 16:28:18.0",
+        "status": 1,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 1,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
+      }
+      ,{
+        "id": 92,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-20 16:28:18.0",
+        "status": 1,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 1,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
+      },{
+        "id": 92,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-20 16:28:18.0",
+        "status": 2,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 2,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
+      },{
+        "id": 92,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-20 16:28:18.0",
+        "status": 3,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 1,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
+      }
+    ]
+  }
+}
