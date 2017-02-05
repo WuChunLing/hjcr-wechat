@@ -54,11 +54,14 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 	}
 
 	@Override
-	public Page<DrawMoneyRecord> getByStatus(Pageable pageable,
-			Integer status) {
-		Page<DrawMoneyRecord> page = drawMoneyRecordDao.findByStatus(pageable,
-				status);
-		setUserAndWay(page.getContent());
+	public Page<DrawMoneyRecord> getByStatus(Pageable pageable,Integer status, String startDate, String endDate) {
+		Page<DrawMoneyRecord> page = null;
+		if (startDate != null & endDate != null ) {
+			page = drawMoneyRecordDao.findByStatus(pageable,status,startDate,endDate);
+		} else {
+			page = drawMoneyRecordDao.findByStatus(pageable,status);
+		}
+		if (page!=null)setUserAndWay(page.getContent());
 		return page;
 	}
 

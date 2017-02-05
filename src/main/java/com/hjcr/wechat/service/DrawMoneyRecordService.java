@@ -40,6 +40,6 @@ public interface DrawMoneyRecordService {
 	/*
 	 * 根据状态获取提现记录
 	 */
-	public Page<DrawMoneyRecord> getByStatus(Pageable pageable, Integer status);
+	public Page<DrawMoneyRecord> getByStatus(Pageable pageable, Integer status, String startDate, String endDate);
 
 }

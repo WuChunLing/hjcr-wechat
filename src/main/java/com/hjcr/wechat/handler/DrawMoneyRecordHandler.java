@@ -1,7 +1,5 @@
 package com.hjcr.wechat.handler;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,12 +75,12 @@ public class DrawMoneyRecordHandler {
 	 * @return
 	 */
 	@RequestMapping(value = "/getByStatus", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getByStatus(Integer status, Integer currentPage, Integer size) {
+	public ResponseEntity<ResultMessage> getByStatus(Integer status, Integer currentPage, Integer size, String startDate, String endDate) {
 		log.info("获取用户自身提现账单");
 		ResultMessage result = new ResultMessage();
 		Sort sort = new Sort(Direction.DESC, "creatTime");
 		Pageable pageable = new PageRequest(currentPage, size, sort);
-		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByStatus(pageable,status);
+		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByStatus(pageable,status,startDate,endDate);
 		result.getResultParm().put("list", list);
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
