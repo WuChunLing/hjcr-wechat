@@ -38,7 +38,7 @@
                           <span ng-click="checkByDate(2)" class="input-group-addon">
                               <i class="fa fa-calendar" ng-click=""></i>
                           </span>
-                          <input type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
+                          <input ng-keyup="keyupDate(2)" type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
                       </div>
 
                   </div>
@@ -78,36 +78,36 @@
                                 {{(currentPage[1]-1)*15+$index+1}}
                             </td>
                             <td>
-                              <a ui-sref="myWithdrawal" ng-click="checkMyWithdrawal(record.userId)">{{record.username}}</a>
+                              <a ui-sref="myWithdrawal" ng-click="checkMyWithdrawal(record.userId)">{{record.user.userName}}</a>
                             </td>
                             <td>
                                 {{record.money}}
                             </td>
                             <td class="numeric">
-                                {{record.way==1?'银行卡':'支付宝'}}
+                                {{record.drawMoneyWay.way==1?'银行卡':'支付宝'}}
                             </td>
                             <td class="numeric">
-                              {{record.number}}
+                              {{record.drawMoneyWay.number}}
                             </td>
                             <td class="numeric">
-                              {{record.realName}}
+                              {{record.drawMoneyWay.realName}}
                             </td>
                             <td class="numeric">
-                              {{record.phone}}
+                              {{record.drawMoneyWay.phone}}
                             </td>
                             <td class="numeric">
-                              {{record.createTime}}
+                              {{record.creatTime}}
                             </td>
                         </tr>
                       </tbody>
                   </table>
             </div>
             <ul class="pagination" style="margin-top:20px;">
-                <li ng-click="getPage(currentPage[1]-1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===1?'disabled':''"><a>«</a></li>
-                <li ng-click="getPage(page,2)" ng-show="totalPage[1]>1" ng-repeat="page in pageArr[1]" ng-class="currentPage[1]===page?'active':''">
+                <li ng-click="getPage(startDate,endDate,currentPage[1]-1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPage(startDate,endDate,page,2)" ng-show="totalPage[1]>1" ng-repeat="page in pageArr[1]" ng-class="currentPage[1]===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="getPage(currentPage[1]+1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
+                <li ng-click="getPage(startDate,endDate,currentPage[1]+1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
             </ul>
           </div>
       </div>

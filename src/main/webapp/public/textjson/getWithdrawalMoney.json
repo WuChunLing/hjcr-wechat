@@ -1,9 +1,6 @@
 {
   "serviceResult": true,
   "resultParm": {
-    "recordMoney":
-      {
-        "money":1582406
-      }
+    "total": 50
   }
 }

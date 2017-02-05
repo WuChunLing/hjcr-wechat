@@ -32,7 +32,7 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 	}).state("updateQrcode",{
 		url:"/updateQrcode",
 		templateUrl: "html/updateQrcode.html",   //修改模板
-	//账单管理
+	//分润记账管理
 	}).state("billManage",{
 		url:"/billManage",
 		templateUrl: "html/billManage.html",
@@ -86,4 +86,30 @@ hjcr.config(function($stateProvider,$urlRouterProvider) {
 		url:"/welcome",
 		templateUrl:"html/welcome.html"
 	});
+});
+hjcr.filter("showStatus",function(){
+	return function(inputArray){
+		var status = "";
+		if(inputArray === 1){
+			status ="待审核";
+		}else if(inputArray === 2){
+			status = "已完成";
+		}else if(inputArray === 3){
+			status = "已驳回";
+		}
+		return status;
+	}
+});
+hjcr.filter("showStatusClass",function(){
+	return function(inputArray){
+		var status = "";
+		if(inputArray === 1){
+			status ="warning";
+		}else if(inputArray === 2){
+			status = "success";
+		}else if(inputArray === 3){
+			status = "danger";
+		}
+		return status;
+	}
 });

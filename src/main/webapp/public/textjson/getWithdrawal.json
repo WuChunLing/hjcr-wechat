@@ -1,39 +1,57 @@
 {
   "serviceResult": true,
-  "totalPage":8,
-  "currentPage":8,
-  "resultParm":  {
-    "recordList": [
+  "resultParm": {
+    "totalPages":3,
+    "list": [
       {
-        "userId": 1,
-        "username": "kellan",
-        "money": "500",
-        "way": 1,
-        "createTime": "01/12/2016",
-        "realName":"宋文光",
-        "phone":"13413609014",
-        "number":"565626561534"
+        "id": 92,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-20 16:28:18.0",
+        "status": 1,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 1,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
       },
       {
-        "userId": 2,
-        "username": "linda",
-        "money": "800",
-        "way": 2,
-        "createTime": "01/12/2016",
-        "realName":"琳达",
-        "phone":"13413609014",
-        "number":"565626561534"
-      },
-      {
-        "userId": 3,
-        "username": "panda",
-        "money": "300",
-        "way": 1,
-        "createTime": "01/12/2016",
-        "realName":"潘达",
-        "phone":"13413609014",
-        "number":"565626561534"
+        "id": 91,
+        "userId": 21,
+        "wayId": 1,
+        "money": 50,
+        "creatTime": "2017-01-19 19:31:58.0",
+        "status": 1,
+        "drawMoneyWay": {
+          "id": 1,
+          "userId": 21,
+          "realName": "kellan",
+          "phone": "18320489492",
+          "way": 1,
+          "number": "18320489492",
+          "defaultWay": true
+        },
+        "user": {
+          "userId": 21,
+          "userName": "─=≡Σ( つ•̀ω•́)つ",
+          "userForeignkey": 0,
+          "userMobiphone": "1111",
+          "balance": 200
+        }
       }
-    ]
+    ],
+    "currentPage": 0
   }
 }
