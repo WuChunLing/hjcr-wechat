@@ -46,14 +46,16 @@ public class DrawMoneyRecordHandler {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Page<DrawMoneyRecord>> getAll(Integer currentPage, Integer size) {
+	public ResponseEntity<ResultMessage> getAll(Integer currentPage, Integer size) {
 		log.info("获取所有提现记录");
 		ResultMessage result = new ResultMessage();
 		Sort sort = new Sort(Direction.DESC,"creatTime");
 		Pageable pageable = new PageRequest(currentPage,size,sort);
-		Page<DrawMoneyRecord> list = drawMoneyRecordService.getAll(pageable);
-		result.getResultParm().put("list", list);
-		return new ResponseEntity<Page<DrawMoneyRecord>>(list, HttpStatus.OK);
+		Page<DrawMoneyRecord> page = drawMoneyRecordService.getAll(pageable);
+		result.getResultParm().put("list", page.getContent());
+		result.getResultParm().put("totalPages", page.getTotalPages());
+		result.getResultParm().put("currentPage", page.getNumber());
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
 	
@@ -70,7 +72,9 @@ public class DrawMoneyRecordHandler {
 		Sort sort = new Sort(Direction.DESC, "creatTime");
 		Pageable pageable = new PageRequest(currentPage, size, sort);
 		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByUserId(pageable,userId);
-		result.getResultParm().put("list", list);
+		result.getResultParm().put("list", list.getContent());
+		result.getResultParm().put("totalPages", list.getTotalPages());
+		result.getResultParm().put("currentPage", list.getNumber());
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
@@ -101,8 +105,10 @@ public class DrawMoneyRecordHandler {
 		ResultMessage result = new ResultMessage();
 		Sort sort = new Sort(Direction.DESC, "creatTime");
 		Pageable pageable = new PageRequest(currentPage, size, sort);
-		Page<DrawMoneyRecord> list = drawMoneyRecordService.getByStatus(pageable,status,startDate,endDate);
-		result.getResultParm().put("list", list);
+		Page<DrawMoneyRecord> page = drawMoneyRecordService.getByStatus(pageable,status,startDate,endDate);
+		result.getResultParm().put("list", page.getContent());
+		result.getResultParm().put("totalPages", page.getTotalPages());
+		result.getResultParm().put("currentPage", page.getNumber());
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	
