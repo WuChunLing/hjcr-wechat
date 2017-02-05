@@ -1,8 +1,6 @@
 package com.hjcr.wechat.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +18,15 @@ import com.hjcr.wechat.entity.DrawMoneyWay;
 import com.hjcr.wechat.entity.User;
 import com.hjcr.wechat.service.DrawMoneyRecordService;
 
-
 @Service("drawMoneyRecordService")
-public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
-	
-	private final Logger logger = LoggerFactory.getLogger(DrawMoneyRecordServiceImpl.class);
+public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
+
+	private final Logger logger = LoggerFactory
+			.getLogger(DrawMoneyRecordServiceImpl.class);
 
 	@Autowired
 	private DrawMoneyRecordDao drawMoneyRecordDao;
-	
+
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -40,16 +38,26 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 	public Page<DrawMoneyRecord> getAll(Pageable pageable) {
 		Page<DrawMoneyRecord> page = drawMoneyRecordDao.findAll(pageable);
 		setUserAndWay(page.getContent());
-		//System.out.println(page.getContent()+"dddd");
+		// System.out.println(page.getContent()+"dddd");
 		return page;
 	}
-	
+
 	/**
 	 * 获取某用户记录
 	 */
 	public Page<DrawMoneyRecord> getByUserId(Pageable pageable,
 			Integer userId) {
-		Page<DrawMoneyRecord> page = drawMoneyRecordDao.findByUserId(pageable,userId);
+		Page<DrawMoneyRecord> page = drawMoneyRecordDao.findByUserId(pageable,
+				userId);
+		setUserAndWay(page.getContent());
+		return page;
+	}
+
+	@Override
+	public Page<DrawMoneyRecord> getByStatus(Pageable pageable,
+			Integer status) {
+		Page<DrawMoneyRecord> page = drawMoneyRecordDao.findByStatus(pageable,
+				status);
 		setUserAndWay(page.getContent());
 		return page;
 	}
@@ -67,7 +75,7 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 			user.setBalance(user.getBalance() - record.getMoney());
 			User flush = userDao.saveAndFlush(user);
 			logger.info("After draw money user'blance :" + flush.getBalance());
-			record.setStatus(1);//设置提现记录为 “待审核”
+			record.setStatus(1);// 设置提现记录为 “待审核”
 			return drawMoneyRecordDao.save(record);
 		}
 	}
@@ -81,33 +89,30 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		if (record == null) {
 			throw new SecurityException("无法更新该记录");
 		}
-		
+
 		if (status == 3) { // 拒绝提现
 			User user = userDao.findOne(record.getUserId());
 			user.setBalance(user.getBalance() + record.getMoney());
 			userDao.saveAndFlush(user);
-		} 
+		}
 		record.setStatus(status);
 		DrawMoneyRecord flush = drawMoneyRecordDao.saveAndFlush(record);
-		
+
 		if (flush.getId() == null)
 			throw new SecurityException("更新失败");
 		else
 			return true;
 	}
-	
+
 	/*
 	 * 获取各个状态的总额度.
 	 */
-	public Map<String, Object> getStatusTotal() {
-		Map<String,Object> map = new HashMap<String,Object>();
-		Double apply = drawMoneyRecordDao.getApplyTotal();
-		Double success = drawMoneyRecordDao.getSuccessTotal();
-		Double reject = drawMoneyRecordDao.getRejectTotal();
-		map.put("apply",apply);
-		map.put("success",success);
-		map.put("reject",reject);
-		return map;
+	public Double getStatusTotal(Integer status, String startDate, String endDate) {
+		if (startDate != null & endDate != null) 
+			return drawMoneyRecordDao.getSumByStatus(status,startDate,endDate);//获取某个状态某个时间段的总金额
+		else 
+			return drawMoneyRecordDao.getSumByStatus(status); //获取某个状态的总金额
+		
 	}
 
 	/*
@@ -117,7 +122,7 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		if (list.size() != 0) {
 			User user = new User();
 			DrawMoneyWay way = new DrawMoneyWay();
-			for(DrawMoneyRecord record : list) {
+			for (DrawMoneyRecord record : list) {
 				user = userDao.findOne(record.getUserId());
 				way = drawMoneyWayDao.findOne(record.getWayId());
 				record.setUser(user);
@@ -127,7 +132,7 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		}
 		return list;
 	}
-	
+
 	/*
 	 * 过滤记录信息.
 	 */
@@ -140,7 +145,6 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 		return record;
 	}
 
-	
 	/**
 	 * 删除
 	 */
@@ -152,8 +156,7 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService{
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
 
-	
 }

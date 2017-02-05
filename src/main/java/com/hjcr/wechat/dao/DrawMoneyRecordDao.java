@@ -7,20 +7,23 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.hjcr.wechat.entity.DrawMoneyRecord;
 
-
-public interface DrawMoneyRecordDao extends JpaRepository<DrawMoneyRecord, Integer>{
+public interface DrawMoneyRecordDao
+		extends JpaRepository<DrawMoneyRecord, Integer> {
 
 	/*
 	 * 获取某用户记录
 	 */
 	Page<DrawMoneyRecord> findByUserId(Pageable pageable, Integer userId);
 
-	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = 1")
-	Double getApplyTotal();
-	
-	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = 2")
-	Double getSuccessTotal();
-	
-	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = 3")
-	Double getRejectTotal();
+	// 根据状态获取记录
+	Page<DrawMoneyRecord> findByStatus(Pageable pageable, Integer status);
+
+	// 获取某个状态的总金额
+	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = ?1")
+	Double getSumByStatus(Integer status);
+
+	// 获取某个状态某个时间段的总金额
+	@Query("SELECT SUM(r.money) FROM DrawMoneyRecord r where r.status = ?1 and r.creatTime >= ?2 and r.creatTime <= ?3")
+	Double getSumByStatus(Integer status, String startDate, String endDate);
+
 }
