@@ -41,7 +41,7 @@ var deleteUserURL = preURL_project + 'system/deleteSystemUser';    // 删除 用
 //修改个人登录密码的接口
 var updatePwdURL = preURL_project + 'system/updatePassword';
 // 退出登录
-var loginOutURL = preURL_post + 'loginOut';
+var loginOutURL = preURL_project + 'loginOut';
 
 // 分润记账管理的接口
 var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
@@ -57,17 +57,17 @@ var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
 	// 按或者不按时间段查询  状态为 xx  的第n页  提现记录
 	// 按或者不按时间段查询  状态为 xx  的总金额信息
-	var getWithdrawalURL = preURL_project + 'getWithdrawal';
-	var getWithdrawalMoneyURL = preURL_project + 'getWithdrawalMoney';
+	var getWithdrawalURL = preURL_project + 'drawrecord/getByStatus';
+	var getWithdrawalMoneyURL = preURL_project + 'drawrecord/getStatusTotal';
 	// 对待审核的提现记录的操作
 	// 通过
-	var allowURL = preURL_project + 'allow';
+	var allowURL = preURL_project + 'drawrecord/allow';
 	// 拒绝
-	var rejectURL = preURL_project + 'reject';
+	var rejectURL = preURL_project + 'drawrecord/reject';
 
 // 个人提现记录 的接口 (2个)
-var getMyWithdrawalURL = preURL_project + 'getMyWithdrawal'; //获取 用户为xx 的 第n页 提现记录
-var getMyInfoURL = preURL_project + 'getMyInfo'; //获取 用户为xx 的 用户信息
+var getMyWithdrawalURL = preURL_project + 'drawrecord/getByUserId'; //获取 用户为xx 的 第n页 提现记录
+var getMyInfoURL = preURL_project + 'drawrecord/getUserInfo'; //获取 用户为xx 的 用户信息
 
 
 
@@ -897,9 +897,11 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
 		$http.get(getWithdrawalMoneyURL,{
-				startDate:start,
-				endDate:end,
-				status:status
+				params:{
+					startDate:start,
+					endDate:end,
+					status:status
+				}
 			})
 			.success(function(response){
 				auth(response);
@@ -917,13 +919,15 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	// 按时间段或者不按时间段  根据状态 获得第n页的提现记录
 	$scope.getPage = function(start,end,num,status){
 		if(num>=1 && num<=$scope.totalPage[status-1] ){
-			$http.get(getWithdrawalURL,{
+			$http.get(getWithdrawalURL, {
+				params: {
 					startDate:start,
 					endDate:end,
 					currentPage:num-1,
 					status:status,
 					size:15
-				})
+				}
+			})
 				.success(function(response){
 					auth(response);
 					$scope.totalPage[status-1] = response.resultParm.totalPages;
@@ -1039,9 +1043,11 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 	$scope.getPage = function(num,id){
 		if(num>=1 && num<=$scope.totalPage ){
 			$http.get(getMyWithdrawalURL,{
-					currentPage:num-1,
-					userId:id,
-					size:15
+					params:{
+						currentPage:num-1,
+						userId:id,
+						size:15
+					}
 				}).success(function(response){
 	  				auth(response);
 						$scope.records = response.resultParm.list;
@@ -1058,7 +1064,11 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 	}
 	$scope.getMoney = function(){
 		// 获得个人信息
-		$http.get(getMyInfoURL,{userId:sessionStorage.userId})
+		$http.get(getMyInfoURL,{
+			params:{
+				userId:sessionStorage.userIdWithdrawal
+			}
+		})
 			.success(function(response){
 	  		auth(response);
 				$scope.user=response.resultParm;
