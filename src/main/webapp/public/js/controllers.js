@@ -44,16 +44,15 @@ var updatePwdURL = preURL_project + 'system/updatePassword';
 var loginOutURL = preURL_project + 'loginOut';
 
 // 分润记账管理的接口
-var getBillURL = preURL_project + 'getBill';   //获取 第n页的订单记录
-var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的 第n页的订单记录
-var getBillMoneyURL = preURL_project + 'getBillMoney.json'; //获取总订单 的金额信息
-var getBillUserURL = preURL_project + 'getBillUser';  //  获取用户为xx的用户信息
-var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 订单
-var getBillByDateURL = preURL_project + 'getBillByDate';   //通过时间段查询 订单
-var getBillMoneyByDateURL = preURL_project + 'getBillMoneyByDate';
-var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 
-// 提现管理的接口   (4个接口)
+var getBillURL = preURL_project + 'getBill';   	// 按时间段或者不按时间段 查询  第n页订单记录
+var getBillMoneyURL = preURL_project + 'getBillMoney'; //按时间段或者不按时间段  获取总订单 的金额信息
+var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 订单
+// 个人分润信息
+var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的   第n页的订单记录
+var getBillUserURL = preURL_project + 'getBillUserInfo';  //  	获取用户为xx的用户信息
+
+// 提现管理的接口   (3个接口)
 
 	// 按或者不按时间段查询  状态为 xx  的第n页  提现记录
 	// 按或者不按时间段查询  状态为 xx  的总金额信息
@@ -85,17 +84,17 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 		}else if($location.path() === "/rightsManage"){
 			$scope.tableTitle = "权限管理-权限管理";
 		}else if($location.path() === "/billManage"){
-			$scope.tableTitle = "分润记账管理";
+			$scope.tableTitle = "分润账单";
 		}else if($location.path() === "/myBill"){
-			$scope.tableTitle = "分润记账管理-用户个人账单";
+			$scope.tableTitle = "分润账单-用户个人账单";
 		}else if($location.path() === "/withdrawalFinish"){
-			$scope.tableTitle = "提现管理-已完成";
+			$scope.tableTitle = "提现账单-已完成";
 		}else if($location.path() === "/withdrawalWait"){
-			$scope.tableTitle = "提现管理-待审核";
+			$scope.tableTitle = "提现账单-待审核";
 		}else if($location.path() === "/withdrawalReject"){
-			$scope.tableTitle = "提现管理-已驳回";
+			$scope.tableTitle = "提现账单-已驳回";
 		}else if($location.path() === "/myWithdrawal"){
-			$scope.tableTitle = "提现管理-用户个人提现记录";
+			$scope.tableTitle = "提现账单-用户个人提现记录";
 		}else if($location.path() === "/profitManage"){
 			$scope.tableTitle = "分润管理";
 		}else if($location.path() === "/dataStatistic"){
@@ -725,127 +724,179 @@ hjcr.controller('userCtrl',function($scope,$http){
 });
 
 
-// 分润记账管理
+// 分润账单
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
-	// 获得第n页的订单信息  的方法
-	$scope.getPageBill = function(num){
-		if((num!=$scope.currentNum) && (num===1 || (num>1&&num<=$scope.bills.totalPage))){
-			$scope.currentNum = num;
-			console.log(num);
-			$http.post(getBillURL,{page:num})
-				.success(function(response){
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
+	$scope.bills = null;// 总订单记录
+	$scope.billMoney = 0;// 总金额信息
+	$scope.totalPage = 1;//全部页数
+	$scope.currentPage = 0;//当前页码
+	$scope.pageArr;// 页码数组
+	// 生成页码数组
+	$scope.getPage = function(num){
+		$scope.pageArr = new Array();
+		for(var i=0;i<num;i++){
+			$scope.pageArr[i] = i+1;
+		}
+	}
+	$scope.startDate = null;
+	$scope.endDate = null;
+
+	//获取   第n页的订单记录
+	$scope.getBill = function(start,end,num){
+		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+				$http.get(getBillURL,
+					{
+						params:{
+							startDate:start,
+							endDate:end,
+							currentPage:num-1,
+							size:15
+						}
 					}
+				)
+				.success(function(response){
+					auth(response);
+					$scope.bills=response.resultParm.list;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.getPage($scope.totalPage);
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
-	// 获得总订单金额信息
-	$http.get(getBillMoneyURL)
-		.success(function(response){
-			$scope.billMoney=response;
-		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-	});
-	// 自动调用获取第一页订单信息
-	$scope.getPageBill(1);
-	// 查看某个用户的相关订单信息
-	$scope.checkMyBill = function(id){
-		sessionStorage.userId = id;
-	}
-	// 按订单号查询订单
-	$scope.checkBillById = function(id){
-		if(id!=null && id!='' && id!=' '){
-			console.log(id);
-			$http.post(getBillByIdURL,{billId:id})
-				.success(function(response){
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
-					}
-				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-			});
-			$http.post(getBillMoneyByIdURL,{billId:id})
-				.success(function(response){
-					$scope.billMoney=response;
-				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-			});
-		}
-	}
-	// 按时间段查询订单
-	$scope.checkBillByDate = function(){
-		var date = $("#reservation").val();
-		if(date!=null && date!='' && date!=' '){
-			console.log(date);
-			$http.post(getBillByDateURL,{billDate:date})
-				.success(function(response){
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
-					}
-				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-			});
-			$http.post(getBillMoneyByDateURL,{billDate:date})
-				.success(function(response){
-					$scope.billMoney=response;
-				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
-			});
-		}
-	}
-	// 返回总订单表
-	$scope.backToAllBill = function(){
-		$http.post(getBillURL,{page:1})
-			.success(function(response){
-				$scope.bills=response;
-				$scope.pageArr = new Array();
-				for(var i=0;i<$scope.bills.totalPage;i++){
-					$scope.pageArr[i] = i+1;
+
+	//获取总订单 的金额信息
+	$scope.getBillMoney = function(start,end){
+		$http.get(getBillMoneyURL,{
+				params:{
+					startDate:start,
+					endDate:end
 				}
+			})
+			.success(function(response){
+				auth(response);
+				$scope.billMoney=response;
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
+
+	$scope.getBill(null,null,1);
+	$scope.getBillMoney(null,null);
+
+	//通过订单号查询 订单
+	$scope.checkBillById = function(id){
+		if(id!=null && id!='' && id!=' '){
+			$http.get(getBillByIdURL,
+				{
+					params:{billId:id}
+				})
+				.success(function(response){
+					auth(response);
+					$scope.bills=response.resultParm.list;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.getPage($scope.totalPage);
+					$scope.billMoney.billMoney=$scope.bills[0].billMoney;
+					$scope.billMoney.billProfit=$scope.bills[0].billProfit;
+				}).error(function(){
+					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			});
+		}
+	}
+	$scope.keyupId = function(){
+		if(window.event.keyCode == 13){
+			$scope.checkBillById($scope.checkbillId);
+		}
+	}
+
+	//通过时间段查询 第n页的  订单
+	$scope.checkByDate = function(){
+		var date = $("#reservation").val();
+		if(date!=''&&date!=null){
+			var dateArr = date.split(" 至 ");
+			$scope.currentPage = 0;
+			$scope.startDate = dateArr[0];
+			$scope.endDate = dateArr[1] + " 24:00:00";
+			$scope.getBill(dateArr[0],dateArr[1],1);
+			$scope.getBillMoney(dateArr[0],dateArr[1]);
+		}
+	}
+	$scope.keyupDate = function(){
+		if(window.event.keyCode == 13){
+			$scope.checkByDate();
+		}
+	}
+	// 返回主页面
+	$scope.backTo = function(){
+		$scope.currentPage = 0;
+		$scope.startDate = null;
+		$scope.endDate = null;
+		$scope.getBill(null,null,1);
+		$scope.getBillMoney(null,null);
+	}
+	$scope.checkMyBill = function(id){
+		sessionStorage.checkBillById = id;
+	}
 });
 // 个人订单控制器
 hjcr.controller('myBillCtrl',function($scope,$http){
+	$scope.id = sessionStorage.checkBillById;
+	$scope.bills = null;// 总订单记录
+	$scope.totalPage = 1;//全部页数
+	$scope.currentPage = 0;//当前页码
+	$scope.pageArr;// 页码数组
+	// 生成页码数组
+	$scope.getPage = function(num){
+		$scope.pageArr = new Array();
+		for(var i=0;i<num;i++){
+			$scope.pageArr[i] = i+1;
+		}
+	}
+
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPageMyBill = function(num,id){
-		if((num!=$scope.currentNum) && (num==1 || (num>1&&num<=$scope.bills.totalPage))){
-			$scope.currentNum = num;
-			console.log(num+' '+id);
-			$http.post(getMyBillURL,{page:num,userId:id})
-				.success(function(response){
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
+		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+				$http.get(getBillURL,
+					{
+						params:{
+							userId:id,
+							currentPage:num-1,
+							size:15
+						}
 					}
+				)
+				.success(function(response){
+					auth(response);
+					$scope.bills=response.resultParm.list;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.getPage($scope.totalPage);
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
 	// 获得个人信息
-	$http.post(getBillUserURL,{userId:sessionStorage.userId})
+	$http.get(getBillUserURL,{
+		params:{
+				userId:$scope.id
+			}
+		})
 		.success(function(response){
+  		auth(response);
 			$scope.user=response;
-			$scope.user.userId = sessionStorage.userId;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 自动调用获取第一页订单信息
-	$scope.getPageMyBill(1,sessionStorage.userId);
+	$scope.getPageMyBill(1,$scope.id);
+	// 返回主页面
+	$scope.backTo = function(){
+		location.href="/#/billManage";
+	}
 });
 
 

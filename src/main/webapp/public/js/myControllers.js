@@ -84,17 +84,17 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 		}else if($location.path() === "/rightsManage"){
 			$scope.tableTitle = "权限管理-权限管理";
 		}else if($location.path() === "/billManage"){
-			$scope.tableTitle = "分润记账管理";
+			$scope.tableTitle = "分润账单";
 		}else if($location.path() === "/myBill"){
-			$scope.tableTitle = "分润记账管理-用户个人账单";
+			$scope.tableTitle = "分润账单-用户个人账单";
 		}else if($location.path() === "/withdrawalFinish"){
-			$scope.tableTitle = "提现管理-已完成";
+			$scope.tableTitle = "提现账单-已完成";
 		}else if($location.path() === "/withdrawalWait"){
-			$scope.tableTitle = "提现管理-待审核";
+			$scope.tableTitle = "提现账单-待审核";
 		}else if($location.path() === "/withdrawalReject"){
-			$scope.tableTitle = "提现管理-已驳回";
+			$scope.tableTitle = "提现账单-已驳回";
 		}else if($location.path() === "/myWithdrawal"){
-			$scope.tableTitle = "提现管理-用户个人提现记录";
+			$scope.tableTitle = "提现账单-用户个人提现记录";
 		}else if($location.path() === "/profitManage"){
 			$scope.tableTitle = "分润管理";
 		}else if($location.path() === "/dataStatistic"){
@@ -738,13 +738,15 @@ hjcr.controller('userCtrl',function($scope,$http){
 });
 
 
-// 分润记账管理
+// 分润账单
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.bills = null;// 总订单记录
 	$scope.billMoney = 0;// 总金额信息
 	$scope.totalPage = 1;//全部页数
 	$scope.currentPage = 0;//当前页码
+	$scope.startDate = null;
+	$scope.endDate = null;
 	$scope.pageArr;// 页码数组
 	// 生成页码数组
 	$scope.getPage = function(num){
@@ -753,8 +755,6 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.pageArr[i] = i+1;
 		}
 	}
-	$scope.startDate = null;
-	$scope.endDate = null;
 
 	//获取   第n页的订单记录
 	$scope.getBill = function(start,end,num){
@@ -833,7 +833,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			var dateArr = date.split(" 至 ");
 			$scope.currentPage = 0;
 			$scope.startDate = dateArr[0];
-			$scope.endDate = dateArr[1];
+			$scope.endDate = dateArr[1] + " 24:00:00";
 			$scope.getBill(dateArr[0],dateArr[1],1);
 			$scope.getBillMoney(dateArr[0],dateArr[1]);
 		}
@@ -846,6 +846,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	// 返回主页面
 	$scope.backTo = function(){
 		$scope.currentPage = 0;
+		$scope.startDate = null;
+		$scope.endDate = null;
 		$scope.getBill(null,null,1);
 		$scope.getBillMoney(null,null);
 	}
