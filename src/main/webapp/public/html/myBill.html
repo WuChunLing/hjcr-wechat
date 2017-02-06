@@ -13,7 +13,7 @@
       </div>
       <div class="no-padding text-align-center bordered-left bordered-platinum" style="float:left;height:100%;width:127px;">
         <div style="vertical-align:middle;margin-top:26px">
-          <span class="databox-number lightcarbon no-margin pink">{{user.userMoney}}</span>
+          <span class="databox-number lightcarbon no-margin pink">{{user.userMoney | currency}}</span>
           <span class="databox-text sonic-silver  no-margin">账户余额</span>
         </div>
       </div>
@@ -24,6 +24,8 @@
         <div class="widget">
             <div class="widget-header  with-footer">
                 <span class="widget-caption">用户个人订单信息表</span>
+                <span ng-click="backTo()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer">
+                <i class="glyphicon glyphicon-home"></i></span>
             </div>
             <div class="widget-body" style="height: auto;">
               <div class="flip-scroll">
@@ -63,18 +65,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                      <tr ng-repeat="bill in bills.bill">
+                      <tr ng-repeat="bill in bills">
                           <td>
-                              {{(bills.currentPage-1)*15+$index+1}}
+                              {{(currentPage-1)*15+$index+1}}
                           </td>
                           <td>
                               {{bill.billId}}
                           </td>
                           <td>
-                              {{bill.billMoney}}
+                              {{bill.billMoney | currency}}
                           </td>
                           <td class="numeric">
-                              {{bill.billProfit}}
+                              {{bill.billProfit | currency}}
                           </td>
                           <td class="numeric">
                             {{bill.billUser.userName}}
@@ -83,13 +85,13 @@
                             {{bill.billFirstUser.userName}}
                           </td>
                           <td class="numeric">
-                            {{bill.userFirstProfit}}
+                            {{bill.userFirstProfit | currency}}
                           </td>
                           <td class="numeric">
                             {{bill.billSecondUser.userName}}
                           </td>
                           <td class="numeric">
-                              {{bill.userSecondProfit}}
+                              {{bill.userSecondProfit | currency}}
                           </td>
                           <td class="numeric">
                               {{bill.billDate}}
@@ -99,11 +101,11 @@
                 </table>
               </div>
               <ul class="pagination" style="margin-top:20px;">
-                  <li ng-click="getPageMyBill(currentNum-1,user.userId)" ng-class="currentNum===1?'disabled':''"><a>«</a></li>
-                  <li ng-click="getPageMyBill(page,user.userId)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                  <li ng-click="getPageMyBill(currentPage-1,user.userId)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
+                  <li ng-click="getPageMyBill(page,user.userId)" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
                     <a>{{page}}</a>
                   </li>
-                  <li ng-click="getPageMyBill(currentNum+1,user.userId)" ng-class="currentNum===bills.totalPage?'disabled':''"><a>»</a></li>
+                  <li ng-click="getPageMyBill(currentPage+1,user.userId)" ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
               </ul>
             </div>
         </div>

@@ -1,17 +1,20 @@
 {
-  "totalPage":1,
-  "currentPage":1,
-  "bill":[
-    {
-      "billId":12345,
-      "billMoney":200,
-      "billProfit":20,
-      "billUser":{"userId":"004","userName":"嗷大喵"},
-      "billFirstUser":{"userId":"005","userName":"桃小仙"},
-      "userFirstProfit":12,
-      "billSecondUser":{"userId":"006","userName":"小肥柴"},
-      "userSecondProfit":12,
-      "billDate":"2015-02-18"
-    }
-  ]
+  "serviceResult": true,
+  "resultParm": {
+    "totalPages":1,
+    "currentPage": 0,
+    "list": [
+      {
+        "billId":12345,
+        "billMoney":200,
+        "billProfit":20,
+        "billUser":{"userId":"004","userName":"嗷大喵"},
+        "billFirstUser":{"userId":"005","userName":"桃小仙"},
+        "userFirstProfit":12,
+        "billSecondUser":{"userId":"006","userName":"小肥柴"},
+        "userSecondProfit":12,
+        "billDate":"2015-02-18"
+      }
+    ]
+  }
 }

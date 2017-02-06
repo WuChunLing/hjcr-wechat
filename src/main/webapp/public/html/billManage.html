@@ -4,11 +4,11 @@
       <div class="databox radius-bordered databox-shadowed databox-graded">
           <div class="databox-left bg-orange">
               <div class="databox-piechart">
-                  <span class="white font-200"><i class="fa fa-jpy"></i></span>
+                  <span class="white font-200"><i class="fa fa-money"></i></span>
               </div>
           </div>
           <div class="databox-right">
-              <span class="databox-number orange">{{billMoney.billMoney}}</span>
+              <span class="databox-number orange">{{billMoney.billMoney | currency }}</span>
               <div class="databox-text darkgray">总消费金额</div>
               <div class="databox-stat orange radius-bordered">
                   <i class="stat-icon icon-lg fa fa-tasks"></i>
@@ -20,11 +20,11 @@
     <div class="databox radius-bordered databox-shadowed databox-graded">
         <div class="databox-left bg-azure">
             <div class="databox-piechart">
-              <span class="white font-200"><i class="fa fa-jpy"></i></span>
+              <span class="white font-200"><i class="fa fa-money"></i></span>
             </div>
         </div>
         <div class="databox-right">
-            <span class="databox-number azure">{{billMoney.billProfit}}</span>
+            <span class="databox-number azure">{{billMoney.billProfit | currency}}</span>
             <div class="databox-text darkgray">总分润金额</div>
             <div class="databox-state bg-azure">
                 <i class="fa fa-check"></i>
@@ -36,7 +36,8 @@
       <div class="widget">
           <div class="widget-header  with-footer">
               <span class="widget-caption">总订单信息表</span>
-              <span ng-click="backToAllBill()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+              <span ng-click="backTo()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer">
+              <i class="glyphicon glyphicon-home"></i></span>
           </div>
 
           <div class="widget-body" style="height: auto;">
@@ -48,13 +49,16 @@
                       <i ng-click="checkBillById(checkbillId)" class="glyphicon glyphicon-search blue"></i>
                   </span>
               </div>
-              <div class="form-group" style="width:250px;float:left;">
+              <div class="form-group" style="width:330px;float:left;">
                   <div class="controls">
                       <div class="input-group">
                           <span class="input-group-addon">
                               <i class="fa fa-calendar" ng-click="checkByDate()"></i>
                           </span>
                           <input type="text" ng-keyup="keyupDate()" ng-model="checkbillDate" placeholder="按时间查询某一时间段的订单" class="form-control" id="reservation">
+                          <span ng-click="checkByDate()" class="input-group-addon">
+                              点击查询
+                          </span>
                       </div>
 
                   </div>
@@ -95,18 +99,18 @@
                           </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="bill in bills.bill">
+                        <tr ng-repeat="bill in bills">
                             <td>
-                                {{(bills.currentPage-1)*15+$index+1}}
+                                {{(currentPage-1)*15+$index+1}}
                             </td>
                             <td>
                                 {{bill.billId}}
                             </td>
                             <td>
-                                {{bill.billMoney}}
+                                {{bill.billMoney | currency}}
                             </td>
                             <td class="numeric">
-                                {{bill.billProfit}}
+                                {{bill.billProfit | currency}}
                             </td>
                             <td class="numeric">
                               <a ui-sref="myBill" ng-click="checkMyBill(bill.billUser.userId)">{{bill.billUser.userName}}</a>
@@ -115,13 +119,13 @@
                               <a ui-sref="myBill" ng-click="checkMyBill(bill.billFirstUser.userId)">{{bill.billFirstUser.userName}}</a>
                             </td>
                             <td class="numeric">
-                              {{bill.userFirstProfit}}
+                              {{bill.userFirstProfit | currency}}
                             </td>
                             <td class="numeric">
                               <a ui-sref="myBill" ng-click="checkMyBill(bill.billSecondUser.userId)">{{bill.billSecondUser.userName}}</a>
                             </td>
                             <td class="numeric">
-                                {{bill.userSecondProfit}}
+                                {{bill.userSecondProfit | currency}}
                             </td>
                             <td class="numeric">
                                 {{bill.billDate}}
@@ -130,12 +134,12 @@
                       </tbody>
                   </table>
             </div>
-            <ul class="pagination" style="margin-top:20px;">
+            <ul ng-show="totalPage>1" class="pagination" style="margin-top:20px;">
                 <li ng-click="getBill(startDate,endDate,currentPage-1)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
-                <li ng-click="getBill(startDate,endDate,page)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                <li ng-click="getBill(startDate,endDate,page)" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="getBill(startDate,endDate,currentPage+1)" ng-class="currentPage===bills.totalPage?'disabled':''"><a>»</a></li>
+                <li ng-click="getBill(startDate,endDate,currentPage+1)" ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
             </ul>
           </div>
       </div>

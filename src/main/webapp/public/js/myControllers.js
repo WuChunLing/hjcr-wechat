@@ -62,10 +62,7 @@ var getBillUserURL = preURL_get + 'getBillUser.json';  //  	获取用户为xx的
 	var getWithdrawalURL = preURL_get + 'getWithdrawal.json';
 	var getWithdrawalMoneyURL = preURL_get + 'getWithdrawalMoney.json';
 	// 对待审核的提现记录的操作
-	// 通过
-	var allowURL = preURL_post + 'allow';
-	// 拒绝
-	var rejectURL = preURL_post + 'reject';
+	var operationURL = preURL_post + 'allow';
 
 // 个人提现记录 的接口 (2个)
 var getMyWithdrawalURL = preURL_get + 'getMyWithdrawal.json'; //获取 用户为xx 的 第n页 提现记录
@@ -775,8 +772,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 				.success(function(response){
 					auth(response);
 					$scope.bills=response.resultParm.list;
-					$scope.totalPage = response.resultParm.totalPage;
-					$scope.currentPage = response.resultParm.currentPage;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
 					$scope.getPage($scope.totalPage);
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
@@ -787,8 +784,10 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	//获取总订单 的金额信息
 	$scope.getBillMoney = function(start,end){
 		$http.get(getBillMoneyURL,{
-				startDate:start,
-				endDate:end
+				params:{
+					startDate:start,
+					endDate:end
+				}
 			})
 			.success(function(response){
 				auth(response);
@@ -806,12 +805,16 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		if(id!=null && id!='' && id!=' '){
 			$http.get(getBillByIdURL,
 				{
-					billId:id
+					params:{billId:id}
 				})
 				.success(function(response){
-					$scope.postFuc(response);
-					$scope.billMoney.billMoney=response.bill[0].billMoney;
-					$scope.billMoney.billProfit=response.bill[0].billProfit;
+					auth(response);
+					$scope.bills=response.resultParm.list;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.getPage($scope.totalPage);
+					$scope.billMoney.billMoney=$scope.bills[0].billMoney;
+					$scope.billMoney.billProfit=$scope.bills[0].billProfit;
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
@@ -840,38 +843,72 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.checkByDate();
 		}
 	}
+	// 返回主页面
+	$scope.backTo = function(){
+		$scope.currentPage = 0;
+		$scope.getBill(null,null,1);
+		$scope.getBillMoney(null,null);
+	}
+	$scope.checkMyBill = function(id){
+		sessionStorage.checkBillById = id;
+	}
 });
 // 个人订单控制器
 hjcr.controller('myBillCtrl',function($scope,$http){
+	$scope.id = sessionStorage.checkBillById;
+	$scope.bills = null;// 总订单记录
+	$scope.totalPage = 1;//全部页数
+	$scope.currentPage = 0;//当前页码
+	$scope.pageArr;// 页码数组
+	// 生成页码数组
+	$scope.getPage = function(num){
+		$scope.pageArr = new Array();
+		for(var i=0;i<num;i++){
+			$scope.pageArr[i] = i+1;
+		}
+	}
+
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPageMyBill = function(num,id){
-		if((num!=$scope.currentNum) && (num==1 || (num>1&&num<=$scope.bills.totalPage))){
-			$scope.currentNum = num;
-			console.log(num+' '+id);
-			$http.post(getMyBillURL,{page:num,userId:id})
-				.success(function(response){
-  				auth(response);
-					$scope.bills=response;
-					$scope.pageArr = new Array();
-					for(var i=0;i<$scope.bills.totalPage;i++){
-						$scope.pageArr[i] = i+1;
+		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+				$http.get(getBillURL,
+					{
+						params:{
+							userId:id,
+							currentPage:num-1,
+							size:15
+						}
 					}
+				)
+				.success(function(response){
+					auth(response);
+					$scope.bills=response.resultParm.list;
+					$scope.totalPage = response.resultParm.totalPages;
+					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.getPage($scope.totalPage);
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
 		}
 	}
 	// 获得个人信息
-	$http.get(getBillUserURL,{userId:sessionStorage.userId})
+	$http.get(getBillUserURL,{
+		params:{
+				userId:$scope.id
+			}
+		})
 		.success(function(response){
   		auth(response);
 			$scope.user=response;
-			$scope.user.userId = sessionStorage.userId;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});
 	// 自动调用获取第一页订单信息
-	$scope.getPageMyBill(1,sessionStorage.userId);
+	$scope.getPageMyBill(1,$scope.id);
+	// 返回主页面
+	$scope.backTo = function(){
+		location.href="/#/billManage";
+	}
 });
 
 
@@ -931,6 +968,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 
 	$scope.showModal = false;
 
+	$scope.checkrecordDate = null;
 	// 获取总金额信息
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
@@ -994,7 +1032,6 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			$scope.endDate = dateArr[1]+" 24:00:00";
 			$scope.status = status;
 			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
-			$scope.currentPage=0;
 			$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
 		}
 	}
@@ -1006,7 +1043,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 
 	// 查看某个用户的相关提现记录
 	$scope.checkMyWithdrawal = function(id){
-		sessionStorage.userIdWithdrawal = id;
+		sessionStorage.checkWithdrawalById = id;
 	}
 
 	// // 返回总订单表
@@ -1051,17 +1088,14 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	}
 	//提现申请操作的  确认弹框
 	$scope.tixianModel = function(){
-		var url;
 		var status;
 		if($scope.showModelTian.status===true){
-			url = allowURL;
 			status = 2;
 		}
 		else {
-			url = rejectURL;
 			status = 3;
 		}
-		$http.post(url,
+		$http.post(operationURL,
 			{
 				id:$scope.showModelTian.id,
 				status:status
@@ -1085,7 +1119,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 	$scope.userInfo = {};
 	$scope.currentPage = 0;
 	$scope.totalPage = 1;
-	$scope.id = sessionStorage.userIdWithdrawal;
+	$scope.id = sessionStorage.checkWithdrawalById;
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPage = function(num,id){
 		if(num>=1 && num<=$scope.totalPage ){
@@ -1113,7 +1147,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 		// 获得个人信息
 		$http.get(getMyInfoURL,{
 			params:{
-				userId:sessionStorage.userIdWithdrawal
+				userId:$scope.id
 			}
 		})
 			.success(function(response){
@@ -1174,5 +1208,8 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
+	}
+	$scope.backTo = function(){
+		location.href = "/#/withdrawalWait";
 	}
 });

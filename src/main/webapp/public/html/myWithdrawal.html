@@ -22,7 +22,7 @@
       <div class="widget">
           <div class="widget-header  with-footer">
               <span class="widget-caption">个人提现记录表</span>
-              <span ng-click="backTo(1)" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+              <span ng-click="backTo()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
           </div>
 
           <div class="widget-body" style="height: auto;">
@@ -73,7 +73,7 @@
                               {{record.username}}
                             </td> -->
                             <td>
-                                {{record.money}}
+                                {{record.money | currency}}
                             </td>
                             <td class="numeric">
                                 {{record.drawMoneyWay.way==1?'银行卡':'支付宝'}}
@@ -101,12 +101,12 @@
                       </tbody>
                   </table>
             </div>
-            <ul class="pagination" style="margin-top:20px;">
-                <li ng-click="getPage(currentPage-1,2)" ng-show="totalPage>1" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
-                <li ng-click="getPage(page,2)" ng-show="totalPage>1" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
+            <ul class="pagination" ng-show="totalPage>1" style="margin-top:20px;">
+                <li ng-click="getPage(currentPage-1,2)"  ng-class="currentPage===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPage(page,2)" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="getPage(currentPage+1,2)" ng-show="totalPage>1" ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
+                <li ng-click="getPage(currentPage+1,2)"  ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
             </ul>
           </div>
       </div>
