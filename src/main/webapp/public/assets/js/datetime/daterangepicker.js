@@ -123,8 +123,8 @@
             this.separator = ' 至 ';
 
             this.locale = {
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
+                applyLabel: '确认',
+                cancelLabel: '取消',
                 fromLabel: 'From',
                 toLabel: 'To',
                 weekLabel: 'W',

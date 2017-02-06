@@ -3,7 +3,7 @@
       <div class="databox radius-bordered databox-shadowed databox-graded">
           <div class="databox-left bg-orange">
               <div class="databox-piechart">
-                  <span class="white font-200"><i class="fa fa-jpy"></i></span>
+                  <span class="white font-200"><i class="fa fa-money"></i></span>
               </div>
           </div>
           <div class="databox-right">
@@ -20,7 +20,7 @@
       <div class="widget">
           <div class="widget-header  with-footer">
               <span class="widget-caption">已驳回的提现记录表</span>
-              <span ng-click="backTo()" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+              <span ng-click="backTo(3)" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
           </div>
 
           <div class="widget-body" style="height: auto;">
@@ -36,9 +36,9 @@
                   <div class="controls">
                       <div class="input-group">
                           <span ng-click="checkByDate(3)" class="input-group-addon">
-                              <i class="fa fa-calendar" ng-click=""></i>
+                              <i class="fa fa-calendar"></i>
                           </span>
-                          <input ng-keyup="keyupDate(3)" type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
+                          <input ng-change="checkByDate(3)" ng-keyup="keyupDate(3)" type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
                       </div>
 
                   </div>

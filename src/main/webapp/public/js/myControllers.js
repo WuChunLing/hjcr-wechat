@@ -1011,6 +1011,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 
 	// // 返回总订单表
 	$scope.backTo = function(status){
+		$scope.status = status;
 		$scope.startDate = null;
 		$scope.endDate = null;
 		$scope.currentPage = 0;
@@ -1151,28 +1152,27 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 		}
 		$scope.showModal = !$scope.showModal;
 	}
-	//提现申请操作的  确认弹框
 	$scope.tixianModel = function(){
-		var url;
+		var status;
 		if($scope.showModelTian.status===true){
-			url = allowURL;
+			status = 2;
 		}
 		else {
-			url = rejectURL;
+			status = 3;
 		}
-		$http.post(url,
+		$http.post(operationURL,
 			{
-				id:$scope.showModelTian.id
+				id:$scope.showModelTian.id,
+				status:status
 			})
 			.success(function(response){
 				auth(response);
 				alertMes(response.data,'info','fa-info-circle');
-				$scope.getMoney();
-				$scope.getPage($scope.currentPage,$scope.id);
+				$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+				$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage[$scope.status-1],$scope.status);
 				$scope.showModal = !$scope.showModal;
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
-
 });
