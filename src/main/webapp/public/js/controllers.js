@@ -953,9 +953,10 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 		if(date!='' && date!=null){
 			var dateArr = date.split(" 至 ");
 			$scope.startDate = dateArr[0];
-			$scope.endDate = dateArr[1];
+			$scope.endDate = dateArr[1]+" 24:00:00";
 			$scope.status = status;
 			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+			$scope.currentPage=0;
 			$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
 		}
 	}
