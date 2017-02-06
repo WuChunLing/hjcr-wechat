@@ -60,7 +60,7 @@ var getBillMoneyByIdURL = preURL_project + 'getBillMoneyById';
 	var getWithdrawalURL = preURL_project + 'drawrecord/getByStatus';
 	var getWithdrawalMoneyURL = preURL_project + 'drawrecord/getStatusTotal';
 	// 对待审核的提现记录的操作
-	var operationURL = preURL_project + 'drawrecord/allow';
+	var operationURL = preURL_project + 'drawrecord/update';
 
 // 个人提现记录 的接口 (2个)
 var getMyWithdrawalURL = preURL_project + 'drawrecord/getByUserId'; //获取 用户为xx 的 第n页 提现记录
@@ -1120,26 +1120,26 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 	}
 	//提现申请操作的  确认弹框
 	$scope.tixianModel = function(){
-		var url;
+		var status;
 		if($scope.showModelTian.status===true){
-			url = allowURL;
+			status = 2;
 		}
 		else {
-			url = rejectURL;
+			status = 3;
 		}
-		$http.post(url,
+		$http.post(operationURL,
 			{
-				id:$scope.showModelTian.id
+				id:$scope.showModelTian.id,
+				status:status
 			})
 			.success(function(response){
 				auth(response);
 				alertMes(response.data,'info','fa-info-circle');
-				$scope.getMoney();
-				$scope.getPage($scope.currentPage,$scope.id);
+				$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+				$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage[$scope.status-1],$scope.status);
 				$scope.showModal = !$scope.showModal;
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
 	}
-
 });

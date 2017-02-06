@@ -1,5 +1,7 @@
 package com.hjcr.wechat.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -92,12 +94,15 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 		if (record == null) {
 			throw new SecurityException("无法更新该记录");
 		}
-
+		
 		if (status == 3) { // 拒绝提现
 			User user = userDao.findOne(record.getUserId());
 			user.setBalance(user.getBalance() + record.getMoney());
 			userDao.saveAndFlush(user);
 		}
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		String data = df.format(new Date());// new Date()为获取当前系统时间
+		record.setCreatTime(data);
 		record.setStatus(status);
 		DrawMoneyRecord flush = drawMoneyRecordDao.saveAndFlush(record);
 
