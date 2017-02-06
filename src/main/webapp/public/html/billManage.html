@@ -131,11 +131,11 @@
                   </table>
             </div>
             <ul class="pagination" style="margin-top:20px;">
-                <li ng-click="selectPost(currentNum-1,id,date)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
-                <li ng-click="selectPost(page,id,date)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
+                <li ng-click="getBill(startDate,endDate,currentPage-1)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getBill(startDate,endDate,page)" ng-repeat="page in pageArr" ng-class="bills.currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="selectPost(currentNum+1,id,date)" ng-class="currentPage===bills.totalPage?'disabled':''"><a>»</a></li>
+                <li ng-click="getBill(startDate,endDate,currentPage+1)" ng-class="currentPage===bills.totalPage?'disabled':''"><a>»</a></li>
             </ul>
           </div>
       </div>

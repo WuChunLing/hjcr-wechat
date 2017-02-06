@@ -2,6 +2,7 @@
   "serviceResult": true,
   "resultParm": {
     "totalPages":3,
+    "currentPage": 0,
     "list": [
       {
         "id": 92,
@@ -51,7 +52,6 @@
           "balance": 200
         }
       }
-    ],
-    "currentPage": 0
+    ]
   }
 }

@@ -90,7 +90,15 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 		}else if($location.path() === "/billManage"){
 			$scope.tableTitle = "分润记账管理";
 		}else if($location.path() === "/myBill"){
-			$scope.tableTitle = "分润记账管理-个人账单";
+			$scope.tableTitle = "分润记账管理-用户个人账单";
+		}else if($location.path() === "/withdrawalFinish"){
+			$scope.tableTitle = "提现管理-已完成";
+		}else if($location.path() === "/withdrawalWait"){
+			$scope.tableTitle = "提现管理-待审核";
+		}else if($location.path() === "/withdrawalReject"){
+			$scope.tableTitle = "提现管理-已驳回";
+		}else if($location.path() === "/myWithdrawal"){
+			$scope.tableTitle = "提现管理-用户个人提现记录";
 		}else if($location.path() === "/profitManage"){
 			$scope.tableTitle = "分润管理";
 		}else if($location.path() === "/dataStatistic"){
@@ -110,11 +118,14 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 		}
 	});
 	$scope.loginOut = function(){
-		$http.get(loginOutURL,function(response){
-			location.href = '/login';
+		$http.get(loginOutURL)
+			.success(function(response){
+				location.href = '/login';
+			}).error(function(){
 		});
 	}
 });
+
 
 // 模板管理
 // 显示二维码 的controller
@@ -972,10 +983,13 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	}
 
 	// // 返回总订单表
-	// $scope.backTo = function(status){
-	// 	$scope.getMoney(null,null,data);
-	// 	$scope.getPage(null,null,status,data);
-	// }
+	$scope.backTo = function(status){
+		$scope.startDate = null;
+		$scope.endDate = null;
+		$scope.currentPage = 0;
+		$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
+		$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
+	}
 
 	if($location.path() === "/withdrawalWait"){$scope.status=1;$scope.startDate=null;$scope.endDate=null;}
 	if($location.path() === "/withdrawalFinish"){$scope.status=2;$scope.startDate=null;$scope.endDate=null;}
@@ -1010,15 +1024,19 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	//提现申请操作的  确认弹框
 	$scope.tixianModel = function(){
 		var url;
+		var status;
 		if($scope.showModelTian.status===true){
 			url = allowURL;
+			status = 2;
 		}
 		else {
 			url = rejectURL;
+			status = 3;
 		}
 		$http.post(url,
 			{
-				id:$scope.showModelTian.id
+				id:$scope.showModelTian.id,
+				status:status
 			})
 			.success(function(response){
 				auth(response);
