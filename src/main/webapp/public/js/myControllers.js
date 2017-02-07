@@ -972,8 +972,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	$scope.status = 1;
 
 	$scope.showModal = false;
-
-	$scope.checkrecordDate = null;
+	$scope.size = 15;
 	// 获取总金额信息
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
@@ -1006,7 +1005,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 					endDate:end,
 					currentPage:num-1,
 					status:status,
-					size:15
+					size:$scope.size
 				}
 			})
 				.success(function(response){
@@ -1050,7 +1049,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 
 	// 查看某个用户的相关提现记录
 	$scope.checkMyWithdrawal = function(id){
-		sessionStorage.checkWithdrawalById = id;
+		sessionStorage.userIdWithdrawal = id;
 	}
 
 	// // 返回总订单表
@@ -1119,7 +1118,6 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 		});
 	}
 });
-
 
 // 个人提现的 controller
 hjcr.controller('myRecordCtrl',function($scope,$http){

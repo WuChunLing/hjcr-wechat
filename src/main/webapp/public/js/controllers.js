@@ -954,7 +954,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	$scope.status = 1;
 
 	$scope.showModal = false;
-
+	$scope.size = 15;
 	// 获取总金额信息
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
@@ -987,7 +987,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 					endDate:end,
 					currentPage:num-1,
 					status:status,
-					size:15
+					size:$scope.size
 				}
 			})
 				.success(function(response){
@@ -1108,6 +1108,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 	$scope.userInfo = {};
 	$scope.currentPage = 0;
 	$scope.totalPage = 1;
+	$scope.size = 15;
 	$scope.id = sessionStorage.userIdWithdrawal;
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPage = function(num,id){
@@ -1116,7 +1117,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 					params:{
 						currentPage:num-1,
 						userId:id,
-						size:15
+						size:$scope.size
 					}
 				}).success(function(response){
 	  				auth(response);
