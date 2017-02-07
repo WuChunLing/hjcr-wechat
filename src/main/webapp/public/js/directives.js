@@ -1,4 +1,4 @@
-hjcr.directive('paginationDire',function(){
+hjcr.directive('pagination',function(){
   return{
     restrict:'E',
     scope:{
@@ -13,10 +13,9 @@ hjcr.directive('paginationDire',function(){
     link:function($scope,element,attrs){},
     template:
       '<ul  class="pagination" style="margin-top:20px;">'+
-        '<li>88</li>'+
-        '<li ng-click="getPage(startDate,endDate,currentPage-1,status)"  ng-class="currentPage===1?\'disabled\':\'\'>《</li>'+
-        '<li ng-repeat="page in pages" ng-click="getPage(startDate,endDate,page,status)" ng-class="currentPage===page?\'active\':\'\'>{{page}}</li>'+
-        '<li ng-click="getPage(startDate,endDate,currentPage+1,status)"  ng-class="currentPage===totalPage?\'disabled\':\'\'>》</li>'+
+        '<li ng-click="getPage(startDate,endDate,currentPage-1,status)"  ng-class="currentPage===1?\'disabled\':\'\'><a>《</a></li>'+
+        '<li ng-repeat="page in pages" ng-click="getPage(startDate,endDate,page,status)" ng-class="currentPage===page?\'active\':\'\'><a>{{page}}</a></li>'+
+        '<li ng-click="getPage(startDate,endDate,currentPage+1,status)"  ng-class="currentPage===totalPage?\'disabled\':\'\'><a>》</a></li>'+
       '</ul>'
   }
 });

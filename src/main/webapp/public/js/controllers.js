@@ -1015,8 +1015,9 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1]+" 24:00:00";
 			$scope.status = status;
-			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 			$scope.currentPage=0;
+			$scope.totalPage=1;
+			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 			$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage,$scope.status);
 		}
 	}

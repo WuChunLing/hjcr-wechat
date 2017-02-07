@@ -141,6 +141,13 @@
                 </li>
                 <li ng-click="getBill(startDate,endDate,currentPage+1)" ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
             </ul>
+            <pagination startDate="startDate"
+                        endDate="endDate"
+                        currentPage="currentPage[1]"
+                        totalPage="totalPage[1]"
+                        status="2" pages="pageArr[1]"
+                        getPage="getPage(startDate,endDate,currentPage,status)">
+            </pagination>
           </div>
       </div>
   </div>
