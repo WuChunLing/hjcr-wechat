@@ -1185,11 +1185,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
-<<<<<<< HEAD
-				alertMes(response.data,'info','fa-info-circle');
-=======
 				alertMes(response.resultInfo,'info','fa-info-circle');
->>>>>>> 776fc06aceff48e8993b0454d0bbdfd00ee0be8d
 				$scope.getMoney();
 				$scope.getPage($scope.currentPage,$scope.id);
 				$scope.showModal = !$scope.showModal;
