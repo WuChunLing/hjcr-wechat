@@ -81,6 +81,9 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 			User flush = userDao.saveAndFlush(user);
 			logger.info("After draw money user'blance :" + flush.getBalance());
 			record.setStatus(1);// 设置提现记录为 “待审核”
+			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String creatTime = date.format(new Date());
+			record.setCreatTime(creatTime);
 			return drawMoneyRecordDao.save(record);
 		}
 	}
@@ -101,8 +104,8 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 			userDao.saveAndFlush(user);
 		}
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-		String data = df.format(new Date());// new Date()为获取当前系统时间
-		record.setCreatTime(data);
+		String date = df.format(new Date());// new Date()为获取当前系统时间
+		record.setCreatTime(date);
 		record.setStatus(status);
 		DrawMoneyRecord flush = drawMoneyRecordDao.saveAndFlush(record);
 

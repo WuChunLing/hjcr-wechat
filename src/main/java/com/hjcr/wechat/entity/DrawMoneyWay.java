@@ -7,9 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 //用户提现方式表
@@ -68,7 +65,6 @@ public class DrawMoneyWay {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	@Generated(GenerationTime.INSERT)
 	public String getCreatTime() {
 		return creatTime;
 	}
