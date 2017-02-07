@@ -54,7 +54,7 @@ public class BillHandler {
 	@RequestMapping(value = "/getAllBill", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getAllBill(
 			@RequestParam(value = "currentPage", defaultValue = "0") Integer currentPage,
-			@RequestParam(value = "currentPage", defaultValue = "5") Integer size,String startDate, String endDate) {
+			@RequestParam(value = "size", defaultValue = "5") Integer size,String startDate, String endDate) {
 		log.info("获取所有订单");
 
 		ResultMessage result = new ResultMessage();
@@ -105,7 +105,7 @@ public class BillHandler {
 	@RequestMapping(value = "/getBillbyUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getBillbyUser(
 			@RequestParam(value = "currentPage", defaultValue = "0") Integer currentPage,
-			@RequestParam(value = "currentPage", defaultValue = "5") Integer size, String startDate, String endDate,Integer UserId) {
+			@RequestParam(value = "size", defaultValue = "5") Integer size, String startDate, String endDate,Integer UserId) {
 		log.info("通过用户获取所有的订单");
 
 		ResultMessage result = new ResultMessage();

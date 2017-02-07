@@ -40,4 +40,6 @@ public interface BillDao extends JpaRepository<Bill, Integer> {
 	@Query("SELECT r FROM Bill r where  r.userId =:userId or r.userFirstId=:userId or r.userSecondId=:userId")
 	Page<Bill> getBillByUser(Pageable pageable, @Param("userId") Integer userId);
 
+	Bill findByBillId(Integer billId);
+
 }

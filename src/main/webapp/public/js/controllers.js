@@ -45,12 +45,12 @@ var loginOutURL = preURL_project + 'loginOut';
 
 // 分润记账管理的接口
 
-var getBillURL = preURL_project + 'getAllBill';   	// 按时间段或者不按时间段 查询  第n页订单记录
-var getBillMoneyURL = preURL_project + 'getSumConsume'; //按时间段或者不按时间段  获取总订单 的金额信息
-var getBillByIdURL = preURL_project + 'getBillbyid';   //通过订单号查询 订单
+var getBillURL = preURL_project + 'bill/getAllBill';   	// 按时间段或者不按时间段 查询  第n页订单记录
+var getBillMoneyURL = preURL_project + 'bill/getSumConsume'; //按时间段或者不按时间段  获取总订单 的金额信息
+var getBillByIdURL = preURL_project + 'bill/getBillbyId';   //通过订单号查询 订单
 // 个人分润信息
-var getMyBillURL = preURL_project + 'getBillbyUser';   //获取 用户为xx的   第n页的订单记录
-var getBillUserURL = preURL_project + 'getUser';  //  	获取用户为xx的用户信息
+var getMyBillURL = preURL_project + 'bill/getBillbyUser';   //获取 用户为xx的   第n页的订单记录
+var getBillUserURL = preURL_project + 'user/getUser';  //  	获取用户为xx的用户信息
 
 // 提现管理的接口   (3个接口)
 
@@ -751,7 +751,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 							startDate:start,
 							endDate:end,
 							currentPage:num-1,
-							size:15
+							size:2
 						}
 					}
 				)
@@ -821,7 +821,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.currentPage = 0;
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1] + " 24:00:00";
-			$scope.getBill($scope.startDate,$scope.endDate,1);
+			$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
 			$scope.getBillMoney($scope.startDate,$scope.endDate);
 		}
 	}
@@ -835,8 +835,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		$scope.currentPage = 0;
 		$scope.startDate = null;
 		$scope.endDate = null;
-		$scope.getBill(null,null,1);
-		$scope.getBillMoney(null,null);
+		$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
+		$scope.getBillMoney($scope.startDate,$scope.endDate);
 	}
 	$scope.checkMyBill = function(id){
 		sessionStorage.checkBillById = id;
@@ -865,7 +865,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 						params:{
 							userId:id,
 							currentPage:num-1,
-							size:15
+							size:2
 						}
 					}
 				)
@@ -1017,7 +1017,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			$scope.status = status;
 			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 			$scope.currentPage=0;
-			$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
+			$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage,$scope.status);
 		}
 	}
 	$scope.keyupDate = function(status){

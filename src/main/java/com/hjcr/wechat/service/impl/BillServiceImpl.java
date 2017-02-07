@@ -88,7 +88,7 @@ public class BillServiceImpl implements BillService {
 	}
 
 	public Bill getBill(Integer BillId) {
-		Bill bill = billDao.findOne(BillId);
+		Bill bill = billDao.findByBillId(BillId);
 		setUser(bill);
 		return bill;
 	}
