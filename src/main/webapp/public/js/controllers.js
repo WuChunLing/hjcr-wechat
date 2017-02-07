@@ -1085,7 +1085,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			})
 			.success(function(response){
 				auth(response);
-				alertMes(response.data,'info','fa-info-circle');
+				alertMes(response.resultInfo,'info','fa-info-circle');
 				$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 				$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage[$scope.status-1],$scope.status);
 				$scope.showModal = !$scope.showModal;
@@ -1185,7 +1185,11 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
+<<<<<<< HEAD
 				alertMes(response.data,'info','fa-info-circle');
+=======
+				alertMes(response.resultInfo,'info','fa-info-circle');
+>>>>>>> 776fc06aceff48e8993b0454d0bbdfd00ee0be8d
 				$scope.getMoney();
 				$scope.getPage($scope.currentPage,$scope.id);
 				$scope.showModal = !$scope.showModal;
