@@ -1,19 +1,38 @@
 {
   "serviceResult": true,
+  "resultInfo": "查询成功",
   "resultParm": {
-    "totalPages":1,
-    "currentPage": 0,
     "list": [
       {
-        "billId":12345,
-        "billMoney":200,
-        "billProfit":20,
-        "billUser":{"userId":"004","userName":"嗷大喵"},
-        "billFirstUser":{"userId":"005","userName":"桃小仙"},
-        "userFirstProfit":12,
-        "billSecondUser":{"userId":"006","userName":"小肥柴"},
-        "userSecondProfit":12,
-        "billDate":"2015-02-18"
+        "id": 0,
+        "billId": 50,
+        "billMoney": 50,
+        "billProfit": 90,
+        "typeid": 0,
+        "userId": 44,
+        "userFirstId": 44,
+        "userSecondId": 44,
+        "userFirstProfit": 50,
+        "userSecondProfit": 50,
+        "user": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "userFirst": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "userSecond": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "billDate": "2017-02-05 00:00:00.0"
       }
     ]
   }

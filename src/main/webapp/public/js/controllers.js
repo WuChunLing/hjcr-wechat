@@ -45,12 +45,12 @@ var loginOutURL = preURL_project + 'loginOut';
 
 // 分润记账管理的接口
 
-var getBillURL = preURL_project + 'getBill';   	// 按时间段或者不按时间段 查询  第n页订单记录
-var getBillMoneyURL = preURL_project + 'getBillMoney'; //按时间段或者不按时间段  获取总订单 的金额信息
-var getBillByIdURL = preURL_project + 'getBillById';   //通过订单号查询 订单
+var getBillURL = preURL_project + 'getAllBill';   	// 按时间段或者不按时间段 查询  第n页订单记录
+var getBillMoneyURL = preURL_project + 'getSumConsume'; //按时间段或者不按时间段  获取总订单 的金额信息
+var getBillByIdURL = preURL_project + 'getBillbyid';   //通过订单号查询 订单
 // 个人分润信息
-var getMyBillURL = preURL_project + 'getMyBill';   //获取 用户为xx的   第n页的订单记录
-var getBillUserURL = preURL_project + 'getBillUserInfo';  //  	获取用户为xx的用户信息
+var getMyBillURL = preURL_project + 'getBillbyUser';   //获取 用户为xx的   第n页的订单记录
+var getBillUserURL = preURL_project + 'getUser';  //  	获取用户为xx的用户信息
 
 // 提现管理的接口   (3个接口)
 
@@ -731,6 +731,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.billMoney = 0;// 总金额信息
 	$scope.totalPage = 1;//全部页数
 	$scope.currentPage = 0;//当前页码
+	$scope.startDate = null;
+	$scope.endDate = null;
 	$scope.pageArr;// 页码数组
 	// 生成页码数组
 	$scope.getPage = function(num){
@@ -739,8 +741,6 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.pageArr[i] = i+1;
 		}
 	}
-	$scope.startDate = null;
-	$scope.endDate = null;
 
 	//获取   第n页的订单记录
 	$scope.getBill = function(start,end,num){
@@ -777,7 +777,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
-				$scope.billMoney=response;
+				$scope.billMoney=response.resultParm;
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -796,11 +796,12 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 				.success(function(response){
 					auth(response);
 					$scope.bills=response.resultParm.list;
-					$scope.totalPage = response.resultParm.totalPages;
-					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.totalPage = 1;
+					$scope.currentPage = 1;
 					$scope.getPage($scope.totalPage);
-					$scope.billMoney.billMoney=$scope.bills[0].billMoney;
-					$scope.billMoney.billProfit=$scope.bills[0].billProfit;
+					$scope.billMoney.total=$scope.bills[0].billMoney;
+					$scope.billMoney.SumFeeSplittingtotal=$scope.bills[0].billProfit;
+					alertMes(response.resultInfo,'info','fa-info-circle');
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
@@ -820,8 +821,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.currentPage = 0;
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1] + " 24:00:00";
-			$scope.getBill(dateArr[0],dateArr[1],1);
-			$scope.getBillMoney(dateArr[0],dateArr[1]);
+			$scope.getBill($scope.startDate,$scope.endDate,1);
+			$scope.getBillMoney($scope.startDate,$scope.endDate);
 		}
 	}
 	$scope.keyupDate = function(){
@@ -887,7 +888,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 		})
 		.success(function(response){
   		auth(response);
-			$scope.user=response;
+			$scope.user=response.resultParm.list;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});

@@ -47,7 +47,7 @@ var loginOutURL = preURL_get + 'loginOut.json';
 
 // 分润记账管理的接口
 
-var getBillURL = preURL_get + 'getBill.json';   	// 按时间段或者不按时间段 查询  第n页订单记录
+var getBillURL = preURL_get + 'getAllBill.json';   	// 按时间段或者不按时间段 查询  第n页订单记录
 var getBillMoneyURL = preURL_get + 'getBillMoney.json'; //按时间段或者不按时间段  获取总订单 的金额信息
 var getBillByIdURL = preURL_get + 'getBillById.json';   //通过订单号查询 订单
 // 个人分润信息
@@ -791,7 +791,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
-				$scope.billMoney=response;
+				$scope.billMoney=response.resultParm;
 			}).error(function(){
 				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 		});
@@ -810,11 +810,12 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 				.success(function(response){
 					auth(response);
 					$scope.bills=response.resultParm.list;
-					$scope.totalPage = response.resultParm.totalPages;
-					$scope.currentPage = response.resultParm.currentPage+1;
+					$scope.totalPage = 1;
+					$scope.currentPage = 1;
 					$scope.getPage($scope.totalPage);
-					$scope.billMoney.billMoney=$scope.bills[0].billMoney;
-					$scope.billMoney.billProfit=$scope.bills[0].billProfit;
+					$scope.billMoney.total=$scope.bills[0].billMoney;
+					$scope.billMoney.SumFeeSplittingtotal=$scope.bills[0].billProfit;
+					alertMes(response.resultInfo,'info','fa-info-circle');
 				}).error(function(){
 					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 			});
@@ -834,8 +835,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.currentPage = 0;
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1] + " 24:00:00";
-			$scope.getBill(dateArr[0],dateArr[1],1);
-			$scope.getBillMoney(dateArr[0],dateArr[1]);
+			$scope.getBill($scope.startDate,$scope.endDate,1);
+			$scope.getBillMoney($scope.startDate,$scope.endDate);
 		}
 	}
 	$scope.keyupDate = function(){
@@ -901,7 +902,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 		})
 		.success(function(response){
   		auth(response);
-			$scope.user=response;
+			$scope.user=response.resultParm.list;
 		}).error(function(){
 			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
 	});

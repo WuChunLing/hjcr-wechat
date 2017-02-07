@@ -1,4 +1,7 @@
 {
-  "billMoney":288555551000,
-  "billProfit":550000
+  "serviceResult": true,
+  "resultParm": {
+    "total": 226,
+    "SumFeeSplittingtotal": 111.11999893188477
+  }
 }

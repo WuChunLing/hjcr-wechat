@@ -8,7 +8,7 @@
               </div>
           </div>
           <div class="databox-right">
-              <span class="databox-number orange">{{billMoney.billMoney | currency }}</span>
+              <span class="databox-number orange">{{billMoney.total | currency }}</span>
               <div class="databox-text darkgray">总消费金额</div>
               <div class="databox-stat orange radius-bordered">
                   <i class="stat-icon icon-lg fa fa-tasks"></i>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="databox-right">
-            <span class="databox-number azure">{{billMoney.billProfit | currency}}</span>
+            <span class="databox-number azure">{{billMoney.SumFeeSplittingtotal | currency}}</span>
             <div class="databox-text darkgray">总分润金额</div>
             <div class="databox-state bg-azure">
                 <i class="fa fa-check"></i>
@@ -113,16 +113,16 @@
                                 {{bill.billProfit | currency}}
                             </td>
                             <td class="numeric">
-                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billUser.userId)">{{bill.billUser.userName}}</a>
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.user.userId)">{{bill.user.userName}}</a>
                             </td>
                             <td class="numeric">
-                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billFirstUser.userId)">{{bill.billFirstUser.userName}}</a>
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.userFirst.userId)">{{bill.userFirst.userName}}</a>
                             </td>
                             <td class="numeric">
                               {{bill.userFirstProfit | currency}}
                             </td>
                             <td class="numeric">
-                              <a ui-sref="myBill" ng-click="checkMyBill(bill.billSecondUser.userId)">{{bill.billSecondUser.userName}}</a>
+                              <a ui-sref="myBill" ng-click="checkMyBill(bill.userSecond.userId)">{{bill.userSecond.userName}}</a>
                             </td>
                             <td class="numeric">
                                 {{bill.userSecondProfit | currency}}

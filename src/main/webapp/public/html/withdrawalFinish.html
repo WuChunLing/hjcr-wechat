@@ -112,7 +112,13 @@
                 </li>
                 <li ng-click="getPage(startDate,endDate,currentPage[1]+1,2)"  ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
             </ul>
-            <!-- <pagination startDate={{startDate}} endDate={{endDate}} currentPage={{currentPage}} totalPage={{totalPage}} status=2 pages={{pageArr}} getPage=getPage(startDate,endDate,currentPage,status)></pagination > -->
+            <!-- <pagination-dire startDate="startDate"
+                        endDate="endDate"
+                        currentPage="currentPage[1]"
+                        totalPage="totalPage[1]"
+                        status="2" pages="pageArr[1]"
+                        getPage="getPage(startDate,endDate,currentPage,status)">
+            </pagination-dire> -->
           </div>
       </div>
   </div>
