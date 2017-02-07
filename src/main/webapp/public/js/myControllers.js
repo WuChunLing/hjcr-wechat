@@ -1036,6 +1036,8 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1]+" 24:00:00";
 			$scope.status = status;
+			$scope.currentPage[status-1]=0;
+			$scope.totalPage[status-1]=1;
 			$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 			$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
 		}
@@ -1056,7 +1058,8 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 		$scope.status = status;
 		$scope.startDate = null;
 		$scope.endDate = null;
-		$scope.currentPage = 0;
+		$scope.currentPage[status-1]=0;
+		$scope.totalPage[status-1]=1;
 		$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 		$scope.getPage($scope.startDate,$scope.endDate,1,$scope.status);
 	}
