@@ -105,13 +105,13 @@ public class BillHandler {
 	@RequestMapping(value = "/getBillbyUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> getBillbyUser(
 			@RequestParam(value = "currentPage", defaultValue = "0") Integer currentPage,
-			@RequestParam(value = "size", defaultValue = "5") Integer size, String startDate, String endDate,Integer UserId) {
+			@RequestParam(value = "size", defaultValue = "5") Integer size, String startDate, String endDate,Integer userId) {
 		log.info("通过用户获取所有的订单");
 
 		ResultMessage result = new ResultMessage();
 		Sort sort = new Sort(Direction.DESC, "billDate");
 		Pageable pageable = new PageRequest(currentPage, size, sort);
-		Page<Bill> page = billService.getBillByUser(pageable, startDate, endDate,UserId);
+		Page<Bill> page = billService.getBillByUser(pageable, startDate, endDate,userId);
 		result.getResultParm().put("list", page.getContent());
 		result.getResultParm().put("totalPages", page.getTotalPages());
 		result.getResultParm().put("currentPage", page.getNumber());
