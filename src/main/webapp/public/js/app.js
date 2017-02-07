@@ -8,7 +8,9 @@ var auth = function(response) {
 	return false;
 }
 var alertMes = function(data,dataType,iconType){
-	Notify(data, 'top-right', '5000', dataType, iconType, true);
+	if(data!=null){
+		Notify(data, 'top-right', '5000', dataType, iconType, true);
+	}
 }
 // // 重写http的post和get方法，做到拦截无权限操作
 // hjcr.run(function($rootScope,$state,$stateParams,$location,$http){
