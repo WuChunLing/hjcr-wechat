@@ -734,6 +734,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.startDate = null;
 	$scope.endDate = null;
 	$scope.pageArr;// 页码数组
+	$scope.size = 2;
 	// 生成页码数组
 	$scope.getPage = function(num){
 		$scope.pageArr = new Array();
@@ -751,7 +752,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 							startDate:start,
 							endDate:end,
 							currentPage:num-1,
-							size:2
+							size:$scope.size
 						}
 					}
 				)
@@ -783,8 +784,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		});
 	}
 
-	$scope.getBill(null,null,1);
-	$scope.getBillMoney(null,null);
+	$scope.getBill($scope.startDate,$scope.endDate,1);
+	$scope.getBillMoney($scope.startDate,$scope.endDate);
 
 	//通过订单号查询 订单
 	$scope.checkBillById = function(id){
@@ -797,7 +798,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					auth(response);
 					$scope.bills=response.resultParm.list;
 					$scope.totalPage = 1;
-					$scope.currentPage = 1;
+					$scope.currentPage = 0;
 					$scope.getPage($scope.totalPage);
 					$scope.billMoney.total=$scope.bills[0].billMoney;
 					$scope.billMoney.SumFeeSplittingtotal=$scope.bills[0].billProfit;
@@ -821,7 +822,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 			$scope.currentPage = 0;
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1] + " 24:00:00";
-			$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
+			$scope.getBill($scope.startDate,$scope.endDate,1);
 			$scope.getBillMoney($scope.startDate,$scope.endDate);
 		}
 	}
@@ -835,8 +836,8 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		$scope.currentPage = 0;
 		$scope.startDate = null;
 		$scope.endDate = null;
-		$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
-		$scope.getBillMoney($scope.startDate,$scope.endDate);
+		$scope.getBill(null,null,1);
+		$scope.getBillMoney(null,null);
 	}
 	$scope.checkMyBill = function(id){
 		sessionStorage.checkBillById = id;
@@ -849,6 +850,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 	$scope.totalPage = 1;//全部页数
 	$scope.currentPage = 0;//当前页码
 	$scope.pageArr;// 页码数组
+	$scope.size = 2;
 	// 生成页码数组
 	$scope.getPage = function(num){
 		$scope.pageArr = new Array();
@@ -865,7 +867,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 						params:{
 							userId:id,
 							currentPage:num-1,
-							size:2
+							size:$scope.size
 						}
 					}
 				)
@@ -899,8 +901,6 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 		location.href="/#/billManage";
 	}
 });
-
-
 // 用户修改自己的登录密码
 hjcr.controller('updatePwdCtrl',function($http,$scope){
 	$scope.username = sessionStorage.username;
