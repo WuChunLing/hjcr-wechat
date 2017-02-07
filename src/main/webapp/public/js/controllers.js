@@ -734,7 +734,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.startDate = null;
 	$scope.endDate = null;
 	$scope.pageArr;// 页码数组
-	$scope.size = 2;
+	$scope.size = 15;
 	// 生成页码数组
 	$scope.getPage = function(num){
 		$scope.pageArr = new Array();
@@ -745,7 +745,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 
 	//获取   第n页的订单记录
 	$scope.getBill = function(start,end,num){
-		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+		if(num>=1 && num<=$scope.totalPage){
 				$http.get(getBillURL,
 					{
 						params:{
@@ -798,7 +798,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					auth(response);
 					$scope.bills=response.resultParm.list;
 					$scope.totalPage = 1;
-					$scope.currentPage = 0;
+					$scope.currentPage = 1;
 					$scope.getPage($scope.totalPage);
 					$scope.billMoney.total=$scope.bills[0].billMoney;
 					$scope.billMoney.SumFeeSplittingtotal=$scope.bills[0].billProfit;
@@ -820,6 +820,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 		if(date!=''&&date!=null){
 			var dateArr = date.split(" 至 ");
 			$scope.currentPage = 0;
+			$scope.totalPage = 1;
 			$scope.startDate = dateArr[0];
 			$scope.endDate = dateArr[1] + " 24:00:00";
 			$scope.getBill($scope.startDate,$scope.endDate,1);
@@ -834,6 +835,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	// 返回主页面
 	$scope.backTo = function(){
 		$scope.currentPage = 0;
+		$scope.totalPage = 1;
 		$scope.startDate = null;
 		$scope.endDate = null;
 		$scope.getBill(null,null,1);
@@ -862,7 +864,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPageMyBill = function(num,id){
 		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
-				$http.get(getBillURL,
+				$http.get(getMyBillURL,
 					{
 						params:{
 							userId:id,
@@ -898,7 +900,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 	$scope.getPageMyBill(1,$scope.id);
 	// 返回主页面
 	$scope.backTo = function(){
-		location.href="/#/billManage";
+		history.back();
 	}
 });
 // 用户修改自己的登录密码

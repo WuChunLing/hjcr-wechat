@@ -104,7 +104,8 @@ public class UserServiceImpl implements UserService {
 	public User getFirstUser(int userid) {
 		User user = userDao.findOne(userid);
 		String hierarchy = user.getUserHierarchy();
-		if (!hierarchy.equals(null)) {
+		System.out.println(hierarchy);
+		if (hierarchy!=null) {
 			String[] st = hierarchy.split("/"); // 获取层级关系
 			List<User> list = new ArrayList<User>();
 
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
 	public User getSecondUser(int userid) {
 		User user = userDao.findOne(userid);
 		String hierarchy = user.getUserHierarchy();
-		if (!hierarchy.equals(null)) {
+		if (hierarchy!=null) {
 			String[] st = hierarchy.split("/"); // 获取层级关系
 			if (st.length > 2) {
 				int usersecondid = Integer.valueOf(st[2]);
