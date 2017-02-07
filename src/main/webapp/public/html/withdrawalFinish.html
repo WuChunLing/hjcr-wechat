@@ -3,11 +3,11 @@
       <div class="databox radius-bordered databox-shadowed databox-graded">
           <div class="databox-left bg-orange">
               <div class="databox-piechart">
-                  <span class="white font-200"><i class="fa fa-jpy"></i></span>
+                  <span class="white font-200"><i class="fa fa-money"></i></span>
               </div>
           </div>
           <div class="databox-right">
-              <span class="databox-number orange">{{money.finish}}</span>
+              <span class="databox-number orange">{{money.finish | currency}}</span>
               <div class="databox-text darkgray">总提现金额</div>
               <div class="databox-stat orange radius-bordered">
                   <i class="stat-icon icon-lg fa fa-tasks"></i>
@@ -20,7 +20,7 @@
       <div class="widget">
           <div class="widget-header  with-footer">
               <span class="widget-caption">已完成的提现记录表</span>
-              <span ng-click="" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
+              <span ng-click="backTo(2)" class="widget-caption"style="float:right;margin-right:12px;cursor:pointer"><i class="glyphicon glyphicon-home"></i></span>
           </div>
 
           <div class="widget-body" style="height: auto;">
@@ -32,13 +32,16 @@
                       <i ng-click="" class="glyphicon glyphicon-search blue"></i>
                   </span>
               </div> -->
-              <div class="form-group" style="width:250px;float:left;">
+              <div class="form-group" style="width:330px;float:left;">
                   <div class="controls">
                       <div class="input-group">
                           <span ng-click="checkByDate(2)" class="input-group-addon">
-                              <i class="fa fa-calendar" ng-click=""></i>
+                              <i class="fa fa-calendar"></i>
                           </span>
-                          <input ng-keyup="keyupDate(2)" type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
+                          <input ng-change="checkByDate(2)" ng-keyup="keyupDate(2)" type="text" ng-model="checkrecordDate" placeholder="按时间段查询提现记录" class="form-control" id="reservation">
+                          <span ng-click="checkByDate(2)" class="input-group-addon">
+                              点击查询
+                          </span>
                       </div>
 
                   </div>
@@ -81,7 +84,7 @@
                               <a ui-sref="myWithdrawal" ng-click="checkMyWithdrawal(record.userId)">{{record.user.userName}}</a>
                             </td>
                             <td>
-                                {{record.money}}
+                                {{record.money | currency}}
                             </td>
                             <td class="numeric">
                                 {{record.drawMoneyWay.way==1?'银行卡':'支付宝'}}
@@ -102,13 +105,20 @@
                       </tbody>
                   </table>
             </div>
-            <ul class="pagination" style="margin-top:20px;">
-                <li ng-click="getPage(startDate,endDate,currentPage[1]-1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===1?'disabled':''"><a>«</a></li>
-                <li ng-click="getPage(startDate,endDate,page,2)" ng-show="totalPage[1]>1" ng-repeat="page in pageArr[1]" ng-class="currentPage[1]===page?'active':''">
+            <ul ng-show="totalPage[1]>1" class="pagination" style="margin-top:20px;">
+                <li ng-click="getPage(startDate,endDate,currentPage[1]-1,2)"  ng-class="currentPage[1]===1?'disabled':''"><a>«</a></li>
+                <li ng-click="getPage(startDate,endDate,page,2)"  ng-repeat="page in pageArr[1]" ng-class="currentPage[1]===page?'active':''">
                   <a>{{page}}</a>
                 </li>
-                <li ng-click="getPage(startDate,endDate,currentPage[1]+1,2)" ng-show="totalPage[1]>1" ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
+                <li ng-click="getPage(startDate,endDate,currentPage[1]+1,2)"  ng-class="currentPage[1]===totalPage[1]?'disabled':''"><a>»</a></li>
             </ul>
+            <!-- <pagination-dire startDate="startDate"
+                        endDate="endDate"
+                        currentPage="currentPage[1]"
+                        totalPage="totalPage[1]"
+                        status="2" pages="pageArr[1]"
+                        getPage="getPage(startDate,endDate,currentPage,status)">
+            </pagination-dire> -->
           </div>
       </div>
   </div>

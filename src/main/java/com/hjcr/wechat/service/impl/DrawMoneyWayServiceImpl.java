@@ -1,5 +1,7 @@
 package com.hjcr.wechat.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class DrawMoneyWayServiceImpl implements DrawMoneyWayService{
 	 * 添加新的提现方式
 	 */
 	public DrawMoneyWay addWay(DrawMoneyWay way) {
+		SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = d.format(new Date());
+		way.setCreatTime(date);
 		return drawMoneyWayDao.save(way);
 	}
 
@@ -46,6 +51,9 @@ public class DrawMoneyWayServiceImpl implements DrawMoneyWayService{
 	 * 更新
 	 */
 	public boolean update(DrawMoneyWay way) {
+		SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = d.format(new Date());
+		way.setCreatTime(date);
 		DrawMoneyWay flush = drawMoneyWayDao.saveAndFlush(way);
 		return flush.getId() == null ? false:true;
 	}

@@ -1,6 +1,16 @@
 {
-  "userName":"嗷大喵",
-  "userMobiphone":13413609014,
-  "userPortrait":"imgs/toux.jpg",
-  "userMoney":2000
+  "serviceResult": true,
+  "resultInfo": "查询成功",
+  "resultParm": {
+    "list": {
+      "userId": 54,
+      "headImgUrl": "http://wx.qlogo.cn/mmopen/rsfX3qKj8rDBvYdThrbQfjdAcOtibGdK7HvQSyyBhfibCIuibCkzHPUrxav1Xpto5WESvsYkW2rdrtB8NZ7zQUVT1fH3GY0hdJb/0",
+      "userName": "─=≡Σ( つ•̀ω•́)つ",
+      "userOpenid": "oUPl-wh3UehzmwaztIQzkvcuS3rE",
+      "userHierarchy": "/52",
+      "userForeignkey": 0,
+      "userMobiphone": "1111",
+      "balance": 8.976
+    }
+  }
 }

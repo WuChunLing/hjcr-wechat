@@ -1,8 +1,8 @@
 {
   "serviceResult": true,
   "resultParm": {
-    "totalPages": 1,
-    "currentPage": 0,
+    "totalPages": 5,
+    "currentPage": 2,
     "list": [
       {
         "id": 142,
@@ -67,6 +67,37 @@
           "balance": 1.584
         },
         "billDate": "2017-02-06 16:17:02.0"
+      },
+      {
+        "id": 0,
+        "billId": 50,
+        "billMoney": 50,
+        "billProfit": 90,
+        "typeid": 0,
+        "userId": 44,
+        "userFirstId": 44,
+        "userSecondId": 44,
+        "userFirstProfit": 50,
+        "userSecondProfit": 50,
+        "user": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "userFirst": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "userSecond": {
+          "userId": 44,
+          "userName": "揩油",
+          "userForeignkey": 0,
+          "balance": 1.584
+        },
+        "billDate": "2017-02-05 00:00:00.0"
       },
       {
         "id": 140,
