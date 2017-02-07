@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hjcr.wechat.dao.UserDao;
 import com.hjcr.wechat.entity.User;
@@ -20,7 +21,7 @@ import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 @Service("userService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
@@ -61,12 +62,12 @@ public class UserServiceImpl implements UserService{
 		return "success";
 	}
 
-	// 获取用户的一级代理
+	// 获取该用户作为一级代理的所有下级
 	public List<User> getFirstAgent(int userid) {
 		return userDao.getFirstChildrenAgent(userid);
 	}
 
-	// 获取用户的二级代理
+	// 获取该用户作为二级代理的所有下级
 	public List<User> getSecondChildrenAgent(int userid) {
 		return userDao.getSecondChildrenAgent(userid);
 	}
@@ -80,21 +81,50 @@ public class UserServiceImpl implements UserService{
 		int Userid = Integer.parseInt(userId);
 		return userDao.getOpenidbyuser(Userid);
 	}
-	
-	public List<User> getAllfirstUser(int userid){
-		User user=userDao.findOne(userid);
+
+	public List<User> getAllfirstUser(int userid) {
+		User user = userDao.findOne(userid);
 		String hierarchy = user.getUserHierarchy();
-		if(!hierarchy.equals(null)){
-		String[] st = hierarchy.split("/"); // 获取层级关系
-		List<User> list=new ArrayList<User>();
-		
-		int userfirstid=Integer.valueOf(st[1]);
-		list.add(userDao.findOne(userfirstid));
-		if(st.length>2){
-			int usersecondid=Integer.valueOf(st[2]);
-			list.add(userDao.findOne(usersecondid));
+		if (!hierarchy.equals(null)) {
+			String[] st = hierarchy.split("/"); // 获取层级关系
+			List<User> list = new ArrayList<User>();
+
+			int userfirstid = Integer.valueOf(st[1]);
+			list.add(userDao.findOne(userfirstid));
+			if (st.length > 2) {
+				int usersecondid = Integer.valueOf(st[2]);
+				list.add(userDao.findOne(usersecondid));
+			}
+			return list;
 		}
-		return list;
+		return null;
+	}
+
+	// 获取一级代理
+	public User getFirstUser(int userid) {
+		User user = userDao.findOne(userid);
+		String hierarchy = user.getUserHierarchy();
+		if (!hierarchy.equals(null)) {
+			String[] st = hierarchy.split("/"); // 获取层级关系
+			List<User> list = new ArrayList<User>();
+
+			int userfirstid = Integer.valueOf(st[1]);
+			return userDao.findOne(userfirstid);
+		}
+		return null;
+	}
+
+	// 获取二级代理
+	public User getSecondUser(int userid) {
+		User user = userDao.findOne(userid);
+		String hierarchy = user.getUserHierarchy();
+		if (!hierarchy.equals(null)) {
+			String[] st = hierarchy.split("/"); // 获取层级关系
+			if (st.length > 2) {
+				int usersecondid = Integer.valueOf(st[2]);
+				return userDao.findOne(usersecondid);
+			}
+			return null;
 		}
 		return null;
 	}
@@ -114,11 +144,24 @@ public class UserServiceImpl implements UserService{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 		}
 		return "success";
 	}
 
+	
+	/*
+	 *更新余额 
+	 */
+	@Transactional
+	public void setUserBalance(int userID,float money){
+		User user=userDao.findOne(userID);
+		System.out.println(user);
+		System.err.println(money);
+		float balance=user.getBalance()+money;
+		user.setBalance(balance);
+		userDao.saveAndFlush(user);
+	}
+	
 	@Override
 	public User findOne(Integer userId) {
 		return userDao.findOne(userId);

@@ -23,8 +23,8 @@ public class User {
 	private String userHierarchy;  //微信用户的祖辈关系
 	private Integer userForeignkey; //app用户id
 	private String userMobiphone;  //手机
-	private String UnionID;   //微信用户在公众号与app上的共同id
-	private Float balance;  //用户余额
+	private String unionId;   //微信用户在公众号与app上的共同id
+	private Float balance=(float) 0;  //用户余额
 	
 	
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,11 +71,14 @@ public class User {
 	public void setUserMobiphone(String userMobiphone) {
 		this.userMobiphone = userMobiphone;
 	}
-	public String getUnionID() {
-		return UnionID;
+
+	
+	
+	public String getUnionId() {
+		return unionId;
 	}
-	public void setUnionID(String unionID) {
-		UnionID = unionID;
+	public void setUnionId(String unionId) {
+		this.unionId = unionId;
 	}
 	public Float getBalance() {
 		return balance;
@@ -111,6 +114,6 @@ public class User {
 				+ ", userName=" + userName + ", userOpenid=" + userOpenid
 				+ ", userHierarchy=" + userHierarchy + ", userForeignkey="
 				+ userForeignkey + ", userMobiphone=" + userMobiphone
-				+ ", UnionID=" + UnionID + ", balance=" + balance + "]";
+				+ ", UnionID=" + unionId + ", balance=" + balance + "]";
 	}
 }

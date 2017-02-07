@@ -17,6 +17,13 @@ public interface UserDao extends JpaRepository<User, Integer> {
 	User getUserbyOpenid(String Openid);
 
 	/*
+	 * 通过unionId获得用户信息
+	 */
+	@Query("SELECT user FROM User user WHERE user.unionId = ?1 ")
+	User getUserbyUnionId(String unionId);
+	
+	
+	/*
 	 * 通过userId获得用户openid
 	 */
 	@Query("SELECT user.userOpenid FROM User user WHERE user.userId = ?1 ")

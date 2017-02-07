@@ -24,7 +24,7 @@ public class Bill {
 	private Integer billId; // 订单id
 	private Float billMoney; // 订单金额
 	private Float billProfit; // 分润金额
-	private String typeName;// 类别id
+	private int typeid;// 类别id
 	private Integer userId;// 消费者id
 	private int userFirstId;// 代理一级id
 	private int userSecondId;// 代理二级id
@@ -69,12 +69,14 @@ public class Bill {
 		this.billProfit = billProfit;
 	}
 
-	public String getTypeName() {
-		return typeName;
+	
+
+	public int getTypeid() {
+		return typeid;
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setTypeid(int typeid) {
+		this.typeid = typeid;
 	}
 
 	public Integer getUserId() {
@@ -153,7 +155,7 @@ public class Bill {
 		this.billDate = billDate;
 	}
 
-	public Bill(Integer id, Integer billId, Float billMoney, Float billProfit, String typeName, Integer userId,
+	public Bill(Integer id, Integer billId, Float billMoney, Float billProfit, int typeid, Integer userId,
 			int userFirstId, int userSecondId, Float userFirstProfit, Float userSecondProfit, User user, User userFirst,
 			User userSecond, String billDate) {
 		super();
@@ -161,7 +163,7 @@ public class Bill {
 		this.billId = billId;
 		this.billMoney = billMoney;
 		this.billProfit = billProfit;
-		this.typeName = typeName;
+		this.typeid = typeid;
 		this.userId = userId;
 		this.userFirstId = userFirstId;
 		this.userSecondId = userSecondId;

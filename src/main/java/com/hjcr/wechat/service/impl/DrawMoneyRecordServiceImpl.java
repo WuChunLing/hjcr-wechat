@@ -141,7 +141,7 @@ public class DrawMoneyRecordServiceImpl implements DrawMoneyRecordService {
 	 */
 	private DrawMoneyRecord filterInfo(DrawMoneyRecord record) {
 		record.getUser().setHeadImgUrl(null);
-		record.getUser().setUnionID(null);
+		record.getUser().setUnionId(null);
 		record.getUser().setUserOpenid(null);
 		record.getUser().setUserHierarchy(null);
 		record.getDrawMoneyWay().setCreatTime(null);
