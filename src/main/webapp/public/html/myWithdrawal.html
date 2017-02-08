@@ -101,13 +101,15 @@
                       </tbody>
                   </table>
             </div>
-            <ul class="pagination" ng-show="totalPage>1" style="margin-top:20px;">
+            <!-- <ul class="pagination" ng-show="totalPage>1" style="margin-top:20px;">
                 <li ng-click="getPage(currentPage-1,2)"  ng-class="currentPage===1?'disabled':''"><a>«</a></li>
                 <li ng-click="getPage(page,2)" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
                 <li ng-click="getPage(currentPage+1,2)"  ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
-            </ul>
+            </ul> -->
+            <pagination current-page="currentPage" total-page="totalPage" get-record="getRecord()">
+            </pagination>
           </div>
       </div>
   </div>

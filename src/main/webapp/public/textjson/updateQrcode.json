@@ -6,11 +6,11 @@
       {
          "templateId":"1",
          "templateName":"2016信贷展业集合",
-         "templateQrcodeHigh":0.7670731707317073,
-         "templateQrcodeWide":0.3711111111111111,
-         "templateHeadImgHigh":0.5914634146341463,
-         "templateHeadImgWide":0.42444444444444446,
-         "templateQrcodeSize":0.2866666666666667,
+         "templateQrcodeHigh":0.4426829268292683,
+         "templateQrcodeWide":0.8466666666666667,
+         "templateHeadImgHigh":0.4426829268292683,
+         "templateHeadImgWide":0.8466666666666667,
+         "templateQrcodeSize":0.2822222222222222,
          "templateConfirm":1,
          "templatePath":"imgs/1.jpg"
       }

@@ -7,9 +7,29 @@ var auth = function(response) {
 	}
 	return false;
 }
-var alertMes = function(data,dataType,iconType){
-	if(data!=null){
-		Notify(data, 'top-right', '5000', dataType, iconType, true);
+var alertMes = function(serviceResult,resultInfo){
+	var dataType;
+	var iconType;
+	if (serviceResult===true) {
+		dataType="success";
+		iconType='fa-check';
+	}
+	else if (serviceResult===false) {
+		dataType="danger";
+		iconType='fa-times'
+	}
+	else if(serviceResult==='noHttp'){
+		dataType='warning';
+		iconType='fa-bolt';
+		resultInfo="请求得不到响应，请稍后重试..."
+	}
+	else if (serviceResult==='noPrivilege') {
+		dataType='purple';
+		iconType='fa-warning';
+		resultInfo = "您无此项操作的权限！"
+	}
+	if(resultInfo!=null){
+		Notify(resultInfo, 'top-right', '5000', dataType, iconType, true);
 	}
 }
 // // 重写http的post和get方法，做到拦截无权限操作

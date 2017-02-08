@@ -2,8 +2,9 @@ hjcr.directive('pagination',function(){
   return{
     restrict:'E',
     scope:{
-      currentPage:'@',
-      totalPage:'='
+      currentPage:'=',
+      totalPage:'=',
+      getRecord:'&'
     },
     link:function($scope,element,attrs){
     },
@@ -26,12 +27,7 @@ hjcr.directive('pagination',function(){
       });
       $scope.$watch('currentPage',function(newValue, oldValue){
         $scope.currentPage = newValue;
-        if($scope.currentPage<$scope.pages[0]){
-
-        }
-        else if ($scope.currentPage>$scope.pages[4]) {
-
-        }
+        $scope.getRecord();
       });
       $scope.prev = function(){
         if($scope.currentPage>1){
@@ -50,26 +46,38 @@ hjcr.directive('pagination',function(){
       $scope.toFirst = function(){$scope.currentPage = 1;$scope.index=0;}
       $scope.toEnd = function(){$scope.currentPage = $scope.totalPage;$scope.index=$scope.totalPage-5;}
       $scope.prevSize = function(){
-        if($scope.pages[0]-4<0){
+        if($scope.pages[0]-5<1){
           $scope.index = 0;
+          $scope.currentPage = $scope.index+3;
         }
-        $scope.index = $scope.pages[0]-4;
-        $scope.currentPage = $scope.index+1;
+        else {
+          $scope.index = $scope.pages[0]-6;
+          $scope.currentPage = $scope.currentPage-5;
+        }
       }
       $scope.nextSize = function(){
-        $scope.index = $scope.pages[0]+4;
-        $scope.currentPage = $scope.index+1;
+        if ($scope.pages[4]+5>$scope.totalPage) {
+          $scope.index = $scope.totalPage-5;
+          $scope.currentPage = $scope.index+3;
+        }
+        else {
+          $scope.index = $scope.pages[0]+4;
+          $scope.currentPage = $scope.currentPage+5;
+        }
+      }
+      $scope.jump = function(page){
+        $scope.currentPage = page;
       }
     },
     template:
       '<ul  class="pagination" style="margin-top:20px;">'+
-        '<li ng-click="toFirst()"><a>首页</a></li>'+
-        '<li ng-click="prevSize()"><a><i class="fa fa-backward"></i></a></li>'+
-        '<li ng-click="prev()"><a><i class="fa fa-chevron-left"></i></a></li>'+
-        '<li ng-class="currentPage==page?\'active\':\'\'" ng-repeat="page in pages"><a>{{page}}</a></li>'+
-        '<li ng-click="next()"><a><i class="fa fa-chevron-right"></i></a></li>'+
-        '<li ng-click="nextSize()"><a><i class="fa fa-forward"></i></a></li>'+
-        '<li ng-click="toEnd()"><a>尾页</a></li>'+
+        '<li ng-click="toFirst()" ng-class="currentPage===1?\'disabled\':\'\'"><a>首页</a></li>'+
+        '<li ng-show="totalPage>5" ng-click="prevSize()" ng-class="pages[0]===1?\'disabled\':\'\'"><a><i class="fa fa-backward"></i></a></li>'+
+        '<li ng-click="prev()" ng-class="currentPage===1?\'disabled\':\'\'"><a><i class="fa fa-chevron-left"></i></a></li>'+
+        '<li ng-click="jump(page)" ng-class="currentPage==page?\'active\':\'\'" ng-repeat="page in pages"><a>{{page}}</a></li>'+
+        '<li ng-click="next()" ng-class="currentPage===totalPage?\'disabled\':\'\'"><a><i class="fa fa-chevron-right"></i></a></li>'+
+        '<li ng-show="totalPage>5" ng-click="nextSize()" ng-class="pages[4]===totalPage?\'disabled\':\'\'"><a><i class="fa fa-forward"></i></a></li>'+
+        '<li ng-click="toEnd()" ng-class="currentPage===totalPage?\'disabled\':\'\'"><a>尾页</a></li>'+
       '</ul>'
   }
 });

@@ -1,16 +1,16 @@
 {
   "serviceResult": true,
-  "resultInfo": "查询成功",
   "resultParm": {
-    "list": {
-      "userId": 54,
-      "headImgUrl": "http://wx.qlogo.cn/mmopen/rsfX3qKj8rDBvYdThrbQfjdAcOtibGdK7HvQSyyBhfibCIuibCkzHPUrxav1Xpto5WESvsYkW2rdrtB8NZ7zQUVT1fH3GY0hdJb/0",
+    "total": null,
+    "user": {
+      "userId": 21,
+      "headImgUrl": "http://wx.qlogo.cn/mmopen/eHEMOF2hOemG7tCo9eEv4FZPDmj2ia0KqBmZkBfflXNiaIyGtp8I1alYQia0yIO67gXEmkdKwbmKmBOZzwptRcvWAygWPZ8RyKC/0",
       "userName": "─=≡Σ( つ•̀ω•́)つ",
       "userOpenid": "oUPl-wh3UehzmwaztIQzkvcuS3rE",
-      "userHierarchy": "/52",
+      "userHierarchy": "/23",
       "userForeignkey": 0,
       "userMobiphone": "1111",
-      "balance": 8.976
+      "balance": 200
     }
   }
 }

@@ -135,7 +135,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 			auth(response);
 			$scope.qrcodes=response.resultParm.allTemplate;
 		}).error(function(response){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 
 	// 修改模板
@@ -154,7 +154,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 		$http.post(deleteQrcodeURL,{templateId:$scope.templateId})
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			// $scope.qrcodes.splice($scope.templateIndex,1);
 			$http.get(getQrcodeURL)
 				.success(function(response){
@@ -163,7 +163,7 @@ hjcr.controller('checkQCtrl',function($scope,$http){
 				}).error(function(response){
 			});
 		}).error(function(response){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 		$scope.showModal = !$scope.showModal;
 	}
@@ -202,46 +202,52 @@ hjcr.controller('newQCtrl',function($scope,$http){
   //显示或移除二维码、头像
 	$scope.showQ = function(value){$scope.showQrcode = value;}
 	$scope.showT = function(value){$scope.showToux = value;}
-  //确认上传模板
+	//确认上传模板
 	$scope.submitTemplate = function(){
-		if($("#qrcodeImg").width()!=null && $("#qrcodeImg").width()!=0 && $("#qrcodeImg").width()!=undefined){
-			template.templateQrcodeSize = $("#qrcodeImg").width()/450;
-		}
-		var offset = $('.templateImg').offset();
-		var offsetQ = $('#qrcodeImg').offset();
-		var offsetT = $('#toux').offset();
-		// 二维码的 top 和 left 偏移比例
-		template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
-		template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
-		// 头像的 top 和 left 偏移比例
-		template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
-		template.templateHeadImgWide = (offsetT.left-offset.left)/450;
-
-		template.templateConfirm = $scope.templateConfirm===true?1:0;
-		var templateFormDate = new FormData(document.getElementById("myForm"));
-		templateFormDate.append("templateQrcodeHigh",template.templateQrcodeHigh);
-		templateFormDate.append("templateQrcodeWide",template.templateQrcodeWide);
-		templateFormDate.append("templateHeadImgHigh",template.templateHeadImgHigh);
-		templateFormDate.append("templateHeadImgWide",template.templateHeadImgWide);
-		templateFormDate.append("templateQrcodeSize",template.templateQrcodeSize);
-		templateFormDate.append("templateConfirm",template.templateConfirm==true?1:0);
-		var xhr = new XMLHttpRequest();
-    xhr.onload=function(event)
-    {
-      if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
-      {
-				alertMes("上传成功!",'success','fa-check');
-      }
-			else if(xhr.status == 401){
-				alertMes("您没有权限，操作失败!",'warning','fa-warning');
+		if($scope.showQrcode===true && $scope.showToux===true){
+			if($("#qrcodeImg").width()!=null && $("#qrcodeImg").width()!=0 && $("#qrcodeImg").width()!=undefined){
+				template.templateQrcodeSize = $("#qrcodeImg").width()/450;
 			}
-      else
-      {
-        alertMes("上传失败!",'danger','fa-bolt');
-      }
-    };
-		xhr.open("POST", newQrcodeURL,true);
-		xhr.send(templateFormDate);
+			var offset = $('.templateImg').offset();
+			var offsetQ = $('#qrcodeImg').offset();
+			var offsetT = $('#toux').offset();
+			// 二维码的 top 和 left 偏移比例
+			template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
+			template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
+			// 头像的 top 和 left 偏移比例
+			template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
+			template.templateHeadImgWide = (offsetT.left-offset.left)/450;
+
+			template.templateConfirm = $scope.templateConfirm===true?1:0;
+			var templateFormDate = new FormData(document.getElementById("myForm"));
+			templateFormDate.append("templateQrcodeHigh",template.templateQrcodeHigh);
+			templateFormDate.append("templateQrcodeWide",template.templateQrcodeWide);
+			templateFormDate.append("templateHeadImgHigh",template.templateHeadImgHigh);
+			templateFormDate.append("templateHeadImgWide",template.templateHeadImgWide);
+			templateFormDate.append("templateQrcodeSize",template.templateQrcodeSize);
+			templateFormDate.append("templateConfirm",template.templateConfirm==true?1:0);
+			var xhr = new XMLHttpRequest();
+	    xhr.onload=function(event)
+	    {
+	      if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
+	      {
+					alertMes(true,"上传成功！");
+	      }
+				else if(xhr.status == 401){
+					// alertMes("您没有权限，操作失败!",'warning','fa-warning');
+					alertMes('noPrivilege',null);
+				}
+	      else
+	      {
+	        alertMes(false,"上传失败！");
+	      }
+	    };
+			xhr.open("POST", newQrcodeURL,true);
+			xhr.send(templateFormDate);
+		}
+		else {
+			alertMes(false,'请添加二维码和头像的位置');
+		}
 	}
 });
 
@@ -266,36 +272,41 @@ hjcr.controller('updateQCtrl',function($scope,$http){
 					left:$scope.template.templateQrcodeWide*450
 			})
 			$("#toux").css({
-				top:$scope.template.templateHeadImgHigh*820,
+				top:$scope.template.templateHeadImgHigh*820-130,
 				left:$scope.template.templateHeadImgWide*450,
 			});
 		}).error(function(){
-			alertMes("请求得不到响应，请稍后重试...",'warning','fa-warning');
+			alertMes("noHttp",null);
 	});
 	//显示或移除二维码、头像
 	$scope.showQ = function(value){$scope.showQrcode = value;}
 	$scope.showT = function(value){$scope.showToux = value;}
 	//确认修改模板
 	$scope.submitTemplate = function(){
-		$scope.template.templateName=$("#templateName").val();
-		$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
-		$scope.template.templateConfirm=($scope.select==true?1:0);
-		var offset = $('.templateImg').offset();
-		var offsetQ = $('#qrcodeImg').offset();
-		var offsetT = $('#touxImg').offset();
-		// 二维码的 top 和 left 偏移比例
-		$scope.template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
-		$scope.template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
-		// 头像的 top 和 left 偏移比例
-		$scope.template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
-		$scope.template.templateHeadImgWide = (offsetT.left-offset.left)/450;
-		$http.post(updateQrcodeURL,$scope.template)
-		.success(function(response){
-			auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
-		}).error(function(){
-			alertMes("修改失败,请稍后重试...",'warning','fa-warning');
-		});
+		if($scope.showQrcode===true && $scope.showToux===true){
+			$scope.template.templateName=$("#templateName").val();
+			$scope.template.templateQrcodeSize = $("#qrcodeImg").width()/450;
+			$scope.template.templateConfirm=($scope.select==true?1:0);
+			var offset = $('.templateImg').offset();
+			var offsetQ = $('#qrcodeImg').offset();
+			var offsetT = $('#touxImg').offset();
+			// 二维码的 top 和 left 偏移比例
+			$scope.template.templateQrcodeHigh = (offsetQ.top-offset.top)/820;
+			$scope.template.templateQrcodeWide = (offsetQ.left-offset.left)/450;
+			// 头像的 top 和 left 偏移比例
+			$scope.template.templateHeadImgHigh = (offsetT.top-offset.top)/820;
+			$scope.template.templateHeadImgWide = (offsetT.left-offset.left)/450;
+			$http.post(updateQrcodeURL,$scope.template)
+			.success(function(response){
+				auth(response);
+				alertMes(response.serviceResult,response.resultInfo);
+			}).error(function(){
+				alertMes('noHttp',null);
+			});
+		}
+		else {
+			alertMes(false,'请添加二维码和头像的位置');
+		}
 	}
 });
 
@@ -317,11 +328,11 @@ hjcr.controller('createQCtrl',function($scope,$http){
 			$http.post(createQrcodeURL,{userTelephone:$scope.phone})
 			.success(function(response){
   			auth(response);
-				alertMes(response.resultInfo,'success','fa-check');
+				alertMes(response.serviceResult,response.resultInfo);
 				$scope.createQImg=response.templatePath;
 				$scope.createQ = true;
 			}).error(function(){
-				alertMes("请求未得到响应，请稍后重试！",'warning','fa-warning');
+				alertMes('noHttp',null);
 				$scope.createQ = false;
 			});
 		}
@@ -337,7 +348,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	  	auth(response);
 			$scope.voucher=response.resultParm.allVoucher;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 获取一二级代理分润比例
 	$http.get(getAllocationURL)
@@ -345,7 +356,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	  	auth(response);
 			$scope.location=response.resultParm.allocation;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 获取商品比例
 	$http.get(getOrderMoneyURL)
@@ -353,7 +364,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 	  	auth(response);
 			$scope.productions=response.resultParm.orderMoney;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 修改一级代理的优惠券面额
 	$scope.ifEditExFirst = false;
@@ -365,11 +376,11 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$http.post(updateFirstVoucherURL,{money:save_exFirst})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.ifEditExFirst = !$scope.ifEditExFirst;
 			$scope.voucher[0].voucherMoney = save_exFirst;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 	}
 	// 修改二级代理的优惠券面额
@@ -382,11 +393,11 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$http.post(updateSecondVoucherURL,{money:save_exSecond})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.ifEditExSecond = !$scope.ifEditExSecond;
 			$scope.voucher[1].voucherMoney = save_exSecond;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 	}
 	// 修改一级代理的销售分配比例
@@ -399,17 +410,17 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$http.post(updatafirstAllocationURL,{orderMoneyFirst:save_orderFirst})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			// 获取一二级代理分润比例
 			$http.get(getAllocationURL)
 				.success(function(response){
 			  	auth(response);
 					$scope.location=response.resultParm.allocation;
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 	}
 	// 修改二级代理的销售分配比例
@@ -422,17 +433,17 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$http.post(updatasecondAllocationURL,{orderMoneySecond:save_orderSecond})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			// 获取一二级代理分润比例
 			$http.get(getAllocationURL)
 				.success(function(response){
 			  	auth(response);
 					$scope.location=response.resultParm.allocation;
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 	}
 
@@ -461,7 +472,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		$http.post(deteleOrderMoneyURL,{orderMoneyId:$scope.deleteId})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.showModal = false;
 			// 获取商品比例
 			$http.get(getOrderMoneyURL)
@@ -469,10 +480,10 @@ hjcr.controller('profitCtrl',function($scope,$http){
 			  	auth(response);
 					$scope.productions=response.resultParm.orderMoney;
 				}).error(function(){
-					alertMes('删除失败！','danger','fa-bolt');
+					alertMes('noHttp',null);
 			});
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 			$scope.showModal = false;
 		});
 	}
@@ -488,7 +499,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 		})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'success','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$http.get(getOrderMoneyURL)
 				.success(function(response){
 			  	auth(response);
@@ -496,7 +507,7 @@ hjcr.controller('profitCtrl',function($scope,$http){
 				}).error(function(){
 			});
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 	}
 });
@@ -510,14 +521,14 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		.success(function(response){
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	$http.get(getPrivilegeURL)
 		.success(function(response){
 			auth(response);
 			$scope.privileges=response.resultParm.privilegeList;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 显示权限
 	$scope.showPrivilegeFuc = function(index){
@@ -538,7 +549,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 			})
 			.success(function(response){
   			auth(response);
-				alertMes(response.resultInfo,'info','fa-check');
+				alertMes(response.serviceResult,response.resultInfo);
 				$scope.showModal = !$scope.showModal;
 				$http.get(getRoleURL)
 					.success(function(response){
@@ -548,7 +559,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				});
 			}).error(function(){
 				$scope.showModal = !$scope.showModal;
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 	// 添加角色
@@ -567,17 +578,17 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				$http.get(getRoleURL)
 					.success(function(response){
   					auth(response);
-						alertMes(response.resultInfo,'success','fa-check');
+						alertMes(response.serviceResult,response.resultInfo);
 						$scope.roles=response.resultParm.roleList;
 					}).error(function(){
 				});
       }
 			else if(xhr.status == 401){
-				alertMes('无权限操作！','danger','fa-bolt');
+				alertMes('noPrivilege',null);
 			}
       else
       {
-        alertMes('添加角色失败！','danger','fa-bolt');
+        alertMes('noHttp',null);
       }
     };
 		xhr.open("POST", addRoleURL,true);
@@ -587,6 +598,8 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	// 显示 修改角色 名称和 角色   的 对话框
 	$scope.updateRoleModel = false;
 	$scope.updateRoleName = function(id){
+		$scope.roleName=null;
+		$scope.roleDescribe=null;
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 		$scope.updateRoleId = id;
 	}
@@ -599,7 +612,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$http.get(getRoleURL)
 				.success(function(response){
   				auth(response);
@@ -607,7 +620,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 				}).error(function(){
 			});
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 		$scope.updateRoleModel = !$scope.updateRoleModel;
 	}
@@ -620,7 +633,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
-				alertMes(response.resultInfo,'info','fa-check');
+				alertMes(response.serviceResult,response.resultInfo);
 				var edit = new Array();
 				for (var i = 0; i < $scope.roles.length; i++) {
 					edit[i] = $scope.roles[i].editActive;
@@ -633,10 +646,10 @@ hjcr.controller('roleCtrl',function($scope,$http){
 							$scope.roles[i].editActive = edit[i];
 						}
 					}).error(function(){
-						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+						alertMes('noHttp',null);
 				});
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 });
@@ -647,19 +660,19 @@ hjcr.controller('userCtrl',function($scope,$http){
 	$http.get(getUserURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.users=response.resultParm.userList;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 获取角色表
 	$http.get(getRoleURL)
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.roles=response.resultParm.roleList;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 删除用户确认弹框
 	$scope.showModal = false;
@@ -671,16 +684,16 @@ hjcr.controller('userCtrl',function($scope,$http){
 		$http.post(deleteUserURL,{id:$scope.deleteUserId})
 		.success(function(response){
   		auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$http.get(getUserURL)
 				.success(function(response){
   				auth(response);
 					$scope.users=response.resultParm.userList;
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 		$scope.showModal = !$scope.showModal;
 	}
@@ -693,17 +706,17 @@ hjcr.controller('userCtrl',function($scope,$http){
 		$http.post(addUserURL,$scope.newUser)
 			.success(function(response){
   			auth(response);
-				alertMes(response.resultInfo,'info','fa-check');
+				alertMes(response.serviceResult,response.resultInfo);
 				$http.get(getUserURL)
 					.success(function(response){
   					auth(response);
 						$scope.users=response.resultParm.userList;
 					}).error(function(){
-						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+						alertMes('noHttp',null);
 				});
 				$scope.showAddUser = !$scope.showAddUser;
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 	// 修改用户
@@ -717,10 +730,10 @@ hjcr.controller('userCtrl',function($scope,$http){
 		})
 		.success(function(response){
 			auth(response);
-			alertMes(response.resultInfo,'info','fa-check');
+			alertMes(response.serviceResult,response.resultInfo);
 			$scope.users[index].userRole = $scope.users[index].newuserRole.roleName;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 		});
 		$scope.users[index].editActive = !$scope.users[index].editActive;
 	}
@@ -730,7 +743,6 @@ hjcr.controller('userCtrl',function($scope,$http){
 // 分润账单
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
-	$scope.test ={name:"Hell"};
 	$scope.bills = null;// 总订单记录
 	$scope.billMoney = 0;// 总金额信息
 	$scope.totalPage = 1;//全部页数
@@ -767,7 +779,7 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					$scope.currentPage = response.resultParm.currentPage+1;
 					$scope.getPage($scope.totalPage);
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}
 	}
@@ -784,13 +796,16 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 				auth(response);
 				$scope.billMoney=response.resultParm;
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 
 	$scope.getBill($scope.startDate,$scope.endDate,1);
 	$scope.getBillMoney($scope.startDate,$scope.endDate);
-
+	$scope.getRecord = function(){
+		$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
+		$scope.getBillMoney($scope.startDate,$scope.endDate);
+	}
 	//通过订单号查询 订单
 	$scope.checkBillById = function(id){
 		if(id!=null && id!='' && id!=' '){
@@ -806,9 +821,9 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 					$scope.getPage($scope.totalPage);
 					$scope.billMoney.total=$scope.bills[0].billMoney;
 					$scope.billMoney.SumFeeSplittingtotal=$scope.bills[0].billProfit;
-					alertMes(response.resultInfo,'info','fa-info-circle');
+					alertMes(response.serviceResult,response.resultInfo);
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}
 	}
@@ -864,7 +879,9 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 			$scope.pageArr[i] = i+1;
 		}
 	}
-
+	$scope.getRecord = function(){
+		$scope.getPageMyBill($scope.currentPage,$scope.id);
+	}
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPageMyBill = function(num,id){
 		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
@@ -884,7 +901,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 					$scope.currentPage = response.resultParm.currentPage+1;
 					$scope.getPage($scope.totalPage);
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}
 	}
@@ -898,7 +915,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
   		auth(response);
 			$scope.user=response.resultParm.list;
 		}).error(function(){
-			alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+			alertMes('noHttp',null);
 	});
 	// 自动调用获取第一页订单信息
 	$scope.getPageMyBill(1,$scope.id);
@@ -920,9 +937,9 @@ hjcr.controller('updatePwdCtrl',function($http,$scope){
 			})
 			.success(function(response){
   			auth(response);
-				alertMes(response.resultInfo,'success','fa-check');
+				alertMes(response.serviceResult,response.resultInfo);
 			}).error(function(){
-				alertMes("请求未得到响应，请稍后重试！",'warning','fa-warning');
+				alertMes('noHttp',null);
 			});
 		}
 	}
@@ -977,7 +994,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 					case 3:$scope.money.reject=response.resultParm.total;break;
 				}
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 
@@ -1008,11 +1025,13 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 						$scope.pageArr[status-1][i] = i+1;
 					}
 				}).error(function(){
-					alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+					alertMes('noHttp',null);
 			});
 		}
 	}
-
+	$scope.getRecord = function(){
+		$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage,$scope.status);
+	}
 	// 按时间段查询订单
 	$scope.checkByDate = function(status){
 		var date = $("#reservation").val();
@@ -1095,12 +1114,12 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 			})
 			.success(function(response){
 				auth(response);
-				alertMes(response.resultInfo,'info','fa-info-circle');
+				alertMes(response.serviceResult,response.resultInfo);
 				$scope.getMoney($scope.startDate,$scope.endDate,$scope.status);
 				$scope.getPage($scope.startDate,$scope.endDate,$scope.currentPage[$scope.status-1],$scope.status);
 				$scope.showModal = !$scope.showModal;
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 });
@@ -1133,7 +1152,7 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 							$scope.pageArr[i] = i+1;
 						}
 					}).error(function(){
-						alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+						alertMes('noHttp',null);
 			});
 		}
 	}
@@ -1146,12 +1165,14 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 		})
 			.success(function(response){
 	  		auth(response);
-				$scope.user=response.resultParm;
+				$scope.user=response.resultParm.list;
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
-
+	$scope.getRecord = function(){
+		$scope.getPage($scope.currentPage,$scope.id);
+	}
 	// 自动调用获取第一页订单信息
 	$scope.getPage(1,$scope.id);
 	$scope.getMoney();
@@ -1196,12 +1217,12 @@ hjcr.controller('myRecordCtrl',function($scope,$http){
 			})
 			.success(function(response){
 				auth(response);
-				alertMes(response.resultInfo,'info','fa-info-circle');
+				alertMes(response.serviceResult,response.resultInfo);
 				$scope.getMoney();
 				$scope.getPage($scope.currentPage,$scope.id);
 				$scope.showModal = !$scope.showModal;
 			}).error(function(){
-				alertMes('请求得不到响应，请稍后刷新重试！','warning','fa-warning');
+				alertMes('noHttp',null);
 		});
 	}
 });

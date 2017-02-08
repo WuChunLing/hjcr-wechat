@@ -1,0 +1,12 @@
+{
+  "serviceResult": true,
+  "resultInfo": "success",
+  "resultParm": {
+    "allocation": {
+      "allocationId": 1,
+      "allocationName": "11",
+      "orderMoneyFirst": "0.4",
+      "orderMoneySecond": "0.6"
+    }
+  }
+}

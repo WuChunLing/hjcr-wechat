@@ -112,13 +112,15 @@
                       </tbody>
                   </table>
             </div>
-            <ul class="pagination" ng-show="totalPage[0]>1" style="margin-top:20px;">
+            <!-- <ul class="pagination" ng-show="totalPage[0]>1" style="margin-top:20px;">
                 <li ng-click="getPage(startDate,endDate,currentPage[0]-1,1)"  ng-class="currentPage[0]===1?'disabled':''"><a>«</a></li>
                 <li ng-click="getPage(startDate,endDate,page,1)" ng-repeat="page in pageArr[0]" ng-class="currentPage[0]===page?'active':''">
                   <a>{{page}}</a>
                 </li>
                 <li ng-click="getPage(startDate,endDate,currentPage[0]+1,1)" ng-class="currentPage[0]===totalPage[0]?'disabled':''"><a>»</a></li>
-            </ul>
+            </ul> -->
+            <pagination current-page="currentPage[0]" total-page="totalPage[0]" get-record="getRecord()">
+            </pagination>
           </div>
       </div>
   </div>
