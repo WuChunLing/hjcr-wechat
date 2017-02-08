@@ -50,6 +50,10 @@ public class SystemUserServiceImpl implements SystemUserService{
 	 */
 	public SystemUser addUser(SystemUser user) {
 		SystemUser tem_user = systemUserDao.findOneByName(user.getUsername());
+		Role role = roleDao.findOne(user.getRoleId());
+		if (role == null) {
+			throw new SecurityException("不存在该角色");
+		}
 		if (tem_user != null) {
 			throw new SecurityException("该用户已存在");
 		}
@@ -100,7 +104,14 @@ public class SystemUserServiceImpl implements SystemUserService{
 	 * @param user
 	 */
 	public void updateUserRole(SystemUser user) {
+		Role role = roleDao.findOne(user.getRoleId());
+		if (role == null) {
+			throw new SecurityException("不存在该角色");
+		}
 		SystemUser dbUser = systemUserDao.findOne(user.getId());
+		if (dbUser == null) {
+			throw new SecurityException("不存在该用户");
+		}
 		dbUser.setRoleId(user.getRoleId());
 		systemUserDao.saveAndFlush(dbUser);
 	}

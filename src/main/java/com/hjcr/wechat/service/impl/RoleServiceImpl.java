@@ -11,6 +11,7 @@ import com.hjcr.wechat.dao.PrivilegeDao;
 import com.hjcr.wechat.dao.RoleDao;
 import com.hjcr.wechat.dao.RolePrivilegeDao;
 import com.hjcr.wechat.dao.SystemUserDao;
+import com.hjcr.wechat.entity.Privilege;
 import com.hjcr.wechat.entity.Role;
 import com.hjcr.wechat.entity.RolePrivilege;
 import com.hjcr.wechat.entity.SystemUser;
@@ -40,17 +41,25 @@ public class RoleServiceImpl implements RoleService{
 	 * @return
 	 */
 	public Role addRole(Role role, Integer[] list) {
+		Role dbRole = roleDao.findByRolename(role.getRolename());
+		if (dbRole != null) {
+			throw new SecurityException("该角色已存在");
+		}
 		List<Integer> lis = new ArrayList<Integer>(Arrays.asList(list));
 		if (lis.isEmpty()) {
 			return roleDao.save(role);
 		} else {
 			role = roleDao.save(role);
 			RolePrivilege rp = null;
-			for(Integer id : list){
+			Privilege privilege = new Privilege();
+			for(Integer privilegeId : list){
 				rp = new RolePrivilege();
 				rp.setRoleId(role.getId());
-				rp.setPrivilegeId(id);
-				rolePrivilegeDao.save(rp);
+				rp.setPrivilegeId(privilegeId);
+				privilege = privilegeDao.findOne(privilegeId);
+				if (privilege !=null) {
+					rolePrivilegeDao.save(rp);
+				}
 			}
 			return role;
 		}
@@ -93,9 +102,16 @@ public class RoleServiceImpl implements RoleService{
 	 * @return
 	 */
 	public Role updateRoleName(Role role) {
-		Role old_role = roleDao.findOne(role.getId());
-		old_role.setRolename(role.getRolename());
-		return roleDao.saveAndFlush(old_role);
+		Role temR = roleDao.findByRolename(role.getRolename());
+		if (temR != null) {
+			throw new SecurityException("该角色名已存在");
+		}
+		Role dbrole = roleDao.findOne(role.getId());
+		if (dbrole == null) {
+			throw new SecurityException("无法修改该角色");
+		}
+		dbrole.setRolename(role.getRolename());
+		return roleDao.saveAndFlush(dbrole);
 	}
 
 	public void delete(Role role) {

@@ -36,30 +36,8 @@ public class DrawMoneyRecordHandler {
 	@Autowired
 	private UserService userService;
 	
-
-	
 	private final Logger log = LoggerFactory.getLogger(DrawMoneyRecordHandler.class);
 
-	/**
-	 * 获取所有提现记录(测试)
-	 * @author Kellan
-	 * @return
-	 */
-	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getAll(Integer currentPage, Integer size) {
-		log.info("获取所有提现记录");
-		ResultMessage result = new ResultMessage();
-		Sort sort = new Sort(Direction.DESC,"creatTime");
-		Pageable pageable = new PageRequest(currentPage,size,sort);
-		Page<DrawMoneyRecord> page = drawMoneyRecordService.getAll(pageable);
-		result.getResultParm().put("list", page.getContent());
-		result.getResultParm().put("totalPages", page.getTotalPages());
-		result.getResultParm().put("currentPage", page.getNumber());
-		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
-	}
-	
-	
-	
 	/**
 	 * 获取用户自身提现账单.
 	 * @author Kellan
@@ -138,7 +116,7 @@ public class DrawMoneyRecordHandler {
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResultMessage> add(@RequestBody DrawMoneyRecord record) {
 		log.info("保存新的提现申请");
-		if (record.getUserId() == null) {
+		if (record.getWayId()== null || record.getUserId() == null || record.getMoney() == null||record.getMoney() < 0.01) {
 			throw new SecurityException("数据有误");
 		}
 		ResultMessage result = new ResultMessage();
@@ -188,6 +166,24 @@ public class DrawMoneyRecordHandler {
 			throw new SecurityException("更新失败");
 		}
 		result.setResultInfo("更新成功");
+		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * 获取所有提现记录(测试)
+	 * @author Kellan
+	 * @return
+	 */
+	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> getAll(Integer currentPage, Integer size) {
+		log.info("获取所有提现记录");
+		ResultMessage result = new ResultMessage();
+		Sort sort = new Sort(Direction.DESC,"creatTime");
+		Pageable pageable = new PageRequest(currentPage,size,sort);
+		Page<DrawMoneyRecord> page = drawMoneyRecordService.getAll(pageable);
+		result.getResultParm().put("list", page.getContent());
+		result.getResultParm().put("totalPages", page.getTotalPages());
+		result.getResultParm().put("currentPage", page.getNumber());
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

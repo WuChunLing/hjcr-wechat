@@ -16,6 +16,12 @@ public interface RoleDao extends JpaRepository<Role, Integer>{
 	@Query("SELECT r FROM Role r, SystemUser u WHERE u.id = ?1 and r.id = u.roleId")
 	Role getRoleByUser(Integer userId);
 
+	/**
+	 * 根据角色名称获取角色.
+	 * @author Kellan
+	 */
+	Role findByRolename(String rolename);
+
 	
 	
 }

@@ -101,7 +101,7 @@ public class SystemHandler extends GenericController {
 	public ResponseEntity<ResultMessage> add(@RequestBody SystemUser user) {
 		ResultMessage result = new ResultMessage();
 		if (StringUtils.isBlank(user.getUsername())
-				|| StringUtils.isBlank(user.getPassword())) {
+				|| StringUtils.isBlank(user.getPassword()) || user.getRoleId() == null) {
 			throw new SecurityException("数据有误");
 		}
 		user = systemUserService.addUser(user);
@@ -208,8 +208,8 @@ public class SystemHandler extends GenericController {
 	public ResponseEntity<ResultMessage> updateRoleName(
 			@RequestBody Role role) {
 		ResultMessage result = new ResultMessage();
-		if (StringUtils.isBlank(role.getRolename())) {
-			throw new SecurityException("角色名称不能为空");
+		if (StringUtils.isBlank(role.getRolename()) || role.getId() == null) {
+			throw new SecurityException("数据有误");
 		}
 		role = roleService.updateRoleName(role);
 		if (role == null) {
