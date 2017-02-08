@@ -28,6 +28,13 @@ public class DrawMoneyWayServiceImpl implements DrawMoneyWayService{
 	 * 添加新的提现方式
 	 */
 	public DrawMoneyWay addWay(DrawMoneyWay way) {
+		if (way.getDefaultWay()) {   //如果设置为默认提现方式
+			DrawMoneyWay defaultWay = drawMoneyWayDao.getDafultWayByUserId(way.getUserId());
+			if (defaultWay != null) {  //更新原本的默认提现方式
+				defaultWay.setDefaultWay(false);
+				drawMoneyWayDao.saveAndFlush(defaultWay);
+			}
+		}
 		SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = d.format(new Date());
 		way.setCreatTime(date);
@@ -51,6 +58,13 @@ public class DrawMoneyWayServiceImpl implements DrawMoneyWayService{
 	 * 更新
 	 */
 	public boolean update(DrawMoneyWay way) {
+		if (way.getDefaultWay()) {   //如果设置为默认提现方式
+			DrawMoneyWay defaultWay = drawMoneyWayDao.getDafultWayByUserId(way.getUserId());
+			if (defaultWay != null) {  //更新原本的默认提现方式
+				defaultWay.setDefaultWay(false);
+				drawMoneyWayDao.saveAndFlush(defaultWay);
+			}
+		}
 		SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = d.format(new Date());
 		way.setCreatTime(date);

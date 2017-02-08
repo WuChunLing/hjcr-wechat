@@ -32,7 +32,7 @@ var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 �
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
 var addRoleURL = preURL_project + 'system/addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
-var updateRoleNameURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色名称和角色说明
+var updateRoleNameURL = preURL_project + 'system/updateRoleName';    // 修改 角色名称和角色说明
 var deleteRoleURL = preURL_project + 'system/deleteRole';    // 删除 角色
 // 用户
 var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用户表

@@ -51,7 +51,7 @@ public class DrawMoneyWayHandler {
 	 * @return
 	 */
 	@RequestMapping(value = "/getDafultWayByUserId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> getDafultWayByUserId(@RequestBody Integer userId) {
+	public ResponseEntity<ResultMessage> getDafultWayByUserId(Integer userId) {
 		log.info("获取某用户的默认提现方式getDafultWayByUserId");
 		if (userId == null) {
 			throw new SecurityException("数据有误");
