@@ -954,7 +954,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	$scope.status = 1;
 
 	$scope.showModal = false;
-	$scope.size = 15;
+	$scope.size = 2;
 	// 获取总金额信息
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
