@@ -741,14 +741,16 @@ hjcr.controller('userCtrl',function($scope,$http){
 // 分润账单
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
+	$scope.test ={name:"Hell"};
 	$scope.bills = null;// 总订单记录
-	$scope.billMoney = 0;// 总金额信息
+	$scope.billMoney = {};// 总金额信息
 	$scope.totalPage = 1;//全部页数
 	$scope.currentPage = 0;//当前页码
 	$scope.startDate = null;
 	$scope.endDate = null;
 	$scope.pageArr;// 页码数组
 	$scope.size = 2;
+	$scope.title = 1;
 	// 生成页码数组
 	$scope.getPage = function(num){
 		$scope.pageArr = new Array();

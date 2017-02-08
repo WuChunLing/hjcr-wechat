@@ -32,6 +32,7 @@ var getPrivilegeURL = preURL_project + 'system/getAllPrivilege';    // 获取 �
 var getRoleURL = preURL_project + 'system/getAllRole';    			// 获取 角色表
 var addRoleURL = preURL_project + 'system/addRole';    			// 新增 角色
 var updateRoleURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色权限
+var updateRoleNameURL = preURL_project + 'system/updateRolePrivilege';    // 修改 角色名称和角色说明
 var deleteRoleURL = preURL_project + 'system/deleteRole';    // 删除 角色
 // 用户
 var getUserURL = preURL_project + 'system/getAllSystemUser';    			// 获取 用户表
@@ -120,6 +121,7 @@ hjcr.controller('hjcrCtrl',function($rootScope,$scope,$location,$http){
 			}).error(function(){
 		});
 	}
+
 });
 
 
@@ -561,10 +563,11 @@ hjcr.controller('roleCtrl',function($scope,$http){
     {
       if  ( ( xhr.status >= 200 && xhr.status < 300) || xhr.status == 304)   //上传成功
       {
-				alertMes('添加角色成功！','success','fa-check');
+
 				$http.get(getRoleURL)
 					.success(function(response){
   					auth(response);
+						alertMes(response.resultInfo,'success','fa-check');
 						$scope.roles=response.resultParm.roleList;
 					}).error(function(){
 				});
@@ -589,7 +592,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 	}
 	// 确认修改 角色的名称和说明
 	$scope.sureUpdate = function(){
-		$http.post(updateRoleURL,{
+		$http.post(updateRoleNameURL,{
 			id:$scope.updateRoleId,
 			rolename:$scope.roleName,
 			describe:$scope.roleDescribe
@@ -727,6 +730,7 @@ hjcr.controller('userCtrl',function($scope,$http){
 // 分润账单
 // 总订单控制器
 hjcr.controller('billManageCtrl',function($scope,$http){
+	$scope.test ={name:"Hell"};
 	$scope.bills = null;// 总订单记录
 	$scope.billMoney = 0;// 总金额信息
 	$scope.totalPage = 1;//全部页数

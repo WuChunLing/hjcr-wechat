@@ -8,7 +8,7 @@
     <table  class="table table-striped table-hover table-bordered" id="editabledatatable">
         <thead>
             <tr user="row">
-                <th class="name">用户名</th>
+                <th class="name">账号</th>
                 <th class="privilege">被分配的角色</th>
                 <th class="password">密码</th>
                 <th class="edit">    </th>
@@ -40,7 +40,7 @@
             </tr>
             <tr ng-if="showAddUser">
                 <td>
-                  <input type="text" name="newUserName" ng-model="newUser.username" required placeholder="用户名"/>
+                  <input type="text" name="newUserName" ng-model="newUser.username" minlength="6" required placeholder="用户名"/>
                 </td>
                 <td>
                   <select required name="newUserRole" ng-model="newUser.roleId" ng-init="newUser.roleId=roles[0].id">
@@ -48,7 +48,7 @@
                   </select>
                 </td>
                 <td>
-                  <input type="text" name="newUserPassword" ng-model="newUser.password" required placeholder="密码"/>
+                  <input type="text" name="newUserPassword" ng-model="newUser.password" required minlength="6" placeholder="密码"/>
                 </td>
                 <td>
                   <button type="submit" class="btn btn-success btn-xs save"><i class="fa fa-save"></i>确认</button>

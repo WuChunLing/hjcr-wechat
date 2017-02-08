@@ -134,19 +134,14 @@
                       </tbody>
                   </table>
             </div>
-            <ul ng-show="totalPage>1" class="pagination" style="margin-top:20px;">
+            <!-- <ul ng-show="totalPage>1" class="pagination" style="margin-top:20px;">
                 <li ng-click="getBill(startDate,endDate,currentPage-1)" ng-class="currentPage===1?'disabled':''"><a>«</a></li>
                 <li ng-click="getBill(startDate,endDate,page)" ng-repeat="page in pageArr" ng-class="currentPage===page?'active':''">
                   <a>{{page}}</a>
                 </li>
                 <li ng-click="getBill(startDate,endDate,currentPage+1)" ng-class="currentPage===totalPage?'disabled':''"><a>»</a></li>
-            </ul>
-            <pagination startDate="startDate"
-                        endDate="endDate"
-                        currentPage="currentPage[1]"
-                        totalPage="totalPage[1]"
-                        status="2" pages="pageArr[1]"
-                        getPage="getPage(startDate,endDate,currentPage,status)">
+            </ul> -->
+            <pagination current-page="{{currentPage}}" total-page="totalPage">
             </pagination>
           </div>
       </div>
