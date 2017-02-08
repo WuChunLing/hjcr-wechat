@@ -102,15 +102,21 @@ public class RoleServiceImpl implements RoleService{
 	 * @return
 	 */
 	public Role updateRoleName(Role role) {
-		Role temR = roleDao.findByRolename(role.getRolename());
-		if (temR != null) {
-			throw new SecurityException("该角色名已存在");
-		}
-		Role dbrole = roleDao.findOne(role.getId());
+		Role dbrole = roleDao.findOne(role.getId()); // 判断该iid是否有效
 		if (dbrole == null) {
 			throw new SecurityException("无法修改该角色");
 		}
-		dbrole.setRolename(role.getRolename());
+		if (role.getRolename() != null) {
+			Role temR = roleDao.findByRolename(role.getRolename());
+			if (temR != null) {
+				throw new SecurityException("该角色名已存在");
+			}
+			dbrole.setRolename(role.getRolename());
+		}
+		if (role.getNote() != null) {
+			dbrole.setNote(role.getNote());
+		}
+		
 		return roleDao.saveAndFlush(dbrole);
 	}
 

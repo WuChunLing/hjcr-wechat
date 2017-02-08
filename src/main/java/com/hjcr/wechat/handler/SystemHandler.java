@@ -85,6 +85,7 @@ public class SystemHandler extends GenericController {
 		ResultMessage result = new ResultMessage();
 		List<SystemUser> list = systemUserService.getAllSystemUser();
 		result.getResultParm().put("userList", list);
+		result.setResultInfo("获取成功");
 		return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
 	}
 	

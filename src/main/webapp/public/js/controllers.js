@@ -608,7 +608,7 @@ hjcr.controller('roleCtrl',function($scope,$http){
 		$http.post(updateRoleNameURL,{
 			id:$scope.updateRoleId,
 			rolename:$scope.roleName,
-			describe:$scope.roleDescribe
+			note:$scope.roleDescribe
 		})
 		.success(function(response){
   		auth(response);
