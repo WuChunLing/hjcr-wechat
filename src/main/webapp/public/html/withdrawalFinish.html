@@ -78,7 +78,7 @@
                       <tbody>
                         <tr ng-repeat="record in record.finish">
                             <td>
-                                {{(currentPage[1]-1)*15+$index+1}}
+                                {{(currentPage[1]-1)*size+$index+1}}
                             </td>
                             <td>
                               <a ui-sref="myWithdrawal" ng-click="checkMyWithdrawal(record.userId)">{{record.user.userName}}</a>

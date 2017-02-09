@@ -804,7 +804,6 @@ hjcr.controller('billManageCtrl',function($scope,$http){
 	$scope.getBillMoney($scope.startDate,$scope.endDate);
 	$scope.getRecord = function(){
 		$scope.getBill($scope.startDate,$scope.endDate,$scope.currentPage);
-		$scope.getBillMoney($scope.startDate,$scope.endDate);
 	}
 	//通过订单号查询 订单
 	$scope.checkBillById = function(id){
@@ -871,7 +870,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 	$scope.totalPage = 1;//全部页数
 	$scope.currentPage = 0;//当前页码
 	$scope.pageArr;// 页码数组
-	$scope.size = 2;
+	$scope.size = 15;
 	// 生成页码数组
 	$scope.getPage = function(num){
 		$scope.pageArr = new Array();
@@ -884,7 +883,7 @@ hjcr.controller('myBillCtrl',function($scope,$http){
 	}
 	// 获得用户id为id 的 第n页的订单信息  的方法
 	$scope.getPageMyBill = function(num,id){
-		if(num!=$scope.currentPage && num>=1 && num<=$scope.totalPage){
+		if(num>=1 && num<=$scope.totalPage){
 				$http.get(getMyBillURL,
 					{
 						params:{
@@ -975,7 +974,7 @@ hjcr.controller('recordManageCtrl',function($scope,$http,$location){
 	$scope.status = 1;
 
 	$scope.showModal = false;
-	$scope.size = 2;
+	$scope.size = 15;
 	// 获取总金额信息
 	// 按时间段或者不按时间段 以及 按状态获取
 	$scope.getMoney = function(start,end,status){
